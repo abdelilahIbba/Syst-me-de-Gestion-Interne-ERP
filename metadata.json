@@ -1,0 +1,6 @@
+{
+  "name": "Système de Gestion Interne ERP",
+  "description": "Plateforme complète de gestion d'entreprise IT : RH & paie marocaine, facturation, contrats de maintenance, charges, rapports journaliers, interventions terrain et connecteur Google Sheets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
