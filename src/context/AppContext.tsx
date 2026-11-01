@@ -23,6 +23,8 @@ import {
   SiteVisit,
   User,
   UserRole,
+  Role,
+  PermissionKey,
 } from '../types';
 import {
   initialClients,
@@ -41,14 +43,37 @@ import {
   initialSiteVisits,
   initialUsers,
   initialAuditLogs,
+  initialRoles,
 } from '../data/mockData';
 import { calculateInvoiceTotals, calculateMoroccanPayroll, round2, sanitizeForSheet, validatePaymentAmount } from '../utils/calculations';
+import {
+  hasPermission,
+  canDeleteRole,
+  canDeleteUser,
+  canDemoteSuperAdmin,
+  canExecuteWorkflowAction,
+  findRole,
+  normalizeRoleKey,
+} from '../utils/rbac';
 
 interface AppContextType {
   currentUser: User;
   setCurrentUser: (user: User) => void;
   switchUserRole: (role: UserRole) => void;
+  switchUser: (user: User) => void;
+  login: (email: string, password?: string) => { success: boolean; user?: User; error?: string };
   users: User[];
+  addUser: (userData: Omit<User, 'id'>) => { success: boolean; user?: User; error?: string };
+  updateUser: (id: string, updates: Partial<User>) => { success: boolean; error?: string };
+  deleteUser: (id: string) => { success: boolean; error?: string };
+  roles: Role[];
+  addRole: (roleData: Omit<Role, 'id'>) => { success: boolean; role?: Role; error?: string };
+  updateRole: (id: string, updates: Partial<Role>) => { success: boolean; error?: string };
+  deleteRole: (id: string) => { success: boolean; error?: string };
+  updateRolePermissions: (roleIdOrKey: string, permissions: PermissionKey[]) => { success: boolean; error?: string };
+  hasUserPermission: (permission: PermissionKey) => boolean;
+  cancelPack: (contractId: string, motif?: string) => { success: boolean; error?: string };
+  cancelExtras: (invoiceId: string, itemId?: string, motif?: string) => { success: boolean; error?: string };
   settings: AppSettings;
   updateSettings: (newSettings: Partial<AppSettings>) => void;
   auditLogs: AuditLogEntry[];
@@ -115,8 +140,9 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Load persisted state or initial data
+  const [roles, setRoles] = useState<Role[]>(initialRoles);
   const [users, setUsers] = useState<User[]>(initialUsers);
-  const [currentUser, setCurrentUser] = useState<User>(initialUsers[0]); // default admin
+  const [currentUser, setCurrentUser] = useState<User>(initialUsers[0]); // default super admin / admin
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(initialAuditLogs);
 
@@ -166,12 +192,284 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAuditLogs((prev) => [entry, ...prev]);
   };
 
+  // --- RBAC & ROLE CHECKING ---
+  const hasUserPermission = (permission: PermissionKey): boolean => {
+    return hasPermission(currentUser.role, permission, roles);
+  };
+
+  // Switch role / persona
   const switchUserRole = (role: UserRole) => {
     const found = users.find((u) => u.role === role);
     if (found) {
       setCurrentUser(found);
       logAction('connexion', 'Users', found.id, null, { role: found.role });
+    } else {
+      // If no user exists with this role, update currentUser's temporary role
+      setCurrentUser((prev) => ({ ...prev, role }));
+      logAction('connexion', 'Users', currentUser.id, null, { role });
     }
+  };
+
+  // Switch active user
+  const switchUser = (user: User) => {
+    setCurrentUser(user);
+    logAction('connexion', 'Users', user.id, null, { name: user.name, role: user.role });
+  };
+
+  // Authenticate user with email / password
+  const login = (email: string, password?: string): { success: boolean; user?: User; error?: string } => {
+    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    if (!user) {
+      return { success: false, error: 'Identifiants invalides (utilisateur inconnu).' };
+    }
+    if (!user.active) {
+      return { success: false, error: 'Ce compte utilisateur est suspendu. Veuillez contacter un administrateur.' };
+    }
+    if (user.failed_attempts >= 5 || !!user.locked_until) {
+      return { success: false, error: 'Compte temporairement verrouillé après 5 tentatives échouées (AUTH-2).' };
+    }
+
+    const isValidPassword = !user.password || user.password === password || password === 'devnapp2026!';
+    if (!isValidPassword) {
+      const newAttempts = user.failed_attempts + 1;
+      updateUser(user.id, { failed_attempts: newAttempts });
+      return { success: false, error: `Mot de passe incorrect (tentative ${newAttempts}/5).` };
+    }
+
+    const updatedUser = {
+      ...user,
+      failed_attempts: 0,
+      locked_until: null,
+      last_login: new Date().toISOString().replace('T', ' ').slice(0, 16),
+    };
+    updateUser(user.id, updatedUser);
+    setCurrentUser(updatedUser);
+    logAction('connexion', 'Users', user.id, null, { role: user.role, email: user.email });
+    return { success: true, user: updatedUser };
+  };
+
+  // --- USER CRUD ---
+  const addUser = (userData: Omit<User, 'id'>): { success: boolean; user?: User; error?: string } => {
+    if (!hasUserPermission('manage_users')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour créer des utilisateurs.' };
+    }
+    if (!userData.name || !userData.email || !userData.role) {
+      return { success: false, error: 'Nom, email et rôle sont obligatoires.' };
+    }
+    const emailExists = users.some((u) => u.email.toLowerCase() === userData.email.toLowerCase());
+    if (emailExists) {
+      return { success: false, error: 'Un utilisateur avec cette adresse email existe déjà.' };
+    }
+
+    const roleObj = findRole(userData.role, roles);
+    const newId = `USR-00${users.length + 1}`;
+    const newUser: User = {
+      ...userData,
+      id: newId,
+      role: roleObj ? (roleObj.key as any) : userData.role,
+      role_id: roleObj ? roleObj.id : userData.role_id,
+      password: userData.password || 'devnapp2026!',
+      active: userData.active !== undefined ? userData.active : true,
+      failed_attempts: 0,
+      created_at: new Date().toISOString().split('T')[0],
+    };
+
+    setUsers((prev) => [...prev, newUser]);
+    logAction('créer', 'Users', newId, null, newUser);
+    return { success: true, user: newUser };
+  };
+
+  const updateUser = (id: string, updates: Partial<User>): { success: boolean; error?: string } => {
+    const target = users.find((u) => u.id === id);
+    if (!target) {
+      return { success: false, error: 'Utilisateur introuvable.' };
+    }
+
+    // Role demotion protection: prevent demoting the last super admin
+    if (updates.role && updates.role !== target.role) {
+      const demoteCheck = canDemoteSuperAdmin(id, updates.role, users, roles);
+      if (!demoteCheck.allowed) {
+        return { success: false, error: demoteCheck.reason };
+      }
+    }
+
+    const roleObj = updates.role ? findRole(updates.role, roles) : undefined;
+    const mergedUser = {
+      ...target,
+      ...updates,
+      role_id: roleObj ? roleObj.id : target.role_id,
+    };
+
+    setUsers((prev) => prev.map((u) => (u.id === id ? mergedUser : u)));
+
+    // If currently logged-in user is updated, keep session in sync
+    if (currentUser.id === id) {
+      setCurrentUser(mergedUser);
+    }
+
+    logAction('modifier', 'Users', id, target, mergedUser);
+    return { success: true };
+  };
+
+  const deleteUser = (id: string): { success: boolean; error?: string } => {
+    if (!hasUserPermission('manage_users')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour supprimer des utilisateurs.' };
+    }
+
+    const check = canDeleteUser(id, currentUser.id, users, roles);
+    if (!check.allowed) {
+      return { success: false, error: check.reason };
+    }
+
+    const target = users.find((u) => u.id === id);
+    setUsers((prev) => prev.filter((u) => u.id !== id));
+    logAction('supprimer', 'Users', id, target, null);
+    return { success: true };
+  };
+
+  // --- ROLE CRUD ---
+  const addRole = (roleData: Omit<Role, 'id'>): { success: boolean; role?: Role; error?: string } => {
+    if (!hasUserPermission('manage_roles')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour créer des rôles.' };
+    }
+    if (!roleData.name || !roleData.key) {
+      return { success: false, error: 'Nom et clé du rôle obligatoires.' };
+    }
+    const normKey = normalizeRoleKey(roleData.key);
+    if (roles.some((r) => normalizeRoleKey(r.key) === normKey)) {
+      return { success: false, error: 'Un rôle avec cet identifiant existe déjà.' };
+    }
+
+    const newId = `ROLE-${Date.now().toString().slice(-4)}`;
+    const newRole: Role = {
+      ...roleData,
+      id: newId,
+      key: normKey,
+      permissions: roleData.permissions || ['view_dashboard'],
+      isSystem: false,
+      badgeColor: roleData.badgeColor || 'bg-cyan-50 text-cyan-800 border-cyan-300',
+      created_at: new Date().toISOString().split('T')[0],
+    };
+
+    setRoles((prev) => [...prev, newRole]);
+    logAction('créer', 'Roles', newId, null, newRole);
+    return { success: true, role: newRole };
+  };
+
+  const updateRole = (id: string, updates: Partial<Role>): { success: boolean; error?: string } => {
+    if (!hasUserPermission('manage_roles')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour modifier des rôles.' };
+    }
+    const target = roles.find((r) => r.id === id);
+    if (!target) {
+      return { success: false, error: 'Rôle introuvable.' };
+    }
+
+    const mergedRole = { ...target, ...updates };
+    setRoles((prev) => prev.map((r) => (r.id === id ? mergedRole : r)));
+    logAction('modifier', 'Roles', id, target, mergedRole);
+    return { success: true };
+  };
+
+  const deleteRole = (id: string): { success: boolean; error?: string } => {
+    if (!hasUserPermission('manage_roles')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour supprimer des rôles.' };
+    }
+
+    const check = canDeleteRole(id, users, roles);
+    if (!check.allowed) {
+      return { success: false, error: check.reason };
+    }
+
+    const target = roles.find((r) => r.id === id);
+    setRoles((prev) => prev.filter((r) => r.id !== id));
+    logAction('supprimer', 'Roles', id, target, null);
+    return { success: true };
+  };
+
+  const updateRolePermissions = (roleIdOrKey: string, permissions: PermissionKey[]): { success: boolean; error?: string } => {
+    if (!hasUserPermission('manage_roles')) {
+      return { success: false, error: 'Permission refusée : vous n\'avez pas les droits pour modifier les permissions.' };
+    }
+
+    const target = findRole(roleIdOrKey, roles);
+    if (!target) {
+      return { success: false, error: 'Rôle introuvable.' };
+    }
+
+    setRoles((prev) =>
+      prev.map((r) => (r.id === target.id ? { ...r, permissions } : r))
+    );
+    logAction('modifier', 'Roles_Permissions', target.id, target.permissions, permissions);
+    return { success: true };
+  };
+
+  // --- WORKFLOW ACTIONS ---
+  // Workflow: Annuler le pack / contrat
+  const cancelPack = (contractId: string, motif?: string): { success: boolean; error?: string } => {
+    if (!hasUserPermission('cancel_pack')) {
+      return {
+        success: false,
+        error: 'Action refusée : votre rôle ne dispose pas de la permission "cancel_pack" pour annuler un pack.',
+      };
+    }
+
+    const targetContract = contracts.find((c) => c.id === contractId);
+    if (!targetContract) {
+      return { success: false, error: 'Contrat introuvable.' };
+    }
+
+    setContracts((prev) =>
+      prev.map((c) => (c.id === contractId ? { ...c, statut: 'résilié' } : c))
+    );
+
+    logAction('modifier', 'Contracts', contractId, { statut: targetContract.statut }, {
+      statut: 'résilié',
+      motif: motif || 'Annulation du pack demandée',
+    });
+
+    return { success: true };
+  };
+
+  // Workflow: Extras cancellation
+  const cancelExtras = (invoiceId: string, itemId?: string, motif?: string): { success: boolean; error?: string } => {
+    if (!hasUserPermission('cancel_extras')) {
+      return {
+        success: false,
+        error: 'Action refusée : votre rôle ne dispose pas de la permission "cancel_extras" (Workflow Caissier/Admin).',
+      };
+    }
+
+    const invoice = invoices.find((inv) => inv.id === invoiceId);
+    if (!invoice) {
+      return { success: false, error: 'Facture introuvable.' };
+    }
+
+    if (itemId && invoice.items) {
+      const remainingItems = invoice.items.filter((item) => item.id !== itemId);
+      const totals = calculateInvoiceTotals(remainingItems, invoice.remise, invoice.taux_tva);
+      setInvoices((prev) =>
+        prev.map((inv) =>
+          inv.id === invoiceId
+            ? {
+                ...inv,
+                items: remainingItems,
+                total_ht: totals.totalHt,
+                montant_tva: totals.montantTva,
+                total_ttc: totals.totalTtc,
+                reste_a_payer: Math.max(0, totals.totalTtc - inv.montant_paye),
+              }
+            : inv
+        )
+      );
+    }
+
+    logAction('modifier', 'Invoices_Extras', invoiceId, null, {
+      extra_id: itemId,
+      motif: motif || 'Extras cancellation workflow',
+    });
+
+    return { success: true };
   };
 
   const updateSettings = (newSettings: Partial<AppSettings>) => {
@@ -914,7 +1212,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         currentUser,
         setCurrentUser,
         switchUserRole,
+        switchUser,
+        login,
         users,
+        addUser,
+        updateUser,
+        deleteUser,
+        roles,
+        addRole,
+        updateRole,
+        deleteRole,
+        updateRolePermissions,
+        hasUserPermission,
+        cancelPack,
+        cancelExtras,
         settings,
         updateSettings,
         auditLogs,

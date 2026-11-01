@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { useApp } from '../context/AppContext';
+import { canAccessNav, hasPermission } from '../utils/rbac';
 import {
   LayoutDashboard,
   Users,
@@ -52,74 +53,66 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => {
-  const { currentUser } = useApp();
-  const role = currentUser.role;
+  const { currentUser, roles } = useApp();
 
-  // Rights matrix evaluation (Section 2)
-  const canSeeDashboard = true;
-  const canSeeEmployees = ['admin', 'rh'].includes(role);
-  const canSeePayroll = ['admin', 'rh', 'comptable'].includes(role);
-  const canSeeClients = ['admin', 'commercial', 'comptable', 'chef_equipe'].includes(role);
-  const canSeeProjects = ['admin', 'commercial', 'comptable', 'chef_equipe'].includes(role);
-  const canSeeContracts = ['admin', 'commercial', 'comptable', 'chef_equipe'].includes(role);
-  const canSeeInvoices = ['admin', 'comptable', 'commercial'].includes(role);
-  const canSeeQuotes = ['admin', 'comptable', 'commercial'].includes(role);
-  const canSeeReminders = ['admin', 'comptable'].includes(role);
-  const canSeeExpenses = ['admin', 'comptable'].includes(role);
-  const canSeeDailyReport = true; // everyone can fill their report
-  const canSeeTeamReports = ['admin', 'chef_equipe', 'rh'].includes(role);
-  const canSeeSiteVisits = ['admin', 'comptable', 'chef_equipe', 'employe', 'rh'].includes(role);
-  const canSeeReportsExports = ['admin', 'comptable', 'rh'].includes(role);
-  const canSeeUsersAdmin = ['admin'].includes(role);
-  const canSeeSettings = ['admin'].includes(role);
-  const canSeeAuditLog = ['admin'].includes(role);
+  // Automatic RBAC evaluation against dynamic role permissions matrix ("Droits d'accès par rôle")
+  const canSee = (key: NavItemKey) => {
+    if (key === 'settings' || key === 'users_admin') {
+      return (
+        hasPermission(currentUser.role, 'manage_settings', roles) ||
+        hasPermission(currentUser.role, 'manage_users', roles) ||
+        hasPermission(currentUser.role, 'manage_roles', roles)
+      );
+    }
+    return canAccessNav(key, currentUser.role, roles);
+  };
 
   const navSections = [
     {
       title: 'Général',
       items: [
-        { key: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard, visible: canSeeDashboard },
+        { key: 'dashboard' as NavItemKey, label: 'Tableau de bord', icon: LayoutDashboard, visible: canSee('dashboard') },
       ],
     },
     {
       title: 'Ressources Humaines',
       items: [
-        { key: 'employees', label: 'Employés', icon: Users, visible: canSeeEmployees },
-        { key: 'payroll', label: 'Paie du mois', icon: Banknote, visible: canSeePayroll },
+        { key: 'employees' as NavItemKey, label: 'Employés', icon: Users, visible: canSee('employees') },
+        { key: 'payroll' as NavItemKey, label: 'Paie du mois', icon: Banknote, visible: canSee('payroll') },
       ],
     },
     {
       title: 'Relation Client & Contrats',
       items: [
-        { key: 'clients', label: 'Clients & Fiche 360°', icon: Building2, visible: canSeeClients },
-        { key: 'projects', label: 'Systèmes vendus', icon: FolderGit2, visible: canSeeProjects },
-        { key: 'contracts', label: 'Contrats maintenance', icon: FileCheck2, visible: canSeeContracts },
+        { key: 'clients' as NavItemKey, label: 'Clients & Fiche 360°', icon: Building2, visible: canSee('clients') },
+        { key: 'projects' as NavItemKey, label: 'Systèmes vendus', icon: FolderGit2, visible: canSee('projects') },
+        { key: 'contracts' as NavItemKey, label: 'Contrats maintenance', icon: FileCheck2, visible: canSee('contracts') },
       ],
     },
     {
       title: 'Facturation & Trésorerie',
       items: [
-        { key: 'invoices', label: 'Factures & Avoirs', icon: Receipt, visible: canSeeInvoices },
-        { key: 'quotes', label: 'Devis', icon: FileText, visible: canSeeQuotes },
-        { key: 'reminders', label: 'Relances impayés', icon: BellRing, visible: canSeeReminders },
-        { key: 'expenses', label: 'Charges & Dépenses', icon: WalletCards, visible: canSeeExpenses },
+        { key: 'invoices' as NavItemKey, label: 'Factures & Avoirs', icon: Receipt, visible: canSee('invoices') },
+        { key: 'quotes' as NavItemKey, label: 'Devis', icon: FileText, visible: canSee('quotes') },
+        { key: 'reminders' as NavItemKey, label: 'Relances impayés', icon: BellRing, visible: canSee('reminders') },
+        { key: 'expenses' as NavItemKey, label: 'Charges & Dépenses', icon: WalletCards, visible: canSee('expenses') },
       ],
     },
     {
       title: 'Activité & Terrain',
       items: [
-        { key: 'daily_report', label: 'Mon rapport du jour', icon: CalendarCheck2, visible: canSeeDailyReport },
-        { key: 'team_reports', label: 'Rapports de l\'équipe', icon: ClipboardList, visible: canSeeTeamReports },
-        { key: 'site_visits', label: 'Déplacements & Frais', icon: MapPin, visible: canSeeSiteVisits },
-        { key: 'reports_exports', label: 'Exports & Synthèses', icon: BarChart3, visible: canSeeReportsExports },
+        { key: 'daily_report' as NavItemKey, label: 'Mon rapport du jour', icon: CalendarCheck2, visible: canSee('daily_report') },
+        { key: 'team_reports' as NavItemKey, label: 'Rapports de l\'équipe', icon: ClipboardList, visible: canSee('team_reports') },
+        { key: 'site_visits' as NavItemKey, label: 'Déplacements & Frais', icon: MapPin, visible: canSee('site_visits') },
+        { key: 'reports_exports' as NavItemKey, label: 'Exports & Synthèses', icon: BarChart3, visible: canSee('reports_exports') },
       ],
     },
     {
       title: 'Administration',
       items: [
-        { key: 'users_admin', label: 'Utilisateurs & Rôles', icon: ShieldCheck, visible: canSeeUsersAdmin },
-        { key: 'settings', label: 'Paramètres Société', icon: Settings, visible: canSeeSettings },
-        { key: 'audit_log', label: 'Journal d\'audit', icon: History, visible: canSeeAuditLog },
+        { key: 'users_admin' as NavItemKey, label: 'Utilisateurs & Rôles', icon: ShieldCheck, visible: canSee('users_admin') },
+        { key: 'settings' as NavItemKey, label: 'Paramètres Société', icon: Settings, visible: canSee('settings') },
+        { key: 'audit_log' as NavItemKey, label: 'Journal d\'audit', icon: History, visible: canSee('audit_log') },
       ],
     },
   ];

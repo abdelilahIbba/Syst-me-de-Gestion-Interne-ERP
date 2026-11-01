@@ -21,7 +21,11 @@ import {
   Quote,
   SiteVisit,
   User,
+  Role,
 } from '../types';
+import { DEFAULT_ROLES } from '../utils/rbac';
+
+export const initialRoles: Role[] = [...DEFAULT_ROLES];
 
 export const initialSettings: AppSettings = {
   company_name: 'DEVNAPP SARL',
@@ -49,11 +53,25 @@ export const initialSettings: AppSettings = {
 
 export const initialUsers: User[] = [
   {
+    id: 'USR-000',
+    employee_id: 'EMP-001',
+    email: 'superadmin@devnapp.ma',
+    name: 'Hamza Tazi (Super Admin)',
+    role: 'super_admin',
+    role_id: 'ROLE-001',
+    password: 'devnapp2026!',
+    active: true,
+    failed_attempts: 0,
+    last_login: '2026-11-01 08:00',
+  },
+  {
     id: 'USR-001',
     employee_id: 'EMP-001',
     email: 'abdelilah@devnapp.ma',
     name: 'Abdelilah El Ibbawi',
     role: 'admin',
+    role_id: 'ROLE-002',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 08:30',
@@ -64,6 +82,8 @@ export const initialUsers: User[] = [
     email: 'fatima@devnapp.ma',
     name: 'Fatima-Zahra Alami',
     role: 'rh',
+    role_id: 'ROLE-005',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 09:00',
@@ -74,6 +94,8 @@ export const initialUsers: User[] = [
     email: 'mehdi@devnapp.ma',
     name: 'Mehdi Bennani',
     role: 'comptable',
+    role_id: 'ROLE-004',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 09:15',
@@ -84,6 +106,8 @@ export const initialUsers: User[] = [
     email: 'karim@devnapp.ma',
     name: 'Karim Mansouri',
     role: 'commercial',
+    role_id: 'ROLE-006',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 09:30',
@@ -94,6 +118,8 @@ export const initialUsers: User[] = [
     email: 'yassine@devnapp.ma',
     name: 'Yassine Tazi',
     role: 'chef_equipe',
+    role_id: 'ROLE-007',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 08:45',
@@ -104,6 +130,8 @@ export const initialUsers: User[] = [
     email: 'salma@devnapp.ma',
     name: 'Salma Chraibi',
     role: 'employe',
+    role_id: 'ROLE-008',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 08:50',
@@ -114,9 +142,23 @@ export const initialUsers: User[] = [
     email: 'omar@devnapp.ma',
     name: 'Omar Kabbaj',
     role: 'employe',
+    role_id: 'ROLE-008',
+    password: 'devnapp2026!',
     active: true,
     failed_attempts: 0,
     last_login: '2026-11-01 08:55',
+  },
+  {
+    id: 'USR-008',
+    employee_id: 'EMP-003',
+    email: 'caisse@devnapp.ma',
+    name: 'Amina Berrada (Caissière)',
+    role: 'cashier',
+    role_id: 'ROLE-003',
+    password: 'devnapp2026!',
+    active: true,
+    failed_attempts: 0,
+    last_login: '2026-11-01 09:10',
   },
 ];
 

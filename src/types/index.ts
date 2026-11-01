@@ -3,7 +3,57 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export type UserRole = 'admin' | 'comptable' | 'rh' | 'commercial' | 'employe' | 'chef_equipe';
+export type UserRole =
+  | 'super_admin'
+  | 'admin'
+  | 'cashier'
+  | 'comptable'
+  | 'rh'
+  | 'commercial'
+  | 'employe'
+  | 'chef_equipe'
+  | (string & {});
+
+export type PermissionKey =
+  | 'view_dashboard'
+  | 'manage_employees'
+  | 'manage_payroll'
+  | 'manage_clients'
+  | 'manage_projects'
+  | 'manage_contracts'
+  | 'cancel_pack'
+  | 'manage_invoices'
+  | 'manage_quotes'
+  | 'manage_reminders'
+  | 'manage_expenses'
+  | 'cancel_extras'
+  | 'fill_daily_report'
+  | 'manage_team_reports'
+  | 'manage_site_visits'
+  | 'view_reports_exports'
+  | 'manage_users'
+  | 'manage_roles'
+  | 'manage_permissions'
+  | 'manage_settings'
+  | 'view_audit_log';
+
+export interface Role {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+  isSystem?: boolean;
+  permissions: PermissionKey[];
+  badgeColor?: string;
+  created_at?: string;
+}
+
+export interface PermissionDefinition {
+  key: PermissionKey;
+  label: string;
+  description: string;
+  module: string;
+}
 
 export interface User {
   id: string;
@@ -11,11 +61,14 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  role_id?: string;
+  password?: string;
   active: boolean;
   last_login?: string;
   failed_attempts: number;
   locked_until?: string | null;
   must_change_password?: boolean;
+  created_at?: string;
 }
 
 export type ContractType = 'CDI' | 'CDD' | 'Freelance' | 'Stage';
