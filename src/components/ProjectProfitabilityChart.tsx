@@ -16,6 +16,7 @@ import {
   Legend,
 } from 'recharts';
 import { Project, Invoice, Payment, DailyReport, SiteVisit, Employee } from '../types';
+import { useI18n } from '../context/I18nContext';
 import {
   calculateMonthlyProjectProfitability,
   formatDH,
@@ -50,12 +51,13 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
   employees,
   onNavigateToProjects,
 }) => {
+  const { t, tMonth, dir } = useI18n();
   const [selectedProjectId, setSelectedProjectId] = useState<string>('all');
   const [chartMode, setChartMode] = useState<'mixed' | 'profit_only'>('mixed');
 
-  // Compute monthly data
+  // Compute monthly data with localized month labels
   const monthlyData: MonthlyProjectProfitability[] = useMemo(() => {
-    return calculateMonthlyProjectProfitability({
+    const raw = calculateMonthlyProjectProfitability({
       projectId: selectedProjectId,
       projects,
       invoices,
@@ -65,7 +67,11 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
       employees,
       targetYear: '2026',
     });
-  }, [selectedProjectId, projects, invoices, payments, dailyReports, siteVisits, employees]);
+    return raw.map((d) => ({
+      ...d,
+      monthLabel: tMonth(d.month.split('-')[1] || '01'),
+    }));
+  }, [selectedProjectId, projects, invoices, payments, dailyReports, siteVisits, employees, tMonth]);
 
   // Aggregate totals for the selected project filter
   const totals = useMemo(() => {
@@ -103,13 +109,13 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                <span>Évolution Mensuelle de la Rentabilité des Projets</span>
+                <span>{t('chart.monthly.title')}</span>
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
-                  Recharts Analytics
+                  {t('chart.monthly.badge')}
                 </span>
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Module CL-3 & CL-7 · Corrélation dynamique du Chiffre d'Affaires Encaissé, Coûts de Production et Marge Nette
+                {t('chart.monthly.subtitle')}
               </p>
             </div>
           </div>
@@ -124,7 +130,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
               onChange={(e) => setSelectedProjectId(e.target.value)}
               className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden max-w-[220px] truncate"
             >
-              <option value="all">Tous les Projets (Vue Globale)</option>
+              <option value="all">{t('chart.monthly.allProjects')}</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.nom_systeme}
@@ -143,7 +149,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              CA, Coûts & Marge
+              {t('chart.monthly.modeMixed')}
             </button>
             <button
               onClick={() => setChartMode('profit_only')}
@@ -153,7 +159,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Bénéfice Net
+              {t('chart.monthly.modeProfit')}
             </button>
           </div>
         </div>
@@ -163,31 +169,31 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
           <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
-            <span>CA Encaissé</span>
+            <span>{t('chart.monthly.collectedRev')}</span>
             <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
           </div>
           <div className="text-base sm:text-lg font-bold font-mono text-slate-900">
             {formatDH(totals.totalRev)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">Paiements clients réels</div>
+          <div className="text-[10px] text-slate-400 mt-1">{t('chart.monthly.collectedRevSub')}</div>
         </div>
 
         <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
           <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
-            <span>Coûts de Production</span>
+            <span>{t('chart.monthly.prodCosts')}</span>
             <Briefcase className="w-3.5 h-3.5 text-rose-600" />
           </div>
           <div className="text-base sm:text-lg font-bold font-mono text-slate-900">
             {formatDH(totals.totalCost)}
           </div>
           <div className="text-[10px] text-slate-400 mt-1">
-            MO: {formatDH(totals.totalLabor)} ({totals.totalHours}h)
+            {t('chart.monthly.laborShort')} {formatDH(totals.totalLabor)} ({totals.totalHours}{t('common.hours')})
           </div>
         </div>
 
         <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
           <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
-            <span>Bénéfice Net Réalisé</span>
+            <span>{t('chart.monthly.netProfit')}</span>
             <TrendingUp className={`w-3.5 h-3.5 ${totals.totalProfit >= 0 ? 'text-cyan-600' : 'text-rose-600'}`} />
           </div>
           <div
@@ -197,12 +203,12 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           >
             {formatDH(totals.totalProfit)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">Marge brute - charges</div>
+          <div className="text-[10px] text-slate-400 mt-1">{t('chart.monthly.netProfitSub')}</div>
         </div>
 
         <div className="bg-gradient-to-br from-slate-900 to-[#070b18] p-3.5 rounded-xl border border-cyan-500/30 text-white shadow-xs">
           <div className="flex items-center justify-between text-[11px] text-cyan-300 font-medium mb-1">
-            <span>Taux de Marge Moyen</span>
+            <span>{t('chart.monthly.avgMargin')}</span>
             <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-300 font-mono">
               2026
             </span>
@@ -211,12 +217,12 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             <span>{totals.avgMargin}%</span>
             <ArrowUpRight className="w-4 h-4 text-cyan-300" />
           </div>
-          <div className="text-[10px] text-slate-300 mt-1">Rentabilité opérationnelle</div>
+          <div className="text-[10px] text-slate-300 mt-1">{t('chart.monthly.opProfitability')}</div>
         </div>
       </div>
 
       {/* Main Recharts Visual Display */}
-      <div className="h-80 w-full pt-2">
+      <div dir="ltr" className="h-80 w-full pt-2">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={monthlyData}
@@ -267,11 +273,14 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             )}
 
             <Tooltip
-              content={({ active, payload, label }) => {
+              content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   const data = payload[0].payload as MonthlyProjectProfitability;
                   return (
-                    <div className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 shadow-2xl text-xs space-y-2 min-w-[210px]">
+                    <div
+                      dir={dir}
+                      className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 shadow-2xl text-xs space-y-2 min-w-[210px]"
+                    >
                       <div className="font-bold text-slate-100 flex items-center justify-between border-b border-slate-800 pb-1.5">
                         <span className="text-cyan-300 font-semibold">{data.monthLabel} 2026</span>
                         <span className="text-[10px] text-slate-400 font-mono">{data.month}</span>
@@ -279,33 +288,33 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
 
                       <div className="space-y-1 font-mono text-[11px]">
                         <div className="flex justify-between items-center text-cyan-300">
-                          <span className="text-slate-300 font-sans">CA Encaissé :</span>
+                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipRev')}</span>
                           <span className="font-bold">{formatDH(data.revenus)}</span>
                         </div>
 
                         <div className="flex justify-between items-center text-rose-300">
-                          <span className="text-slate-300 font-sans">Coûts Totaux :</span>
+                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipCost')}</span>
                           <span className="font-bold">{formatDH(data.couts)}</span>
                         </div>
 
-                        <div className="text-[10px] text-slate-400 pl-2 space-y-0.5 border-l border-slate-700">
+                        <div className="text-[10px] text-slate-400 ps-2 space-y-0.5 border-s border-slate-700">
                           <div className="flex justify-between">
-                            <span>Main d'œuvre :</span>
-                            <span>{formatDH(data.coutsMainOeuvre)} ({data.heuresProd}h)</span>
+                            <span>{t('chart.monthly.tooltipLabor')}</span>
+                            <span>{formatDH(data.coutsMainOeuvre)} ({data.heuresProd}{t('common.hours')})</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Déplacements :</span>
+                            <span>{t('chart.monthly.tooltipTravel')}</span>
                             <span>{formatDH(data.coutsDeplacement)}</span>
                           </div>
                         </div>
 
                         <div className="pt-1.5 border-t border-slate-800 flex justify-between items-center text-emerald-400 font-bold">
-                          <span className="text-slate-300 font-sans">Bénéfice Net :</span>
+                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipProfit')}</span>
                           <span>{formatDH(data.beneficeNet)}</span>
                         </div>
 
                         <div className="flex justify-between items-center text-sky-300 font-semibold pt-0.5">
-                          <span className="text-slate-300 font-sans">Taux de Marge :</span>
+                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipMargin')}</span>
                           <span className="px-1.5 py-0.5 rounded bg-cyan-900/60 border border-cyan-500/40 text-[10px]">
                             {data.tauxMarge}%
                           </span>
@@ -330,7 +339,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                 <Bar
                   yAxisId="left"
                   dataKey="revenus"
-                  name="Revenus Encaissés (DH)"
+                  name={t('chart.monthly.legendRev')}
                   fill="url(#colorRevenus)"
                   radius={[4, 4, 0, 0]}
                   maxBarSize={38}
@@ -338,7 +347,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                 <Bar
                   yAxisId="left"
                   dataKey="couts"
-                  name="Coûts de Production (DH)"
+                  name={t('chart.monthly.legendCost')}
                   fill="url(#colorCouts)"
                   radius={[4, 4, 0, 0]}
                   maxBarSize={38}
@@ -347,7 +356,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   yAxisId="right"
                   type="monotone"
                   dataKey="tauxMarge"
-                  name="Taux de Marge (%)"
+                  name={t('chart.monthly.legendMargin')}
                   stroke="#00d2ff"
                   strokeWidth={2.5}
                   dot={{ r: 3.5, fill: '#00d2ff', strokeWidth: 1.5, stroke: '#ffffff' }}
@@ -359,7 +368,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                 <Bar
                   yAxisId="left"
                   dataKey="beneficeNet"
-                  name="Bénéfice Net (DH)"
+                  name={t('chart.monthly.legendProfit')}
                   fill="url(#colorBenefice)"
                   radius={[4, 4, 0, 0]}
                   maxBarSize={48}
@@ -368,7 +377,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   yAxisId="left"
                   type="monotone"
                   dataKey="couts"
-                  name="Coûts Engagés (DH)"
+                  name={t('chart.monthly.legendCommitted')}
                   stroke="#f43f5e"
                   strokeWidth={2}
                   strokeDasharray="4 4"
@@ -387,12 +396,11 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           <span>
             {activeProject ? (
               <span>
-                Affichage filtré pour : <strong className="text-slate-800 font-semibold">{activeProject.nom_systeme}</strong>
+                {t('chart.monthly.filteredFor')}{' '}
+                <strong className="text-slate-800 font-semibold">{activeProject.nom_systeme}</strong>
               </span>
             ) : (
-              <span>
-                Calcul consolidé sur l'ensemble des <strong className="text-slate-800 font-semibold">{projects.length} systèmes informatiques</strong>
-              </span>
+              <span>{t('chart.monthly.consolidatedFor', { count: projects.length })}</span>
             )}
           </span>
         </div>
@@ -402,7 +410,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             onClick={onNavigateToProjects}
             className="text-cyan-700 hover:text-cyan-800 font-semibold flex items-center gap-1"
           >
-            <span>Détail complet des rentabilités par projet</span>
+            <span>{t('chart.monthly.goToProjects')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         )}

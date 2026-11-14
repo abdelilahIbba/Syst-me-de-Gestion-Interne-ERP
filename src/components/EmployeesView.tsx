@@ -5,23 +5,17 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { Employee, ContractType, EmployeeStatus } from '../types';
 import { formatDH } from '../utils/calculations';
 import {
-  Users,
   UserPlus,
   Search,
-  Filter,
-  FileText,
   AlertCircle,
-  Briefcase,
   History,
   Phone,
   Mail,
   MapPin,
-  CreditCard,
-  Building,
-  CheckCircle2,
   X,
   Edit2,
   UserX,
@@ -29,7 +23,8 @@ import {
 } from 'lucide-react';
 
 export const EmployeesView: React.FC = () => {
-  const { employees, employeeHistory, addEmployee, updateEmployee, deactivateEmployee, currentUser } = useApp();
+  const { employees, employeeHistory, addEmployee, updateEmployee, deactivateEmployee } = useApp();
+  const { t } = useI18n();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDepartement, setFilterDepartement] = useState('all');
@@ -67,6 +62,12 @@ export const EmployeesView: React.FC = () => {
   const [editMotif, setEditMotif] = useState('');
 
   const departments = ['Technique', 'Finance', 'Commercial', 'Ressources Humaines', 'Direction', 'Support & Déploiement'];
+
+  const translateEmployeeStatus = (status: EmployeeStatus) => {
+    if (status === 'actif') return t('emp.status.actif');
+    if (status === 'suspendu') return t('emp.status.suspendu');
+    return t('emp.status.sorti');
+  };
 
   // Check CDD / Stage expiration < 30 days (RH-9)
   const isExpiringSoon = (emp: Employee) => {
@@ -141,7 +142,7 @@ export const EmployeesView: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `employes_atlastech_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `employes_devnapp_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -152,26 +153,26 @@ export const EmployeesView: React.FC = () => {
       {/* Top action bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Gestion des Employés & RH</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('emp.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module RH-1 à RH-9 · Effectif total : {employees.length} collaborateurs
+            {t('emp.subtitle', { count: employees.length })}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={exportEmployeesCSV}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-xs whitespace-nowrap shrink-0"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            <span>{t('common.exportCsv')}</span>
           </button>
           <button
             onClick={() => setIsNewModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
           >
             <UserPlus className="w-4 h-4" />
-            <span>Ajouter un Employé</span>
+            <span>{t('emp.addBtn')}</span>
           </button>
         </div>
       </div>
@@ -181,12 +182,12 @@ export const EmployeesView: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="text-xs text-amber-900">
-            <span className="font-semibold">Alerte Échéance Contrat RH-9 : </span>
+            <span className="font-semibold">{t('emp.expiringAlert')} </span>
             {employees
               .filter(isExpiringSoon)
-              .map((e) => `${e.prenom} ${e.nom} (${e.type_contrat} - fin au ${e.date_fin_contrat})`)
+              .map((e) => `${e.prenom} ${e.nom} (${e.type_contrat} - ${e.date_fin_contrat})`)
               .join(', ')}
-            . Renouvellement ou sortie à formaliser sous 30 jours.
+            . {t('emp.expiringSuffix')}
           </div>
         </div>
       )}
@@ -198,13 +199,13 @@ export const EmployeesView: React.FC = () => {
           {/* Filters bar */}
           <div className="p-3.5 border-b border-slate-100 flex flex-wrap items-center gap-2">
             <div className="relative flex-1 min-w-[180px]">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Rechercher nom, matricule, poste..."
+                placeholder={t('emp.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white focus:ring-1 focus:ring-blue-500"
+                className="w-full ps-9 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -213,7 +214,7 @@ export const EmployeesView: React.FC = () => {
               onChange={(e) => setFilterDepartement(e.target.value)}
               className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
             >
-              <option value="all">Tous Départements</option>
+              <option value="all">{t('emp.allDepts')}</option>
               {departments.map((d) => (
                 <option key={d} value={d}>
                   {d}
@@ -226,23 +227,23 @@ export const EmployeesView: React.FC = () => {
               onChange={(e) => setFilterStatut(e.target.value)}
               className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
             >
-              <option value="all">Tous Statuts</option>
-              <option value="actif">Actif</option>
-              <option value="suspendu">Suspendu</option>
-              <option value="sorti">Sorti</option>
+              <option value="all">{t('emp.allStatuses')}</option>
+              <option value="actif">{t('emp.status.actif')}</option>
+              <option value="suspendu">{t('emp.status.suspendu')}</option>
+              <option value="sorti">{t('emp.status.sorti')}</option>
             </select>
           </div>
 
           {/* Table */}
           <div className="overflow-x-auto flex-1">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-start text-xs">
               <thead className="bg-slate-50/80 text-slate-500 font-semibold border-b border-slate-100">
                 <tr>
-                  <th className="py-2.5 px-4">Employé</th>
-                  <th className="py-2.5 px-3">Poste & Dép.</th>
-                  <th className="py-2.5 px-3">Contrat</th>
-                  <th className="py-2.5 px-3 text-right">Salaire Brut</th>
-                  <th className="py-2.5 px-3 text-center">Statut</th>
+                  <th className="py-2.5 px-4 text-start">{t('emp.col.employee')}</th>
+                  <th className="py-2.5 px-3 text-start">{t('emp.col.roleDept')}</th>
+                  <th className="py-2.5 px-3 text-start">{t('emp.col.contract')}</th>
+                  <th className="py-2.5 px-3 text-end">{t('emp.col.grossSalary')}</th>
+                  <th className="py-2.5 px-3 text-center">{t('emp.col.status')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -280,11 +281,11 @@ export const EmployeesView: React.FC = () => {
                       <td className="py-3 px-3">
                         <span className="font-medium text-slate-700">{emp.type_contrat}</span>
                         {expiring && (
-                          <div className="text-[10px] text-amber-700 font-semibold">Fin &lt; 30j</div>
+                          <div className="text-[10px] text-amber-700 font-semibold">{t('emp.endingSoon')}</div>
                         )}
                       </td>
 
-                      <td className="py-3 px-3 text-right font-mono font-medium text-slate-900">
+                      <td className="py-3 px-3 text-end font-mono font-medium text-slate-900">
                         {formatDH(emp.salaire_brut_base)}
                       </td>
 
@@ -298,7 +299,7 @@ export const EmployeesView: React.FC = () => {
                               : 'text-slate-400'
                           }`}
                         >
-                          {emp.statut}
+                          {translateEmployeeStatus(emp.statut)}
                         </span>
                       </td>
                     </tr>
@@ -307,7 +308,7 @@ export const EmployeesView: React.FC = () => {
                 {filteredEmployees.length === 0 && (
                   <tr>
                     <td colSpan={5} className="py-8 text-center text-slate-400 text-xs">
-                      Aucun collaborateur ne correspond aux critères.
+                      {t('emp.noMatch')}
                     </td>
                   </tr>
                 )}
@@ -316,7 +317,7 @@ export const EmployeesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Detail: Fiche Employé 360° (RH-2 & RH-3) */}
+        {/* Right Detail: Employee 360° Card (RH-2 & RH-3) */}
         <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-5">
           {selectedEmployee ? (
             <>
@@ -342,7 +343,7 @@ export const EmployeesView: React.FC = () => {
                   <button
                     onClick={() => handleOpenEdit(selectedEmployee)}
                     className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-md transition-colors"
-                    title="Modifier l'employé"
+                    title={t('emp.editTooltip')}
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
@@ -350,7 +351,7 @@ export const EmployeesView: React.FC = () => {
                     <button
                       onClick={() => deactivateEmployee(selectedEmployee.id)}
                       className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-md transition-colors"
-                      title="Désactiver l'employé (RH-1: jamais supprimer)"
+                      title={t('emp.deactivateTooltip')}
                     >
                       <UserX className="w-4 h-4" />
                     </button>
@@ -366,7 +367,7 @@ export const EmployeesView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span>{selectedEmployee.telephone}</span>
+                  <span dir="ltr">{selectedEmployee.telephone}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -377,45 +378,45 @@ export const EmployeesView: React.FC = () => {
               {/* Contract & Compensation (RH-2) */}
               <div className="bg-slate-50 rounded-lg p-3.5 space-y-2.5 text-xs">
                 <div className="font-semibold text-slate-900 flex items-center justify-between">
-                  <span>Conditions Contractuelles & Paie</span>
+                  <span>{t('emp.contractSection')}</span>
                   <span className="font-mono text-emerald-700">{selectedEmployee.type_contrat}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
                   <div>
-                    <span className="text-slate-500">Date d'embauche :</span>
+                    <span className="text-slate-500">{t('emp.hireDate')}</span>
                     <div className="font-medium text-slate-800">{selectedEmployee.date_embauche}</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Fin de contrat :</span>
+                    <span className="text-slate-500">{t('emp.endDate')}</span>
                     <div className="font-medium text-slate-800">
-                      {selectedEmployee.date_fin_contrat || 'Indéterminée (CDI)'}
+                      {selectedEmployee.date_fin_contrat || t('emp.indefinite')}
                     </div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Salaire Brut Base :</span>
+                    <span className="text-slate-500">{t('emp.grossBase')}</span>
                     <div className="font-mono font-bold text-slate-900">
                       {formatDH(selectedEmployee.salaire_brut_base)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Salaire Net Est. :</span>
+                    <span className="text-slate-500">{t('emp.netEst')}</span>
                     <div className="font-mono font-bold text-emerald-800">
                       {formatDH(selectedEmployee.salaire_net_base)}
                     </div>
                   </div>
                   <div>
-                    <span className="text-slate-500">N° CNSS :</span>
-                    <div className="font-mono text-slate-800">{selectedEmployee.numero_cnss || 'Non renseigné'}</div>
+                    <span className="text-slate-500">{t('emp.cnssNum')}</span>
+                    <div className="font-mono text-slate-800">{selectedEmployee.numero_cnss || t('emp.notProvided')}</div>
                   </div>
                   <div>
-                    <span className="text-slate-500">Coût horaire projet :</span>
-                    <div className="font-mono text-slate-800">{selectedEmployee.hourly_cost} DH/h</div>
+                    <span className="text-slate-500">{t('emp.hourlyCost')}</span>
+                    <div className="font-mono text-slate-800">{selectedEmployee.hourly_cost} DH/{t('common.hours')}</div>
                   </div>
                 </div>
 
                 <div className="pt-2 border-t border-slate-200 text-[11px]">
-                  <span className="text-slate-500">RIB bancaire : </span>
-                  <span className="font-mono text-slate-800">{selectedEmployee.rib || 'Non renseigné'}</span>
+                  <span className="text-slate-500">{t('emp.bankRib')} </span>
+                  <span className="font-mono text-slate-800">{selectedEmployee.rib || t('emp.notProvided')}</span>
                 </div>
               </div>
 
@@ -423,10 +424,10 @@ export const EmployeesView: React.FC = () => {
               <div className="space-y-2 pt-2">
                 <div className="text-xs font-semibold text-slate-900 flex items-center gap-1.5">
                   <History className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Historique des Évolutions (RH-3)</span>
+                  <span>{t('emp.historyTitle')}</span>
                 </div>
 
-                <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-40 overflow-y-auto pe-1">
                   {employeeHistory
                     .filter((h) => h.employee_id === selectedEmployee.id)
                     .map((h) => (
@@ -436,21 +437,21 @@ export const EmployeesView: React.FC = () => {
                           <span>{h.date_effet}</span>
                         </div>
                         <div className="mt-1 text-slate-800">
-                          <span className="line-through text-slate-400 mr-2">{h.ancienne_valeur}</span>
+                          <span className="line-through text-slate-400 me-2">{h.ancienne_valeur}</span>
                           <span className="font-semibold text-emerald-700">→ {h.nouvelle_valeur}</span>
                         </div>
                         <div className="text-[11px] text-slate-500 italic mt-0.5">{h.motif}</div>
                       </div>
                     ))}
                   {employeeHistory.filter((h) => h.employee_id === selectedEmployee.id).length === 0 && (
-                    <div className="text-xs text-slate-400 py-2 text-center">Aucun changement enregistré.</div>
+                    <div className="text-xs text-slate-400 py-2 text-center">{t('emp.noHistory')}</div>
                   )}
                 </div>
               </div>
             </>
           ) : (
             <div className="py-16 text-center text-slate-400 text-xs">
-              Sélectionnez un employé pour afficher sa fiche complète.
+              {t('emp.selectPrompt')}
             </div>
           )}
         </div>
@@ -461,7 +462,7 @@ export const EmployeesView: React.FC = () => {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Ajouter un nouveau collaborateur</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('emp.modalNewTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
@@ -470,7 +471,7 @@ export const EmployeesView: React.FC = () => {
             <form onSubmit={handleCreateEmployee} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Nom *</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.lastName')}</label>
                   <input
                     type="text"
                     required
@@ -480,7 +481,7 @@ export const EmployeesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Prénom *</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.firstName')}</label>
                   <input
                     type="text"
                     required
@@ -493,7 +494,7 @@ export const EmployeesView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Email professionnel *</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.email')}</label>
                   <input
                     type="email"
                     required
@@ -503,7 +504,7 @@ export const EmployeesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Téléphone</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.phone')}</label>
                   <input
                     type="text"
                     value={formData.telephone}
@@ -515,7 +516,7 @@ export const EmployeesView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">CIN</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.cin')}</label>
                   <input
                     type="text"
                     value={formData.cin}
@@ -524,7 +525,7 @@ export const EmployeesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">N° CNSS</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.cnss')}</label>
                   <input
                     type="text"
                     value={formData.numero_cnss}
@@ -536,7 +537,7 @@ export const EmployeesView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Poste</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.role')}</label>
                   <input
                     type="text"
                     value={formData.poste}
@@ -545,7 +546,7 @@ export const EmployeesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Département</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.dept')}</label>
                   <select
                     value={formData.departement}
                     onChange={(e) => setFormData({ ...formData, departement: e.target.value })}
@@ -562,7 +563,7 @@ export const EmployeesView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Type de contrat</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.contractType')}</label>
                   <select
                     value={formData.type_contrat}
                     onChange={(e) => setFormData({ ...formData, type_contrat: e.target.value as ContractType })}
@@ -575,7 +576,7 @@ export const EmployeesView: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Salaire Brut de Base (DH)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.baseGross')}</label>
                   <input
                     type="number"
                     value={formData.salaire_brut_base}
@@ -587,7 +588,7 @@ export const EmployeesView: React.FC = () => {
 
               {formData.type_contrat === 'CDD' && (
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Date de fin CDD</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.cddEnd')}</label>
                   <input
                     type="date"
                     value={formData.date_fin_contrat}
@@ -598,7 +599,7 @@ export const EmployeesView: React.FC = () => {
               )}
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">RIB Bancaire (24 chiffres)</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.rib')}</label>
                 <input
                   type="text"
                   placeholder="011 780 0000 000000000000 00"
@@ -614,13 +615,13 @@ export const EmployeesView: React.FC = () => {
                   onClick={() => setIsNewModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
                 >
-                  Enregistrer l'employé
+                  {t('emp.saveNewBtn')}
                 </button>
               </div>
             </form>
@@ -634,7 +635,7 @@ export const EmployeesView: React.FC = () => {
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">
-                Modifier : {selectedEmployee.prenom} {selectedEmployee.nom}
+                {t('emp.modalEditTitle', { name: `${selectedEmployee.prenom} ${selectedEmployee.nom}` })}
               </h3>
               <button onClick={() => setIsEditModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
@@ -643,7 +644,7 @@ export const EmployeesView: React.FC = () => {
 
             <form onSubmit={handleSaveEdit} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Poste</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.role')}</label>
                 <input
                   type="text"
                   value={editData.poste || ''}
@@ -653,7 +654,7 @@ export const EmployeesView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Salaire Brut (DH)</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.grossLabel')}</label>
                 <input
                   type="number"
                   value={editData.salaire_brut_base || 0}
@@ -664,12 +665,12 @@ export const EmployeesView: React.FC = () => {
 
               <div>
                 <label className="block text-slate-600 mb-1 font-medium">
-                  Motif de la modification (RH-3 traçabilité automatique) *
+                  {t('emp.field.reason')}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ex: Augmentation annuelle, promotion de poste..."
+                  placeholder={t('emp.field.reasonPlaceholder')}
                   value={editMotif}
                   onChange={(e) => setEditMotif(e.target.value)}
                   className="w-full p-2 border border-slate-200 rounded-lg"
@@ -682,13 +683,13 @@ export const EmployeesView: React.FC = () => {
                   onClick={() => setIsEditModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
                 >
-                  Sauvegarder l'évolution
+                  {t('emp.saveEditBtn')}
                 </button>
               </div>
             </form>

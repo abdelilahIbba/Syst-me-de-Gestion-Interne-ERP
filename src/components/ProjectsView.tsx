@@ -5,8 +5,10 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { Project, ProjectType, ProjectStatus } from '../types';
 import { formatDH, round2 } from '../utils/calculations';
+import { ProjectsComparisonChart } from './ProjectsComparisonChart';
 import {
   FolderGit2,
   Plus,
@@ -21,6 +23,7 @@ import {
 
 export const ProjectsView: React.FC = () => {
   const { projects, clients, employees, dailyReports, siteVisits, payments, invoices, addProject } = useApp();
+  const { t } = useI18n();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -111,9 +114,9 @@ export const ProjectsView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Systèmes Vendus & Rentabilité</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('projects.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module CL-3 & CL-7 · Suivi des livrables et calcul automatique de rentabilité réelle (Heures + Frais)
+            {t('projects.subtitle')}
           </div>
         </div>
 
@@ -122,20 +125,20 @@ export const ProjectsView: React.FC = () => {
           className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouveau Projet / Système</span>
+          <span>{t('projects.newBtn')}</span>
         </button>
       </div>
 
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Rechercher système, client, techno..."
+            placeholder={t('projects.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white"
+            className="w-full ps-9 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white"
           />
         </div>
 
@@ -144,11 +147,11 @@ export const ProjectsView: React.FC = () => {
           onChange={(e) => setFilterType(e.target.value)}
           className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
         >
-          <option value="all">Tous Types</option>
-          <option value="site web">Site Web</option>
-          <option value="application">Application</option>
-          <option value="POS">POS / Caisse</option>
-          <option value="gestion">ERP / Gestion</option>
+          <option value="all">{t('projects.allTypes')}</option>
+          <option value="site web">{t('projects.type.website')}</option>
+          <option value="application">{t('projects.type.app')}</option>
+          <option value="POS">{t('projects.type.pos')}</option>
+          <option value="gestion">{t('projects.type.erp')}</option>
         </select>
 
         <select
@@ -156,13 +159,24 @@ export const ProjectsView: React.FC = () => {
           onChange={(e) => setFilterStatut(e.target.value)}
           className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
         >
-          <option value="all">Tous Statuts</option>
+          <option value="all">{t('projects.allStatuses')}</option>
           <option value="en cours">En cours</option>
           <option value="livré">Livré</option>
           <option value="suspendu">Suspendu</option>
           <option value="annulé">Annulé</option>
         </select>
       </div>
+
+      {/* Recharts Profitability Comparison: Revenus vs Charges Directes */}
+      <ProjectsComparisonChart
+        projects={filteredProjects}
+        clients={clients}
+        invoices={invoices}
+        payments={payments}
+        dailyReports={dailyReports}
+        siteVisits={siteVisits}
+        employees={employees}
+      />
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -199,7 +213,7 @@ export const ProjectsView: React.FC = () => {
 
               {/* Technologies strip */}
               <div className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-md font-mono">
-                Tech : {p.technologies}
+                {t('projects.techPrefix')} {p.technologies}
               </div>
 
               {/* Profitability Box (CL-7) */}
@@ -207,7 +221,7 @@ export const ProjectsView: React.FC = () => {
                 <div className="flex items-center justify-between font-semibold text-slate-900">
                   <span className="flex items-center gap-1.5">
                     <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Rentabilité Réelle (CL-7)</span>
+                    <span>{t('projects.realProfitability')}</span>
                   </span>
                   <span className={`font-mono font-bold ${prof.netProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
                     {formatDH(prof.netProfit)} ({prof.margin}%)
@@ -216,15 +230,15 @@ export const ProjectsView: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-2 text-[11px] pt-1 border-t border-slate-200 text-slate-600">
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Revenus Encaissés</span>
+                    <span className="text-slate-400 block text-[10px]">{t('projects.collectedRevenue')}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.encaissé)}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Coût MO ({prof.totalHours}h)</span>
+                    <span className="text-slate-400 block text-[10px]">{t('projects.laborCost', { hours: prof.totalHours })}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.laborCost)}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[10px]">Frais Déplacement</span>
+                    <span className="text-slate-400 block text-[10px]">{t('projects.travelExpenses')}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.travelExpenses)}</span>
                   </div>
                 </div>
@@ -232,7 +246,7 @@ export const ProjectsView: React.FC = () => {
 
               {/* Bottom links and details */}
               <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
-                <span>Chef de projet : <strong className="text-slate-700">{chef?.prenom} {chef?.nom}</strong></span>
+                <span>{t('projects.projectManager')} <strong className="text-slate-700">{chef?.prenom} {chef?.nom}</strong></span>
                 {p.url_production && (
                   <a
                     href={p.url_production}
@@ -240,7 +254,7 @@ export const ProjectsView: React.FC = () => {
                     rel="noreferrer"
                     className="flex items-center gap-1 text-blue-600 hover:underline"
                   >
-                    <span>Lien prod</span>
+                    <span>{t('projects.prodLink')}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 )}
@@ -255,7 +269,7 @@ export const ProjectsView: React.FC = () => {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Ajouter un système vendu / projet</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('projects.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
@@ -263,7 +277,7 @@ export const ProjectsView: React.FC = () => {
 
             <form onSubmit={handleCreate} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Client *</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
                 <select
                   value={formData.client_id}
                   onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
@@ -278,11 +292,11 @@ export const ProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Nom du Système / Logiciel *</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.name')}</label>
                 <input
                   type="text"
                   required
-                  placeholder="Ex: ERP Logistique V3, Caisse POS Tactile..."
+                  placeholder={t('projects.field.namePlaceholder')}
                   value={formData.nom_systeme}
                   onChange={(e) => setFormData({ ...formData, nom_systeme: e.target.value })}
                   className="w-full p-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-blue-500"
@@ -291,22 +305,22 @@ export const ProjectsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Type</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.type')}</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value as ProjectType })}
                     className="w-full p-2 border border-slate-200 rounded-lg"
                   >
-                    <option value="site web">Site Web</option>
-                    <option value="application">Application Mobile/Web</option>
-                    <option value="POS">Système POS / Caisses</option>
-                    <option value="gestion">Logiciel de Gestion / ERP</option>
-                    <option value="autre">Autre</option>
+                    <option value="site web">{t('projects.type.website')}</option>
+                    <option value="application">{t('projects.type.app')}</option>
+                    <option value="POS">{t('projects.type.pos')}</option>
+                    <option value="gestion">{t('projects.type.erp')}</option>
+                    <option value="autre">{t('projects.type.other')}</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Prix de vente HT (DH)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.priceHt')}</label>
                   <input
                     type="number"
                     value={formData.prix_vente_ht}
@@ -317,10 +331,10 @@ export const ProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Technologies employées</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.tech')}</label>
                 <input
                   type="text"
-                  placeholder="Ex: React, Node.js, PostgreSQL, Docker..."
+                  placeholder={t('projects.field.techPlaceholder')}
                   value={formData.technologies}
                   onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
                   className="w-full p-2 border border-slate-200 rounded-lg"
@@ -328,7 +342,7 @@ export const ProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Description</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.description')}</label>
                 <textarea
                   rows={2}
                   value={formData.description}
@@ -343,13 +357,13 @@ export const ProjectsView: React.FC = () => {
                   onClick={() => setIsNewModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg font-semibold shadow-xs"
                 >
-                  Enregistrer le système
+                  {t('projects.saveBtn')}
                 </button>
               </div>
             </form>

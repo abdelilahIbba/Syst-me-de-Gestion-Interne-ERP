@@ -5,26 +5,27 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Contract, MaintenancePeriodicity } from '../types';
+import { useI18n } from '../context/I18nContext';
+import { Contract, MaintenancePeriodicity, ContractStatus } from '../types';
 import { formatDH, checkContractExpiration } from '../utils/calculations';
 import {
-  FileCheck2,
   Plus,
   AlertTriangle,
   Play,
   CheckCircle2,
-  Clock,
-  Building2,
-  Calendar,
   X,
-  RefreshCw,
 } from 'lucide-react';
 
 export const ContractsView: React.FC = () => {
-  const { contracts, clients, projects, addContract, runRecurringMaintenanceBilling } = useApp();
+  const { contracts, clients, projects, addContract, runRecurringMaintenanceBilling, cancelPack, hasUserPermission } = useApp();
+  const { t } = useI18n();
 
+  const canCancelPack = hasUserPermission('cancel_pack');
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [billingResult, setBillingResult] = useState<number | null>(null);
+  const [cancelPackTarget, setCancelPackTarget] = useState<Contract | null>(null);
+  const [cancelMotif, setCancelMotif] = useState('');
+  const [cancelMessage, setCancelMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const [formData, setFormData] = useState({
     client_id: clients[0]?.id || '',
@@ -41,6 +42,17 @@ export const ContractsView: React.FC = () => {
     heures_incluses: 10,
     statut: 'actif' as const,
   });
+
+  const translatePeriodicity = (p: MaintenancePeriodicity) => {
+    if (p === 'mensuelle') return t('contracts.period.mensuelle');
+    if (p === 'trimestrielle') return t('contracts.period.trimestrielle');
+    return t('contracts.period.annuelle');
+  };
+
+  const translateContractStatus = (s: ContractStatus) => {
+    if (s === 'résilié') return t('contracts.status.résilié');
+    return t('contracts.status.actif');
+  };
 
   const handleRunBilling = () => {
     const count = runRecurringMaintenanceBilling();
@@ -60,9 +72,9 @@ export const ContractsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Contrats de Maintenance</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('contracts.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module CL-4, CL-5 & CL-6 · Gestion des récurrences, alertes d'échéances et facturation automatique
+            {t('contracts.subtitle')}
           </div>
         </div>
 
@@ -70,19 +82,19 @@ export const ContractsView: React.FC = () => {
           {/* Recurring Billing Button (CL-6) */}
           <button
             onClick={handleRunBilling}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg shadow-xs transition-colors"
-            title="Déclencheur automatique de facturation des contrats échus"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
+            title={t('contracts.runBillingTooltip')}
           >
             <Play className="w-3.5 h-3.5 fill-current" />
-            <span>Exécuter Facturation Récurrente (CL-6)</span>
+            <span>{t('contracts.runBilling')}</span>
           </button>
 
           <button
             onClick={() => setIsNewModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>Nouveau Contrat</span>
+            <span>{t('contracts.newBtn')}</span>
           </button>
         </div>
       </div>
@@ -91,27 +103,42 @@ export const ContractsView: React.FC = () => {
         <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>
-              Traitement terminé avec succès : <strong className="font-semibold">{billingResult}</strong> facture(s)
-              brouillon de maintenance générée(s) dans le classeur. Les dates ont été avancées.
-            </span>
+            <span>{t('contracts.billingDone', { count: billingResult })}</span>
           </div>
+        </div>
+      )}
+
+      {cancelMessage && (
+        <div
+          className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+            cancelMessage.type === 'success'
+              ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+              : 'bg-rose-50 border-rose-200 text-rose-900'
+          }`}
+        >
+          {cancelMessage.type === 'success' ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          ) : (
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+          )}
+          <span>{cancelMessage.text}</span>
         </div>
       )}
 
       {/* Contracts Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
-                <th className="py-3 px-4">Contrat</th>
-                <th className="py-3 px-3">Client & Système</th>
-                <th className="py-3 px-3">Période & Périodicité</th>
-                <th className="py-3 px-3 text-right">Montant HT</th>
-                <th className="py-3 px-3">Prochaine Facturation</th>
-                <th className="py-3 px-3">Alerte Échéance (CL-5 & R9)</th>
-                <th className="py-3 px-3 text-center">Statut</th>
+                <th className="py-3 px-4 text-start">{t('contracts.col.contract')}</th>
+                <th className="py-3 px-3 text-start">{t('contracts.col.clientSystem')}</th>
+                <th className="py-3 px-3 text-start">{t('contracts.col.period')}</th>
+                <th className="py-3 px-3 text-end">{t('contracts.col.amountHt')}</th>
+                <th className="py-3 px-3 text-start">{t('contracts.col.nextBilling')}</th>
+                <th className="py-3 px-3 text-start">{t('contracts.col.alert')}</th>
+                <th className="py-3 px-3 text-center">{t('common.status')}</th>
+                {canCancelPack && <th className="py-3 px-4 text-end">{t('common.actions')}</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -136,10 +163,12 @@ export const ContractsView: React.FC = () => {
                       <div className="text-slate-800 font-medium">
                         {c.date_debut} → {c.date_fin}
                       </div>
-                      <div className="text-[11px] text-slate-400 capitalize">{c.periodicite} ({c.heures_incluses}h)</div>
+                      <div className="text-[11px] text-slate-400">
+                        {translatePeriodicity(c.periodicite)} ({c.heures_incluses}{t('common.hours')})
+                      </div>
                     </td>
 
-                    <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
+                    <td className="py-3 px-3 text-end font-mono font-bold text-slate-900">
                       {formatDH(c.montant_ht)}
                     </td>
 
@@ -164,10 +193,31 @@ export const ContractsView: React.FC = () => {
                     </td>
 
                     <td className="py-3 px-3 text-center">
-                      <span className="text-[11px] font-semibold text-emerald-700 capitalize">
-                        {c.statut}
+                      <span
+                        className={`text-[11px] font-semibold ${
+                          c.statut === 'résilié' ? 'text-rose-700' : 'text-emerald-700'
+                        }`}
+                      >
+                        {translateContractStatus(c.statut)}
                       </span>
                     </td>
+
+                    {canCancelPack && (
+                      <td className="py-3 px-4 text-end whitespace-nowrap">
+                        {c.statut === 'actif' && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCancelPackTarget(c);
+                              setCancelMotif(t('contracts.cancelPackDesc', { num: c.numero_contrat }));
+                            }}
+                            className="px-2.5 py-1 text-[11px] font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-md transition-colors whitespace-nowrap"
+                          >
+                            {t('contracts.cancelPackBtn')}
+                          </button>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 );
               })}
@@ -181,7 +231,7 @@ export const ContractsView: React.FC = () => {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Nouveau Contrat de Maintenance (CL-4)</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('contracts.modalNewTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
@@ -189,7 +239,7 @@ export const ContractsView: React.FC = () => {
 
             <form onSubmit={handleCreate} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Client *</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
                 <select
                   value={formData.client_id}
                   onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
@@ -204,7 +254,7 @@ export const ContractsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Système Associé *</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.system')}</label>
                 <select
                   value={formData.project_id}
                   onChange={(e) => setFormData({ ...formData, project_id: e.target.value })}
@@ -220,7 +270,7 @@ export const ContractsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Date de début</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.start')}</label>
                   <input
                     type="date"
                     value={formData.date_debut}
@@ -229,7 +279,7 @@ export const ContractsView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Date de fin</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.end')}</label>
                   <input
                     type="date"
                     value={formData.date_fin}
@@ -241,19 +291,19 @@ export const ContractsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Périodicité</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.periodicity')}</label>
                   <select
                     value={formData.periodicite}
                     onChange={(e) => setFormData({ ...formData, periodicite: e.target.value as MaintenancePeriodicity })}
                     className="w-full p-2 border border-slate-200 rounded-lg"
                   >
-                    <option value="mensuelle">Mensuelle</option>
-                    <option value="trimestrielle">Trimestrielle</option>
-                    <option value="annuelle">Annuelle</option>
+                    <option value="mensuelle">{t('contracts.period.mensuelle')}</option>
+                    <option value="trimestrielle">{t('contracts.period.trimestrielle')}</option>
+                    <option value="annuelle">{t('contracts.period.annuelle')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Montant HT par période (DH)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.amountHt')}</label>
                   <input
                     type="number"
                     value={formData.montant_ht}
@@ -265,7 +315,7 @@ export const ContractsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Heures d'intervention incluses</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.hoursIncluded')}</label>
                   <input
                     type="number"
                     value={formData.heures_incluses}
@@ -274,7 +324,7 @@ export const ContractsView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Préavis de résiliation (jours)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.noticeDays')}</label>
                   <input
                     type="number"
                     value={formData.preavis_jours}
@@ -285,7 +335,7 @@ export const ContractsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Description du SLA</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.sla')}</label>
                 <textarea
                   rows={2}
                   value={formData.sla_description}
@@ -300,16 +350,85 @@ export const ContractsView: React.FC = () => {
                   onClick={() => setIsNewModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg font-semibold shadow-xs"
                 >
-                  Créer le contrat
+                  {t('contracts.createBtn')}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Cancel Pack / Annuler le pack */}
+      {cancelPackTarget && (
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 text-rose-700 font-bold text-sm">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{t('contracts.cancelModalTitle', { num: cancelPackTarget.numero_contrat })}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCancelPackTarget(null)}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="text-xs text-slate-600 space-y-3">
+              <p>
+                {t('contracts.cancelModalBody', { num: cancelPackTarget.numero_contrat })}
+              </p>
+              <div>
+                <label className="block text-slate-700 font-medium mb-1">{t('contracts.cancelMotifLabel')} *</label>
+                <textarea
+                  rows={2}
+                  required
+                  value={cancelMotif}
+                  onChange={(e) => setCancelMotif(e.target.value)}
+                  className="w-full p-2 border border-slate-200 rounded-lg"
+                />
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setCancelPackTarget(null)}
+                className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
+              >
+                {t('common.close')}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const res = cancelPack(cancelPackTarget.id, cancelMotif);
+                  if (res.success) {
+                    setCancelMessage({
+                      type: 'success',
+                      text: t('contracts.cancelSuccess', { num: cancelPackTarget.numero_contrat }),
+                    });
+                  } else {
+                    setCancelMessage({
+                      type: 'error',
+                      text: res.error || t('contracts.cancelError'),
+                    });
+                  }
+                  setCancelPackTarget(null);
+                  setTimeout(() => setCancelMessage(null), 4500);
+                }}
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-semibold"
+              >
+                {t('contracts.confirmCancelPack')}
+              </button>
+            </div>
           </div>
         </div>
       )}

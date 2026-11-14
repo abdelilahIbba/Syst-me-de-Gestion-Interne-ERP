@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { canAccessNav, hasPermission } from '../utils/rbac';
 import {
   LayoutDashboard,
@@ -15,7 +16,6 @@ import {
   FileCheck2,
   Receipt,
   FileText,
-  CreditCard,
   BellRing,
   WalletCards,
   CalendarCheck2,
@@ -25,7 +25,6 @@ import {
   ShieldCheck,
   Settings,
   History,
-  Code2,
 } from 'lucide-react';
 
 export type NavItemKey =
@@ -54,8 +53,9 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => {
   const { currentUser, roles } = useApp();
+  const { t, tRole } = useI18n();
 
-  // Automatic RBAC evaluation against dynamic role permissions matrix ("Droits d'accès par rôle")
+  // Automatic RBAC evaluation against dynamic role permissions matrix
   const canSee = (key: NavItemKey) => {
     if (key === 'settings' || key === 'users_admin') {
       return (
@@ -69,56 +69,56 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
 
   const navSections = [
     {
-      title: 'Général',
+      title: t('nav.section.general'),
       items: [
-        { key: 'dashboard' as NavItemKey, label: 'Tableau de bord', icon: LayoutDashboard, visible: canSee('dashboard') },
+        { key: 'dashboard' as NavItemKey, label: t('nav.dashboard'), icon: LayoutDashboard, visible: canSee('dashboard') },
       ],
     },
     {
-      title: 'Ressources Humaines',
+      title: t('nav.section.hr'),
       items: [
-        { key: 'employees' as NavItemKey, label: 'Employés', icon: Users, visible: canSee('employees') },
-        { key: 'payroll' as NavItemKey, label: 'Paie du mois', icon: Banknote, visible: canSee('payroll') },
+        { key: 'employees' as NavItemKey, label: t('nav.employees'), icon: Users, visible: canSee('employees') },
+        { key: 'payroll' as NavItemKey, label: t('nav.payroll'), icon: Banknote, visible: canSee('payroll') },
       ],
     },
     {
-      title: 'Relation Client & Contrats',
+      title: t('nav.section.crm'),
       items: [
-        { key: 'clients' as NavItemKey, label: 'Clients & Fiche 360°', icon: Building2, visible: canSee('clients') },
-        { key: 'projects' as NavItemKey, label: 'Systèmes vendus', icon: FolderGit2, visible: canSee('projects') },
-        { key: 'contracts' as NavItemKey, label: 'Contrats maintenance', icon: FileCheck2, visible: canSee('contracts') },
+        { key: 'clients' as NavItemKey, label: t('nav.clients'), icon: Building2, visible: canSee('clients') },
+        { key: 'projects' as NavItemKey, label: t('nav.projects'), icon: FolderGit2, visible: canSee('projects') },
+        { key: 'contracts' as NavItemKey, label: t('nav.contracts'), icon: FileCheck2, visible: canSee('contracts') },
       ],
     },
     {
-      title: 'Facturation & Trésorerie',
+      title: t('nav.section.billing'),
       items: [
-        { key: 'invoices' as NavItemKey, label: 'Factures & Avoirs', icon: Receipt, visible: canSee('invoices') },
-        { key: 'quotes' as NavItemKey, label: 'Devis', icon: FileText, visible: canSee('quotes') },
-        { key: 'reminders' as NavItemKey, label: 'Relances impayés', icon: BellRing, visible: canSee('reminders') },
-        { key: 'expenses' as NavItemKey, label: 'Charges & Dépenses', icon: WalletCards, visible: canSee('expenses') },
+        { key: 'invoices' as NavItemKey, label: t('nav.invoices'), icon: Receipt, visible: canSee('invoices') },
+        { key: 'quotes' as NavItemKey, label: t('nav.quotes'), icon: FileText, visible: canSee('quotes') },
+        { key: 'reminders' as NavItemKey, label: t('nav.reminders'), icon: BellRing, visible: canSee('reminders') },
+        { key: 'expenses' as NavItemKey, label: t('nav.expenses'), icon: WalletCards, visible: canSee('expenses') },
       ],
     },
     {
-      title: 'Activité & Terrain',
+      title: t('nav.section.activity'),
       items: [
-        { key: 'daily_report' as NavItemKey, label: 'Mon rapport du jour', icon: CalendarCheck2, visible: canSee('daily_report') },
-        { key: 'team_reports' as NavItemKey, label: 'Rapports de l\'équipe', icon: ClipboardList, visible: canSee('team_reports') },
-        { key: 'site_visits' as NavItemKey, label: 'Déplacements & Frais', icon: MapPin, visible: canSee('site_visits') },
-        { key: 'reports_exports' as NavItemKey, label: 'Exports & Synthèses', icon: BarChart3, visible: canSee('reports_exports') },
+        { key: 'daily_report' as NavItemKey, label: t('nav.daily_report'), icon: CalendarCheck2, visible: canSee('daily_report') },
+        { key: 'team_reports' as NavItemKey, label: t('nav.team_reports'), icon: ClipboardList, visible: canSee('team_reports') },
+        { key: 'site_visits' as NavItemKey, label: t('nav.site_visits'), icon: MapPin, visible: canSee('site_visits') },
+        { key: 'reports_exports' as NavItemKey, label: t('nav.reports_exports'), icon: BarChart3, visible: canSee('reports_exports') },
       ],
     },
     {
-      title: 'Administration',
+      title: t('nav.section.admin'),
       items: [
-        { key: 'users_admin' as NavItemKey, label: 'Utilisateurs & Rôles', icon: ShieldCheck, visible: canSee('users_admin') },
-        { key: 'settings' as NavItemKey, label: 'Paramètres Société', icon: Settings, visible: canSee('settings') },
-        { key: 'audit_log' as NavItemKey, label: 'Journal d\'audit', icon: History, visible: canSee('audit_log') },
+        { key: 'users_admin' as NavItemKey, label: t('nav.users_admin'), icon: ShieldCheck, visible: canSee('users_admin') },
+        { key: 'settings' as NavItemKey, label: t('nav.settings'), icon: Settings, visible: canSee('settings') },
+        { key: 'audit_log' as NavItemKey, label: t('nav.audit_log'), icon: History, visible: canSee('audit_log') },
       ],
     },
   ];
 
   return (
-    <aside className="w-64 bg-[#070b18] text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-slate-800/80">
+    <aside className="w-64 bg-[#070b18] text-slate-300 flex flex-col shrink-0 min-h-screen border-e border-slate-800/80">
       {/* Brand Header with DEVNAPP Logo */}
       <div className="h-18 px-4 flex items-center gap-3 border-b border-slate-800/80 bg-slate-950/80">
         <img
@@ -131,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
             <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">DEVNAPP</span>
             <span className="text-[10px] text-slate-400 font-bold font-mono">SARL</span>
           </div>
-          <div className="text-[10px] text-cyan-400 font-mono tracking-tight uppercase">DNA Digital Solutions</div>
+          <div className="text-[10px] text-cyan-400 font-mono tracking-tight uppercase">{t('app.tagline')}</div>
         </div>
       </div>
 
@@ -154,9 +154,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                     <button
                       key={item.key}
                       onClick={() => onSelectTab(item.key as NavItemKey)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg transition-all text-left ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-lg transition-all text-start ${
                         isActive
-                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold shadow-xs shadow-cyan-500/25 border-l-2 border-l-cyan-300'
+                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold shadow-xs shadow-cyan-500/25 border-s-2 border-s-cyan-300'
                           : 'text-slate-300 hover:bg-slate-800/70 hover:text-white'
                       }`}
                     >
@@ -179,7 +179,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-semibold text-white truncate">{currentUser.name}</div>
-            <div className="text-[10px] text-cyan-400/90 capitalize truncate font-mono">Rôle: {currentUser.role}</div>
+            <div className="text-[10px] text-cyan-400/90 truncate font-mono">
+              {t('sidebar.roleFooter')}: {tRole(currentUser.role, currentUser.role)}
+            </div>
           </div>
         </div>
       </div>

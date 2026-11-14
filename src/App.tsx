@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { Sidebar, NavItemKey } from './components/Sidebar';
@@ -26,70 +26,171 @@ import { SettingsView } from './components/SettingsView';
 import { AuditLogView } from './components/AuditLogView';
 import { GoogleSheetsModal } from './components/GoogleSheetsModal';
 import { MobileDeviceSimulator } from './components/MobileDeviceSimulator';
+import { LoginModal } from './components/LoginModal';
+import { I18nProvider, useI18n } from './context/I18nContext';
+import { TranslationKey } from './i18n/translations';
+import { canAccessNav, hasPermission } from './utils/rbac';
+import { ShieldAlert, AlertTriangle } from 'lucide-react';
 
-const viewTitles: Record<NavItemKey, string> = {
-  dashboard: 'Tableau de bord',
-  employees: 'Gestion des Employés',
-  payroll: 'Paie Mensuelle (Barème Marocain)',
-  clients: 'Clients & Fiche 360°',
-  projects: 'Systèmes Vendus & Rentabilité',
-  contracts: 'Contrats de Maintenance & Alertes',
-  invoices: 'Facturation & Avoirs',
-  quotes: 'Devis Commerciaux',
-  reminders: 'Relances Factures Impayées',
-  expenses: 'Charges & Dépenses (Page Unique)',
-  daily_report: 'Mon Rapport Journalier',
-  team_reports: 'Rapports de l\'Équipe & Validation',
-  site_visits: 'Déplacements Terrain & Bons d\'Intervention',
-  reports_exports: 'Synthèses d\'Heures & Exports CSV',
-  users_admin: 'Administration des Utilisateurs & Rôles',
-  settings: 'Paramètres Société & Fiscaux',
-  audit_log: 'Journal d\'Audit & Sécurité',
+const viewTitleKeys: Record<NavItemKey, TranslationKey> = {
+  dashboard: 'view.dashboard',
+  employees: 'view.employees',
+  payroll: 'view.payroll',
+  clients: 'view.clients',
+  projects: 'view.projects',
+  contracts: 'view.contracts',
+  invoices: 'view.invoices',
+  quotes: 'view.quotes',
+  reminders: 'view.reminders',
+  expenses: 'view.expenses',
+  daily_report: 'view.daily_report',
+  team_reports: 'view.team_reports',
+  site_visits: 'view.site_visits',
+  reports_exports: 'view.reports_exports',
+  users_admin: 'view.users_admin',
+  settings: 'view.settings',
+  audit_log: 'view.audit_log',
 };
 
+const ALL_NAV_TABS: NavItemKey[] = [
+  'dashboard',
+  'daily_report',
+  'employees',
+  'payroll',
+  'clients',
+  'projects',
+  'contracts',
+  'invoices',
+  'quotes',
+  'reminders',
+  'expenses',
+  'team_reports',
+  'site_visits',
+  'reports_exports',
+  'users_admin',
+  'settings',
+  'audit_log',
+];
+
 function MainLayout() {
+  const { currentUser, roles } = useApp();
+  const { t, tRole, dir } = useI18n();
   const [currentTab, setCurrentTab] = useState<NavItemKey>('dashboard');
   const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
   const [isMobileSimOpen, setIsMobileSimOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [accessDeniedPayload, setAccessDeniedPayload] = useState<{
+    type: 'redirect' | 'denied';
+    tab: NavItemKey;
+  } | null>(null);
+
+  const isTabPermitted = (tab: NavItemKey): boolean => {
+    if (tab === 'settings' || tab === 'users_admin') {
+      return (
+        hasPermission(currentUser.role, 'manage_settings', roles) ||
+        hasPermission(currentUser.role, 'manage_users', roles) ||
+        hasPermission(currentUser.role, 'manage_roles', roles)
+      );
+    }
+    return canAccessNav(tab, currentUser.role, roles);
+  };
+
+  // Automatic RBAC route protection: if role/permissions change and currentTab is disallowed, redirect safely
+  useEffect(() => {
+    if (!isTabPermitted(currentTab)) {
+      const fallback = ALL_NAV_TABS.find((tabKey) => isTabPermitted(tabKey)) || 'daily_report';
+      setAccessDeniedPayload({ type: 'redirect', tab: currentTab });
+      setCurrentTab(fallback);
+      const timer = setTimeout(() => setAccessDeniedPayload(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentUser.role, roles, currentTab]);
+
+  const handleSelectTab = (tab: NavItemKey) => {
+    if (!isTabPermitted(tab)) {
+      setAccessDeniedPayload({ type: 'denied', tab });
+      setTimeout(() => setAccessDeniedPayload(null), 4500);
+      return;
+    }
+    setAccessDeniedPayload(null);
+    setCurrentTab(tab);
+  };
+
+  const tabAllowed = isTabPermitted(currentTab);
+  const activeRoleLabel = tRole(currentUser.role, currentUser.role);
+  const accessDeniedNotice = accessDeniedPayload
+    ? t(accessDeniedPayload.type === 'redirect' ? 'access.restrictedRedirect' : 'access.deniedTab', {
+        role: activeRoleLabel,
+        view: t(viewTitleKeys[accessDeniedPayload.tab]),
+      })
+    : null;
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
-      {/* Sidebar Navigation */}
-      <Sidebar currentTab={currentTab} onSelectTab={(tab) => setCurrentTab(tab)} />
+    <div dir={dir} className="flex h-screen bg-slate-50 overflow-hidden font-sans">
+      {/* Sidebar Navigation (filters items automatically via RBAC) */}
+      <Sidebar currentTab={currentTab} onSelectTab={handleSelectTab} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Header */}
         <Header
-          activeViewTitle={viewTitles[currentTab] || 'Système de Gestion'}
+          activeViewTitle={t(viewTitleKeys[currentTab]) || t('app.systemName')}
           onOpenSheets={() => setIsSheetsModalOpen(true)}
           onToggleMobileSim={() => setIsMobileSimOpen(!isMobileSimOpen)}
+          onOpenLogin={() => setIsLoginModalOpen(true)}
           isMobileSimOpen={isMobileSimOpen}
         />
 
         {/* Viewport Content */}
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="max-w-7xl mx-auto">
-            {currentTab === 'dashboard' && <DashboardView onNavigate={(t) => setCurrentTab(t)} />}
-            {currentTab === 'employees' && <EmployeesView />}
-            {currentTab === 'payroll' && <PayrollView />}
-            {currentTab === 'clients' && <ClientsView />}
-            {currentTab === 'projects' && <ProjectsView />}
-            {currentTab === 'contracts' && <ContractsView />}
-            {currentTab === 'invoices' && <InvoicesView />}
-            {currentTab === 'quotes' && <QuotesView onNavigateToInvoices={() => setCurrentTab('invoices')} />}
-            {currentTab === 'reminders' && <RemindersView />}
-            {currentTab === 'expenses' && <ExpensesView />}
-            {currentTab === 'daily_report' && <DailyReportView />}
-            {currentTab === 'team_reports' && <TeamReportsView />}
-            {currentTab === 'site_visits' && <SiteVisitsView />}
-            {currentTab === 'reports_exports' && <ReportsExportsView />}
-            {currentTab === 'users_admin' && <UsersAdminView />}
-            {currentTab === 'settings' && <SettingsView />}
-            {currentTab === 'audit_log' && <AuditLogView />}
+          <div className="max-w-7xl mx-auto space-y-4">
+            {accessDeniedNotice && (
+              <div className="p-3.5 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-center gap-2.5 shadow-2xs">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span className="font-medium">{accessDeniedNotice}</span>
+              </div>
+            )}
+
+            {!tabAllowed ? (
+              <div className="bg-white rounded-2xl border border-rose-200 p-8 text-center max-w-lg mx-auto my-12 space-y-3 shadow-xs">
+                <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
+                  <ShieldAlert className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900">{t('access.unauthorizedTitle')}</h3>
+                <p className="text-xs text-slate-600">
+                  {t('access.unauthorizedDesc', { role: activeRoleLabel })}
+                </p>
+              </div>
+            ) : (
+              <>
+                {currentTab === 'dashboard' && <DashboardView onNavigate={handleSelectTab} />}
+                {currentTab === 'employees' && <EmployeesView />}
+                {currentTab === 'payroll' && <PayrollView />}
+                {currentTab === 'clients' && <ClientsView />}
+                {currentTab === 'projects' && <ProjectsView />}
+                {currentTab === 'contracts' && <ContractsView />}
+                {currentTab === 'invoices' && <InvoicesView />}
+                {currentTab === 'quotes' && <QuotesView onNavigateToInvoices={() => handleSelectTab('invoices')} />}
+                {currentTab === 'reminders' && <RemindersView />}
+                {currentTab === 'expenses' && <ExpensesView />}
+                {currentTab === 'daily_report' && <DailyReportView />}
+                {currentTab === 'team_reports' && <TeamReportsView />}
+                {currentTab === 'site_visits' && <SiteVisitsView />}
+                {currentTab === 'reports_exports' && <ReportsExportsView />}
+                {currentTab === 'users_admin' && <UsersAdminView />}
+                {currentTab === 'settings' && <SettingsView />}
+                {currentTab === 'audit_log' && <AuditLogView />}
+              </>
+            )}
           </div>
         </main>
       </div>
+
+      {/* Login / Session Switcher Modal */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
 
       {/* Google Sheets Architecture & Anti-Injection Modal */}
       <GoogleSheetsModal
@@ -108,8 +209,10 @@ function MainLayout() {
 
 export default function App() {
   return (
-    <AppProvider>
-      <MainLayout />
-    </AppProvider>
+    <I18nProvider>
+      <AppProvider>
+        <MainLayout />
+      </AppProvider>
+    </I18nProvider>
   );
 }

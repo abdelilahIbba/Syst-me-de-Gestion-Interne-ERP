@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { findRole } from '../utils/rbac';
 import {
   Lock,
@@ -16,7 +17,6 @@ import {
   UserCheck,
   Shield,
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 interface LoginModalProps {
@@ -26,6 +26,7 @@ interface LoginModalProps {
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const { users, roles, currentUser, login, switchUser } = useApp();
+  const { t, tRole, isRTL } = useI18n();
 
   const [mode, setMode] = useState<'credentials' | 'accounts'>('accounts');
   const [email, setEmail] = useState('');
@@ -40,13 +41,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     setErrorMsg(null);
     const result = login(email, password);
     if (result.success && result.user) {
-      setSuccessMsg(`Authentifié avec succès : ${result.user.name} (${result.user.role})`);
+      setSuccessMsg(
+        t('login.authSuccess', {
+          name: result.user.name,
+          role: tRole(result.user.role, result.user.role),
+        })
+      );
       setTimeout(() => {
         setSuccessMsg(null);
         onClose();
       }, 1000);
     } else {
-      setErrorMsg(result.error || 'Échec de la connexion.');
+      setErrorMsg(result.error || t('login.authFailed'));
     }
   };
 
@@ -54,11 +60,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     const target = users.find((u) => u.id === userId);
     if (target) {
       if (!target.active) {
-        setErrorMsg('Ce compte est suspendu.');
+        setErrorMsg(t('login.suspendedError'));
         return;
       }
       switchUser(target);
-      setSuccessMsg(`Session basculée sur : ${target.name} (${target.role})`);
+      setSuccessMsg(
+        t('login.switchedSuccess', {
+          name: target.name,
+          role: tRole(target.role, target.role),
+        })
+      );
       setTimeout(() => {
         setSuccessMsg(null);
         onClose();
@@ -80,13 +91,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             <div>
               <div className="text-sm font-bold tracking-wide flex items-center gap-1.5">
                 <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
-                  Connexion & Authentification
+                  {t('login.title')}
                 </span>
                 <span className="text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800/80 px-1.5 py-0.5 rounded font-mono font-bold">
                   AUTH
                 </span>
               </div>
-              <div className="text-xs text-slate-400 mt-0.5">DEVNAPP SARL · Système de Gestion Interne ERP</div>
+              <div className="text-xs text-slate-400 mt-0.5">{t('login.subtitle')}</div>
             </div>
           </div>
           <button
@@ -112,7 +123,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             }`}
           >
             <UserCheck className="w-4 h-4" />
-            <span>Sélection Rapide des Utilisateurs ({users.length})</span>
+            <span>{t('login.tabAccounts', { count: users.length })}</span>
           </button>
           <button
             type="button"
@@ -127,7 +138,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             }`}
           >
             <KeyRound className="w-4 h-4" />
-            <span>Connexion Email / MDP</span>
+            <span>{t('login.tabCredentials')}</span>
           </button>
         </div>
 
@@ -150,14 +161,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {/* Mode 1: Quick Accounts List */}
           {mode === 'accounts' && (
             <div className="space-y-3">
-              <div className="text-xs text-slate-500 flex items-center justify-between">
-                <span>Cliquez sur un compte pour ouvrir sa session :</span>
+              <div className="text-xs text-slate-500 flex items-center justify-between gap-2">
+                <span>{t('login.selectAccountPrompt')}</span>
                 <span className="text-[11px] font-mono text-cyan-700 font-semibold">
-                  Session actuelle : {currentUser.name}
+                  {t('login.currentSession', { name: currentUser.name })}
                 </span>
               </div>
 
-              <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+              <div className="max-h-72 overflow-y-auto space-y-2 pe-1">
                 {users.map((u) => {
                   const roleObj = findRole(u.role_id || u.role, roles);
                   const isCurrent = u.id === currentUser.id;
@@ -194,7 +205,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                             <span className="font-semibold text-xs text-slate-900 truncate">{u.name}</span>
                             {isCurrent && (
                               <span className="text-[10px] font-bold text-cyan-700 bg-cyan-100 px-1.5 py-0.2 rounded-sm">
-                                Connecté
+                                {t('login.connected')}
                               </span>
                             )}
                           </div>
@@ -208,10 +219,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                             roleObj?.badgeColor || 'bg-slate-100 text-slate-800 border-slate-300'
                           }`}
                         >
-                          {roleObj?.name || u.role}
+                          {tRole(roleObj?.key || u.role, roleObj?.name || u.role)}
                         </span>
                         {!isCurrent && !isLocked && (
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                          <ArrowRight className={`w-3.5 h-3.5 text-slate-400 ${isRTL ? 'rotate-180' : ''}`} />
                         )}
                       </div>
                     </div>
@@ -227,14 +238,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <div>
                 <label className="block text-slate-700 font-medium mb-1 flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Adresse Email Professionnelle</span>
+                  <span>{t('login.emailLabel')}</span>
                 </label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ex: abdelilah@devnapp.ma, caisse@devnapp.ma"
+                  placeholder={t('login.emailPlaceholder')}
                   className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-hidden font-mono"
                 />
               </div>
@@ -242,18 +253,19 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               <div>
                 <label className="block text-slate-700 font-medium mb-1 flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Mot de passe</span>
+                  <span>{t('login.passwordLabel')}</span>
                 </label>
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Mot de passe"
+                  placeholder={t('login.passwordPlaceholder')}
                   className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-hidden font-mono"
                 />
                 <div className="text-[11px] text-slate-400 mt-1">
-                  Mot de passe par défaut pour tous les comptes : <code className="font-mono text-cyan-600 font-bold">devnapp2026!</code>
+                  {t('login.defaultPasswordHint')}{' '}
+                  <code className="font-mono text-cyan-600 font-bold">devnapp2026!</code>
                 </div>
               </div>
 
@@ -263,7 +275,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   className="w-full py-2.5 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>S'authentifier</span>
+                  <span>{t('login.submit')}</span>
                 </button>
               </div>
             </form>
@@ -274,13 +286,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <div className="bg-slate-50 px-5 py-3 border-t border-slate-200/80 text-[11px] text-slate-500 flex items-center justify-between">
           <span className="flex items-center gap-1.5">
             <Shield className="w-3.5 h-3.5 text-cyan-600" />
-            <span>Contrôle d'accès basé sur les rôles (RBAC actif)</span>
+            <span>{t('login.footerRbac')}</span>
           </span>
           <button
             onClick={onClose}
             className="text-slate-600 hover:text-slate-900 font-semibold"
           >
-            Fermer
+            {t('common.close')}
           </button>
         </div>
       </div>

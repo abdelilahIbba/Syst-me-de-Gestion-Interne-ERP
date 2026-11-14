@@ -5,19 +5,13 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import {
-  History,
-  Search,
-  Filter,
-  Shield,
-  Clock,
-  User,
-  Database,
-  ArrowRight,
-} from 'lucide-react';
+import { useI18n } from '../context/I18nContext';
+import { AuditLogEntry } from '../types';
+import { Search } from 'lucide-react';
 
 export const AuditLogView: React.FC = () => {
   const { auditLogs } = useApp();
+  const { t } = useI18n();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState('all');
@@ -25,6 +19,23 @@ export const AuditLogView: React.FC = () => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
 
   const tables = Array.from(new Set(auditLogs.map((l) => l.table)));
+
+  const translateAuditAction = (action: AuditLogEntry['action']) => {
+    switch (action) {
+      case 'créer':
+        return t('audit.action.créer');
+      case 'modifier':
+        return t('audit.action.modifier');
+      case 'valider':
+        return t('audit.action.valider');
+      case 'paiement':
+        return t('audit.action.paiement');
+      case 'connexion':
+        return t('audit.action.connexion');
+      default:
+        return action;
+    }
+  };
 
   const filteredLogs = auditLogs.filter((log) => {
     const term = searchTerm.toLowerCase();
@@ -44,36 +55,36 @@ export const AuditLogView: React.FC = () => {
     <div className="space-y-6">
       {/* Top Bar */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Journal d'Audit & Traçabilité</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('audit.title')}</h2>
         <div className="text-xs text-slate-500 mt-0.5">
-          Module AUTH-6 & E23 · Traçabilité non modifiable de toutes les modifications sensibles (salaires, factures, droits, suppressions logiques)
+          {t('audit.subtitle')}
         </div>
       </div>
 
       {/* Filter and Search Bar */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Rechercher utilisateur, table, enregistrement..."
+            placeholder={t('audit.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white"
+            className="w-full ps-9 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white"
           />
         </div>
 
         <select
           value={filterAction}
           onChange={(e) => setFilterAction(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 capitalize"
+          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
         >
-          <option value="all">Toutes Actions</option>
-          <option value="créer">Création</option>
-          <option value="modifier">Modification</option>
-          <option value="valider">Validation</option>
-          <option value="paiement">Paiement</option>
-          <option value="connexion">Connexion</option>
+          <option value="all">{t('audit.allActions')}</option>
+          <option value="créer">{t('audit.action.créer')}</option>
+          <option value="modifier">{t('audit.action.modifier')}</option>
+          <option value="valider">{t('audit.action.valider')}</option>
+          <option value="paiement">{t('audit.action.paiement')}</option>
+          <option value="connexion">{t('audit.action.connexion')}</option>
         </select>
 
         <select
@@ -81,10 +92,10 @@ export const AuditLogView: React.FC = () => {
           onChange={(e) => setFilterTable(e.target.value)}
           className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
         >
-          <option value="all">Toutes Tables</option>
-          {tables.map((t) => (
-            <option key={t} value={t}>
-              {t}
+          <option value="all">{t('audit.allTables')}</option>
+          {tables.map((tbl) => (
+            <option key={tbl} value={tbl}>
+              {tbl}
             </option>
           ))}
         </select>
@@ -95,14 +106,14 @@ export const AuditLogView: React.FC = () => {
         {/* Table of logs (7 cols) */}
         <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto max-h-[650px] overflow-y-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-start text-xs">
               <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 sticky top-0 z-10">
                 <tr>
-                  <th className="py-2.5 px-3">Date & Heure</th>
-                  <th className="py-2.5 px-3">Utilisateur</th>
-                  <th className="py-2.5 px-3">Action</th>
-                  <th className="py-2.5 px-3">Table & Cible</th>
-                  <th className="py-2.5 px-3 text-right">IP</th>
+                  <th className="py-2.5 px-3 text-start">{t('audit.col.datetime')}</th>
+                  <th className="py-2.5 px-3 text-start">{t('audit.col.user')}</th>
+                  <th className="py-2.5 px-3 text-start">{t('audit.col.action')}</th>
+                  <th className="py-2.5 px-3 text-start">{t('audit.col.tableTarget')}</th>
+                  <th className="py-2.5 px-3 text-end">IP</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -117,7 +128,7 @@ export const AuditLogView: React.FC = () => {
                         isSelected ? 'bg-blue-50/80 font-medium' : 'hover:bg-slate-50/70'
                       }`}
                     >
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600">
+                      <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600" dir="ltr">
                         {log.horodatage}
                       </td>
 
@@ -137,7 +148,7 @@ export const AuditLogView: React.FC = () => {
                               : 'bg-slate-100 text-slate-700'
                           }`}
                         >
-                          {log.action}
+                          {translateAuditAction(log.action)}
                         </span>
                       </td>
 
@@ -146,7 +157,7 @@ export const AuditLogView: React.FC = () => {
                         <div className="text-[10px] text-slate-400 font-mono">{log.enregistrement_id}</div>
                       </td>
 
-                      <td className="py-2.5 px-3 text-right font-mono text-[11px] text-slate-500">
+                      <td className="py-2.5 px-3 text-end font-mono text-[11px] text-slate-500" dir="ltr">
                         {log.ip}
                       </td>
                     </tr>
@@ -163,9 +174,9 @@ export const AuditLogView: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Détail de la Transaction</h3>
+                  <h3 className="text-sm font-bold text-slate-900">{t('audit.detailTitle')}</h3>
                   <div className="text-[11px] text-slate-500 font-mono">
-                    ID : {selectedLog.id} · Horodatage : {selectedLog.horodatage}
+                    {t('audit.idTimestamp', { id: selectedLog.id, ts: selectedLog.horodatage })}
                   </div>
                 </div>
                 <span className="font-mono text-xs text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
@@ -175,16 +186,16 @@ export const AuditLogView: React.FC = () => {
 
               <div className="text-xs space-y-2">
                 <div>
-                  <span className="text-slate-500 font-medium">Auteur de l'action : </span>
+                  <span className="text-slate-500 font-medium">{t('audit.author')} </span>
                   <strong className="text-slate-900">{selectedLog.user_name}</strong> ({selectedLog.user_id})
                 </div>
                 <div>
-                  <span className="text-slate-500 font-medium">Enregistrement cible : </span>
+                  <span className="text-slate-500 font-medium">{t('audit.targetRecord')} </span>
                   <strong className="font-mono text-slate-900">{selectedLog.enregistrement_id}</strong>
                 </div>
                 <div>
-                  <span className="text-slate-500 font-medium">Adresse IP certifiée : </span>
-                  <span className="font-mono text-slate-700">{selectedLog.ip}</span>
+                  <span className="text-slate-500 font-medium">{t('audit.ip')} </span>
+                  <span className="font-mono text-slate-700" dir="ltr">{selectedLog.ip}</span>
                 </div>
               </div>
 
@@ -193,9 +204,9 @@ export const AuditLogView: React.FC = () => {
                 {selectedLog.ancien && (
                   <div>
                     <span className="text-[11px] font-semibold text-slate-500 block mb-1">
-                      État Précédent (Avant modification) :
+                      {t('audit.beforeState')}
                     </span>
-                    <pre className="p-3 bg-slate-900 text-slate-100 rounded-lg text-[11px] font-mono overflow-x-auto max-h-40">
+                    <pre dir="ltr" className="p-3 bg-slate-900 text-slate-100 rounded-lg text-[11px] font-mono overflow-x-auto max-h-40 text-left">
                       {JSON.stringify(selectedLog.ancien, null, 2)}
                     </pre>
                   </div>
@@ -204,9 +215,9 @@ export const AuditLogView: React.FC = () => {
                 {selectedLog.nouveau && (
                   <div>
                     <span className="text-[11px] font-semibold text-emerald-700 block mb-1">
-                      Nouvel État Validé (Après transaction) :
+                      {t('audit.afterState')}
                     </span>
-                    <pre className="p-3 bg-slate-900 text-emerald-400 rounded-lg text-[11px] font-mono overflow-x-auto max-h-48">
+                    <pre dir="ltr" className="p-3 bg-slate-900 text-emerald-400 rounded-lg text-[11px] font-mono overflow-x-auto max-h-48 text-left">
                       {JSON.stringify(selectedLog.nouveau, null, 2)}
                     </pre>
                   </div>
@@ -215,7 +226,7 @@ export const AuditLogView: React.FC = () => {
             </div>
           ) : (
             <div className="py-24 text-center text-slate-400 text-xs">
-              Sélectionnez une entrée d'audit pour afficher son état avant/après.
+              {t('audit.selectPrompt')}
             </div>
           )}
         </div>

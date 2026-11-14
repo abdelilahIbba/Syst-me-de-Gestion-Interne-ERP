@@ -5,12 +5,11 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { Quote, InvoiceItem } from '../types';
 import { calculateInvoiceTotals, formatDH } from '../utils/calculations';
 import {
-  FileText,
   Plus,
-  ArrowRight,
   CheckCircle2,
   Trash2,
   X,
@@ -19,9 +18,10 @@ import {
 
 export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onNavigateToInvoices }) => {
   const { quotes, clients, projects, settings, createQuote, convertQuoteToInvoice } = useApp();
+  const { t } = useI18n();
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
-  const [convertedNotice, setConvertedNotice] = useState<string | null>(null);
+  const [convertedQuoteNum, setConvertedQuoteNum] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     client_id: clients[0]?.id || '',
@@ -45,6 +45,19 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
   });
 
   const totals = calculateInvoiceTotals(formData.items, 0, formData.taux_tva);
+
+  const translateQuoteStatus = (status: Quote['statut']) => {
+    switch (status) {
+      case 'converti':
+        return t('quotes.status.converti');
+      case 'accepté':
+        return t('quotes.status.accepté');
+      case 'envoyé':
+        return t('quotes.status.envoyé');
+      default:
+        return t('quotes.status.brouillon');
+    }
+  };
 
   const handleAddItem = () => {
     setFormData({
@@ -86,15 +99,19 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.client_id || formData.items.length === 0) return;
-    createQuote(formData);
+    createQuote({
+      ...formData,
+      total_ht: totals.totalHt,
+      montant_tva: totals.montantTva,
+      total_ttc: totals.totalTtc,
+    });
     setIsNewModalOpen(false);
   };
 
   const handleConvert = (quote: Quote) => {
-    // FA-9: Conversion en facture en un clic
-    const newInv = convertQuoteToInvoice(quote.id);
-    setConvertedNotice(`Le devis ${quote.numero} a été converti avec succès en facture brouillon !`);
-    setTimeout(() => setConvertedNotice(null), 5000);
+    convertQuoteToInvoice(quote.id);
+    setConvertedQuoteNum(quote.numero);
+    setTimeout(() => setConvertedQuoteNum(null), 5000);
   };
 
   return (
@@ -102,32 +119,32 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Devis Commerciaux</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('quotes.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module FA-9 · Création de propositions commerciales et conversion directe en factures
+            {t('quotes.subtitle')}
           </div>
         </div>
 
         <button
           onClick={() => setIsNewModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouveau Devis</span>
+          <span>{t('quotes.newBtn')}</span>
         </button>
       </div>
 
-      {convertedNotice && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center justify-between">
+      {convertedQuoteNum && (
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>{convertedNotice}</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>{t('quotes.convertedBanner', { num: convertedQuoteNum })}</span>
           </div>
           <button
             onClick={onNavigateToInvoices}
-            className="font-bold underline text-emerald-800 hover:text-emerald-900"
+            className="font-bold underline text-emerald-800 hover:text-emerald-900 whitespace-nowrap"
           >
-            Aller aux factures →
+            {t('quotes.goToInvoices')}
           </button>
         </div>
       )}
@@ -135,16 +152,16 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
       {/* Quotes Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
-                <th className="py-3 px-4">Numéro</th>
-                <th className="py-3 px-3">Client</th>
-                <th className="py-3 px-3">Date & Validité</th>
-                <th className="py-3 px-3 text-right">Total HT</th>
-                <th className="py-3 px-3 text-right">Total TTC</th>
-                <th className="py-3 px-3 text-center">Statut</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4 text-start">{t('invoices.col.number')}</th>
+                <th className="py-3 px-3 text-start">{t('invoices.col.client')}</th>
+                <th className="py-3 px-3 text-start">{t('quotes.col.dateValidity')}</th>
+                <th className="py-3 px-3 text-end">{t('quotes.col.totalHt')}</th>
+                <th className="py-3 px-3 text-end">{t('quotes.col.totalTtc')}</th>
+                <th className="py-3 px-3 text-center">{t('common.status')}</th>
+                <th className="py-3 px-4 text-end">{t('common.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -162,20 +179,20 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
 
                     <td className="py-3 px-3">
                       <div className="text-slate-700">{q.date_emission}</div>
-                      <div className="text-[11px] text-slate-400">Valable jusqu'au {q.date_validite}</div>
+                      <div className="text-[11px] text-slate-400">{t('quotes.validUntil', { date: q.date_validite })}</div>
                     </td>
 
-                    <td className="py-3 px-3 text-right font-mono font-medium text-slate-800">
+                    <td className="py-3 px-3 text-end font-mono font-medium text-slate-800">
                       {formatDH(q.total_ht)}
                     </td>
 
-                    <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
+                    <td className="py-3 px-3 text-end font-mono font-bold text-slate-900">
                       {formatDH(q.total_ttc)}
                     </td>
 
                     <td className="py-3 px-3 text-center">
                       <span
-                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-sm capitalize ${
+                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-sm ${
                           q.statut === 'converti'
                             ? 'bg-emerald-50 text-emerald-700'
                             : q.statut === 'accepté'
@@ -183,22 +200,22 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                             : 'bg-amber-50 text-amber-700'
                         }`}
                       >
-                        {q.statut}
+                        {translateQuoteStatus(q.statut)}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3 px-4 text-end">
                       {q.statut !== 'converti' ? (
                         <button
                           onClick={() => handleConvert(q)}
-                          className="flex items-center gap-1.5 px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-md shadow-xs transition-colors ml-auto"
-                          title="Convertir en facture (FA-9)"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-md shadow-xs transition-colors ms-auto whitespace-nowrap"
+                          title={t('quotes.convertBtn')}
                         >
                           <FileCheck className="w-3.5 h-3.5" />
-                          <span>Convertir en Facture (FA-9)</span>
+                          <span>{t('quotes.convertBtn')}</span>
                         </button>
                       ) : (
-                        <span className="text-[11px] text-slate-400 italic">Converti en facture</span>
+                        <span className="text-[11px] text-slate-400 italic">{t('quotes.convertedTag')}</span>
                       )}
                     </td>
                   </tr>
@@ -214,7 +231,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Créer un Devis (FA-9)</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('quotes.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
@@ -223,7 +240,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
             <form onSubmit={handleCreate} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Client *</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
                   <select
                     value={formData.client_id}
                     onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
@@ -237,7 +254,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Taux TVA (%)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('invoices.editorVat')}</label>
                   <input
                     type="number"
                     value={formData.taux_tva}
@@ -250,24 +267,24 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
               {/* Items Lines */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900">Prestations proposées</span>
+                  <span className="font-semibold text-slate-900">{t('quotes.proposedItems')}</span>
                   <button
                     type="button"
                     onClick={handleAddItem}
                     className="text-xs text-blue-600 hover:text-blue-700 font-semibold"
                   >
-                    + Ajouter une ligne
+                    {t('invoices.editorAddLine')}
                   </button>
                 </div>
 
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-48 overflow-y-auto pe-1">
                   {formData.items.map((item, idx) => (
                     <div key={idx} className="grid grid-cols-12 gap-2 p-2 bg-slate-50 rounded-lg items-center">
                       <div className="col-span-6">
                         <input
                           type="text"
                           required
-                          placeholder="Désignation"
+                          placeholder={t('payroll.col.designation')}
                           value={item.designation}
                           onChange={(e) => handleItemChange(idx, 'designation', e.target.value)}
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
@@ -276,7 +293,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                       <div className="col-span-2">
                         <input
                           type="number"
-                          placeholder="Qté"
+                          placeholder={t('invoices.col.qty')}
                           value={item.quantite}
                           onChange={(e) => handleItemChange(idx, 'quantite', Number(e.target.value))}
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
@@ -285,7 +302,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                       <div className="col-span-3">
                         <input
                           type="number"
-                          placeholder="Prix unitaire HT"
+                          placeholder={t('invoices.col.unitPrice')}
                           value={item.prix_unitaire_ht}
                           onChange={(e) => handleItemChange(idx, 'prix_unitaire_ht', Number(e.target.value))}
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
@@ -308,9 +325,9 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
               </div>
 
               <div className="bg-slate-100 p-3 rounded-lg flex items-center justify-between text-xs font-mono">
-                <div>Total HT : <strong>{formatDH(totals.totalHt)}</strong></div>
-                <div>TVA ({totals.tauxTva}%) : <strong>{formatDH(totals.montantTva)}</strong></div>
-                <div className="text-sm font-bold text-slate-900">Total TTC : {formatDH(totals.totalTtc)}</div>
+                <div>{t('invoices.totalHt')} <strong>{formatDH(totals.totalHt)}</strong></div>
+                <div>{t('invoices.vatLabel', { rate: totals.tauxTva })} <strong>{formatDH(totals.montantTva)}</strong></div>
+                <div className="text-sm font-bold text-slate-900">{t('invoices.totalTtc')} {formatDH(totals.totalTtc)}</div>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex justify-end gap-2">
@@ -319,13 +336,13 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                   onClick={() => setIsNewModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg font-semibold shadow-xs"
                 >
-                  Créer et enregistrer le devis
+                  {t('quotes.saveBtn')}
                 </button>
               </div>
             </form>

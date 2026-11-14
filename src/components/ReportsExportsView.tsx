@@ -5,19 +5,19 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { formatDH, round2 } from '../utils/calculations';
+import { useI18n } from '../context/I18nContext';
+import { round2 } from '../utils/calculations';
 import {
-  BarChart3,
   Download,
   Calendar,
   Building2,
   Users,
   FolderGit2,
-  FileSpreadsheet,
 } from 'lucide-react';
 
 export const ReportsExportsView: React.FC = () => {
   const { dailyReports, employees, clients, projects } = useApp();
+  const { t } = useI18n();
 
   const [selectedMonth, setSelectedMonth] = useState('2026-10');
 
@@ -37,10 +37,10 @@ export const ReportsExportsView: React.FC = () => {
   // 2. By Client
   const clientHoursMap = new Map<string, number>();
   monthReports.forEach((rep) => {
-    (rep.tasks || []).forEach((t) => {
-      if (t.client_id) {
-        const cur = clientHoursMap.get(t.client_id) || 0;
-        clientHoursMap.set(t.client_id, round2(cur + t.heures));
+    (rep.tasks || []).forEach((taskItem) => {
+      if (taskItem.client_id) {
+        const cur = clientHoursMap.get(taskItem.client_id) || 0;
+        clientHoursMap.set(taskItem.client_id, round2(cur + taskItem.heures));
       }
     });
   });
@@ -48,10 +48,10 @@ export const ReportsExportsView: React.FC = () => {
   // 3. By Project
   const projectHoursMap = new Map<string, number>();
   monthReports.forEach((rep) => {
-    (rep.tasks || []).forEach((t) => {
-      if (t.project_id) {
-        const cur = projectHoursMap.get(t.project_id) || 0;
-        projectHoursMap.set(t.project_id, round2(cur + t.heures));
+    (rep.tasks || []).forEach((taskItem) => {
+      if (taskItem.project_id) {
+        const cur = projectHoursMap.get(taskItem.project_id) || 0;
+        projectHoursMap.set(taskItem.project_id, round2(cur + taskItem.heures));
       }
     });
   });
@@ -62,18 +62,18 @@ export const ReportsExportsView: React.FC = () => {
 
     monthReports.forEach((rep) => {
       const emp = employees.find((e) => e.id === rep.employee_id);
-      (rep.tasks || []).forEach((t) => {
-        const cl = clients.find((c) => c.id === t.client_id);
-        const pr = projects.find((p) => p.id === t.project_id);
+      (rep.tasks || []).forEach((taskItem) => {
+        const cl = clients.find((c) => c.id === taskItem.client_id);
+        const pr = projects.find((p) => p.id === taskItem.project_id);
         rows.push([
           rep.date,
           emp ? `${emp.prenom} ${emp.nom}` : rep.employee_id,
           rep.lieu,
           cl ? cl.raison_sociale : 'Interne',
           pr ? pr.nom_systeme : 'Divers',
-          `"${t.description.replace(/"/g, '""')}"`,
-          String(t.heures),
-          t.statut_tache,
+          `"${taskItem.description.replace(/"/g, '""')}"`,
+          String(taskItem.heures),
+          taskItem.statut_tache,
         ]);
       });
     });
@@ -93,9 +93,9 @@ export const ReportsExportsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Rapports & Exports d'Activité</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('exports.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module RJ-7 · Synthèse analytique du temps passé par employé, client et projet avec export Excel/Sheets
+            {t('exports.subtitle')}
           </div>
         </div>
 
@@ -107,29 +107,29 @@ export const ReportsExportsView: React.FC = () => {
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden"
             >
-              <option value="2026-11">Novembre 2026</option>
-              <option value="2026-10">Octobre 2026</option>
-              <option value="2026-09">Septembre 2026</option>
+              <option value="2026-11">{t('payroll.month.2026-11')}</option>
+              <option value="2026-10">{t('payroll.month.2026-10')}</option>
+              <option value="2026-09">{t('payroll.month.2026-09')}</option>
             </select>
           </div>
 
           <button
             onClick={exportMonthCSV}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
           >
             <Download className="w-4 h-4" />
-            <span>Exporter CSV ({selectedMonth})</span>
+            <span>{t('exports.exportMonthBtn', { month: selectedMonth })}</span>
           </button>
         </div>
       </div>
 
       {/* 3 Analytics Tables */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Table 1: Par Collaborateur */}
+        {/* Table 1: By Employee */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
             <Users className="w-4 h-4 text-blue-600" />
-            <span>Volume par Collaborateur</span>
+            <span>{t('exports.byEmployee')}</span>
           </div>
 
           <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
@@ -139,20 +139,20 @@ export const ReportsExportsView: React.FC = () => {
                 <div key={emp.id} className="py-2.5 flex items-center justify-between text-xs">
                   <div>
                     <div className="font-semibold text-slate-900">{emp.prenom} {emp.nom}</div>
-                    <div className="text-[11px] text-slate-400">{data.countReports} rapport(s)</div>
+                    <div className="text-[11px] text-slate-400">{t('exports.reportsCount', { count: data.countReports })}</div>
                   </div>
-                  <span className="font-mono font-bold text-blue-700">{data.totalHours} h</span>
+                  <span className="font-mono font-bold text-blue-700">{data.totalHours} {t('common.hours')}</span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Table 2: Par Client */}
+        {/* Table 2: By Client */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
             <Building2 className="w-4 h-4 text-emerald-600" />
-            <span>Temps Passé par Client</span>
+            <span>{t('exports.byClient')}</span>
           </div>
 
           <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
@@ -164,18 +164,18 @@ export const ReportsExportsView: React.FC = () => {
                     <div className="font-semibold text-slate-900 truncate max-w-[170px]">{cli.raison_sociale}</div>
                     <div className="text-[11px] text-slate-400">{cli.ville}</div>
                   </div>
-                  <span className="font-mono font-bold text-emerald-700">{hours} h</span>
+                  <span className="font-mono font-bold text-emerald-700">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Table 3: Par Projet */}
+        {/* Table 3: By Project */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
             <FolderGit2 className="w-4 h-4 text-purple-600" />
-            <span>Temps Passé par Projet</span>
+            <span>{t('exports.byProject')}</span>
           </div>
 
           <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
@@ -187,7 +187,7 @@ export const ReportsExportsView: React.FC = () => {
                     <div className="font-semibold text-slate-900 truncate max-w-[170px]">{proj.nom_systeme}</div>
                     <div className="text-[11px] text-slate-400 capitalize">{proj.type}</div>
                   </div>
-                  <span className="font-mono font-bold text-purple-700">{hours} h</span>
+                  <span className="font-mono font-bold text-purple-700">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}

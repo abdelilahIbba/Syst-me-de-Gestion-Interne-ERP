@@ -5,21 +5,20 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { formatDH } from '../utils/calculations';
 import {
-  BellRing,
   MessageSquare,
   Mail,
   Copy,
   Check,
-  AlertTriangle,
   Clock,
   Send,
-  Building2,
 } from 'lucide-react';
 
 export const RemindersView: React.FC = () => {
   const { invoices, clients, settings } = useApp();
+  const { t } = useI18n();
 
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
@@ -58,14 +57,26 @@ export const RemindersView: React.FC = () => {
     const contact = inv.client.contact_nom || inv.client.raison_sociale;
 
     if (type === 'whatsapp') {
-      return `Bonjour ${contact},\n\nSauf erreur de notre part, la facture n° *${inv.numero}* d'un montant de *${formatDH(
-        inv.reste_a_payer
-      )}* arrivée à échéance le ${inv.date_echeance} (${inv.daysOverdue} jours de retard) est toujours en attente de règlement auprès de notre service comptable.\n\nMerci de bien vouloir nous transmettre l'ordre de virement bancaire par retour de message.\n\n*${settings.company_name}*\nRIB : ${settings.rib}`;
+      return t('reminders.whatsappBody', {
+        contact,
+        num: inv.numero,
+        amount: formatDH(inv.reste_a_payer),
+        due: inv.date_echeance,
+        days: inv.daysOverdue,
+        company: settings.company_name,
+        rib: settings.rib,
+      });
     }
 
-    return `Objet : RAPPEL - Facture échue ${inv.numero} - ${settings.company_name}\n\nMadame, Monsieur ${contact},\n\nNous vous prions de trouver ci-joint le rappel concernant la facture ${inv.numero} émise le ${inv.date_emission} pour un reste dû de ${formatDH(
-      inv.reste_a_payer
-    )} TTC, échue depuis le ${inv.date_echeance}.\n\nNous vous remercions de procéder à sa régularisation par virement bancaire sur notre compte BMCE :\nRIB : ${settings.rib}\n\nRestant à votre entière disposition pour tout renseignement complémentaire.\n\nCordialement,\nService Comptabilité - ${settings.company_name}`;
+    return t('reminders.emailBody', {
+      num: inv.numero,
+      company: settings.company_name,
+      contact,
+      issued: inv.date_emission,
+      amount: formatDH(inv.reste_a_payer),
+      due: inv.date_echeance,
+      rib: settings.rib,
+    });
   };
 
   const handleCopyMessage = (text: string, id: string) => {
@@ -92,17 +103,17 @@ export const RemindersView: React.FC = () => {
     <div className="space-y-6">
       {/* Top Bar */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Relances Factures Impayées</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('reminders.title')}</h2>
         <div className="text-xs text-slate-500 mt-0.5">
-          Module FA-8 · Suivi des créances échues et modèles de communication pré-remplis (Email & WhatsApp)
+          {t('reminders.subtitle')}
         </div>
       </div>
 
       {overdueInvoices.length === 0 ? (
         <div className="p-12 text-center bg-white rounded-xl border border-slate-200">
           <Clock className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-          <h3 className="text-sm font-bold text-slate-900">Aucune facture en retard d'échéance !</h3>
-          <p className="text-xs text-slate-500 mt-1">Toutes les factures clients sont soit payées, soit encore dans leur délai contractuel.</p>
+          <h3 className="text-sm font-bold text-slate-900">{t('reminders.noneTitle')}</h3>
+          <p className="text-xs text-slate-500 mt-1">{t('reminders.noneDesc')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -110,9 +121,9 @@ export const RemindersView: React.FC = () => {
           <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col">
             <div className="p-3.5 border-b border-slate-100 flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-900">
-                Factures en Retard ({overdueInvoices.length})
+                {t('reminders.overdueList', { count: overdueInvoices.length })}
               </span>
-              <span className="text-[11px] font-mono text-rose-700 font-bold">
+              <span className="text-[11px] font-mono text-rose-700 font-bold" dir="ltr">
                 {formatDH(overdueInvoices.reduce((s, i) => s + i.reste_a_payer, 0))}
               </span>
             </div>
@@ -126,22 +137,22 @@ export const RemindersView: React.FC = () => {
                     key={inv.id}
                     onClick={() => setSelectedInvoiceId(inv.id)}
                     className={`p-3.5 cursor-pointer transition-colors ${
-                      isSelected ? 'bg-blue-50/80 border-l-2 border-l-blue-600' : 'hover:bg-slate-50'
+                      isSelected ? 'bg-blue-50/80 border-s-2 border-s-blue-600' : 'hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="font-bold text-xs text-slate-900 font-mono">{inv.numero}</div>
+                        <div className="font-bold text-xs text-slate-900 font-mono" dir="ltr">{inv.numero}</div>
                         <div className="text-xs text-slate-700 font-medium mt-0.5">
                           {inv.client?.raison_sociale}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-mono font-bold text-rose-700 text-xs">
+                      <div className="text-end">
+                        <div className="font-mono font-bold text-rose-700 text-xs" dir="ltr">
                           {formatDH(inv.reste_a_payer)}
                         </div>
                         <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-sm">
-                          +{inv.daysOverdue} j. retard
+                          {t('reminders.daysLate', { days: inv.daysOverdue })}
                         </span>
                       </div>
                     </div>
@@ -155,13 +166,16 @@ export const RemindersView: React.FC = () => {
           <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
             {selectedInv ? (
               <>
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
                   <div>
                     <h3 className="text-sm font-bold text-slate-900">
-                      Modèle de Relance : {selectedInv.numero}
+                      {t('reminders.templateTitle', { num: selectedInv.numero })}
                     </h3>
                     <div className="text-xs text-slate-500">
-                      Client : <strong>{selectedInv.client?.raison_sociale}</strong> (Tél: {selectedInv.client?.telephone})
+                      {t('reminders.clientPhone', {
+                        name: selectedInv.client?.raison_sociale || '',
+                        phone: selectedInv.client?.telephone || '',
+                      })}
                     </div>
                   </div>
 
@@ -169,7 +183,7 @@ export const RemindersView: React.FC = () => {
                   <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs">
                     <button
                       onClick={() => setReminderType('whatsapp')}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors ${
+                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors whitespace-nowrap shrink-0 ${
                         reminderType === 'whatsapp' ? 'bg-white text-emerald-800 font-semibold shadow-xs' : 'text-slate-600'
                       }`}
                     >
@@ -178,7 +192,7 @@ export const RemindersView: React.FC = () => {
                     </button>
                     <button
                       onClick={() => setReminderType('email')}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors ${
+                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors whitespace-nowrap shrink-0 ${
                         reminderType === 'email' ? 'bg-white text-blue-800 font-semibold shadow-xs' : 'text-slate-600'
                       }`}
                     >
@@ -199,35 +213,35 @@ export const RemindersView: React.FC = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                   <div className="text-[11px] text-slate-400">
-                    Cliquez pour copier et envoyer via votre messagerie ou WhatsApp Web.
+                    {t('reminders.copyHint')}
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleCopyMessage(generateMessage(selectedInv, reminderType), selectedInv.id)}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0"
                     >
                       {copiedId === selectedInv.id ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Copié dans le presse-papier !</span>
+                          <span>{t('reminders.copied')}</span>
                         </>
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5" />
-                          <span>Copier le texte</span>
+                          <span>{t('reminders.copyBtn')}</span>
                         </>
                       )}
                     </button>
 
                     <button
                       onClick={handleLogReminder}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>Enregistrer la relance</span>
+                      <span>{t('reminders.logBtn')}</span>
                     </button>
                   </div>
                 </div>
@@ -235,12 +249,19 @@ export const RemindersView: React.FC = () => {
                 {/* History Strip */}
                 {reminderHistory.length > 0 && (
                   <div className="pt-4 border-t border-slate-100 space-y-2">
-                    <span className="text-xs font-semibold text-slate-700">Historique des Relances de la Session :</span>
+                    <span className="text-xs font-semibold text-slate-700">{t('reminders.historyTitle')}</span>
                     <div className="space-y-1">
                       {reminderHistory.map((h) => (
                         <div key={h.id} className="text-[11px] flex justify-between bg-slate-50 p-2 rounded text-slate-600">
-                          <span>{h.date} - Relance {h.type.toUpperCase()} pour {h.client} ({h.invoice})</span>
-                          <span className="text-emerald-700 font-semibold">Envoyée</span>
+                          <span>
+                            {t('reminders.historyEntry', {
+                              date: h.date,
+                              type: h.type.toUpperCase(),
+                              client: h.client,
+                              invoice: h.invoice,
+                            })}
+                          </span>
+                          <span className="text-emerald-700 font-semibold">{t('reminders.sent')}</span>
                         </div>
                       ))}
                     </div>

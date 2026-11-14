@@ -275,7 +275,7 @@ export function calculateMonthlyProjectProfitability(params: {
   projects: Array<{ id: string; nom_systeme?: string; date_signature?: string }>;
   invoices: Array<{ id: string; project_id?: string; total_ttc: number; statut: string }>;
   payments: Array<{ id: string; invoice_id?: string; montant: number; date_paiement: string; statut: string; client_id?: string }>;
-  dailyReports: Array<{ id: string; date: string; employee_id: string; tasks: Array<{ project_id?: string; heures: number }> }>;
+  dailyReports: Array<{ id: string; date: string; employee_id: string; tasks?: Array<{ project_id?: string; heures: number }> }>;
   siteVisits: Array<{ id: string; project_id?: string; date: string; expenses?: Array<{ montant: number; statut: string }> }>;
   employees: Array<{ id: string; hourly_cost?: number }>;
   targetYear?: string; // default '2026'
@@ -363,7 +363,7 @@ export function calculateMonthlyProjectProfitability(params: {
     dailyReports.forEach((rep) => {
       if (rep.date && rep.date.startsWith(m)) {
         const hourlyRate = empRates.get(rep.employee_id) || 150;
-        rep.tasks.forEach((t) => {
+        (rep.tasks || []).forEach((t) => {
           if (projectId === 'all' || t.project_id === projectId) {
             const h = Number(t.heures) || 0;
             heuresProd += h;
@@ -422,6 +422,108 @@ export function calculateMonthlyProjectProfitability(params: {
       beneficeNet,
       tauxMarge,
       heuresProd: round2(heuresProd),
+    };
+  });
+}
+
+export interface ProjectComparisonItem {
+  id: string;
+  nom: string;
+  shortName: string;
+  clientName: string;
+  statut: string;
+  prixVenteHT: number;
+  revenusEncaisses: number;
+  coutMainOeuvre: number;
+  fraisDeplacement: number;
+  chargesDirectes: number;
+  beneficeNet: number;
+  beneficeNetContractuel: number;
+  tauxMarge: number;
+  totalHours: number;
+}
+
+/**
+ * Calculate per-project revenue vs direct charges (labor cost + site visit expenses)
+ * for Recharts profitability comparison in ProjectsView.
+ */
+export function calculateProjectsComparisonData(params: {
+  projects: Array<{ id: string; client_id: string; nom_systeme: string; prix_vente_ht: number; statut: string }>;
+  clients: Array<{ id: string; raison_sociale: string }>;
+  invoices: Array<{ id: string; project_id?: string; statut: string }>;
+  payments: Array<{ id: string; invoice_id: string; montant: number; statut: string }>;
+  dailyReports: Array<{ id: string; employee_id: string; tasks?: Array<{ project_id?: string; heures: number }> }>;
+  siteVisits: Array<{ id: string; project_id?: string; expenses?: Array<{ montant: number }> }>;
+  employees: Array<{ id: string; hourly_cost?: number }>;
+}): ProjectComparisonItem[] {
+  const { projects, clients, invoices, payments, dailyReports, siteVisits, employees } = params;
+
+  const empRates = new Map<string, number>();
+  employees.forEach((e) => {
+    empRates.set(e.id, e.hourly_cost || 150);
+  });
+
+  return projects.map((proj) => {
+    const client = clients.find((c) => c.id === proj.client_id);
+
+    // 1. Collected revenue from project invoices
+    const projInvoices = invoices.filter((inv) => inv.project_id === proj.id && inv.statut !== 'annulée');
+    const revenusEncaisses = round2(
+      payments
+        .filter((pay) => projInvoices.some((inv) => inv.id === pay.invoice_id) && pay.statut === 'encaissé')
+        .reduce((sum, p) => sum + (Number(p.montant) || 0), 0)
+    );
+
+    // 2. Direct labor cost from daily reports
+    let totalHours = 0;
+    let coutMainOeuvre = 0;
+    dailyReports.forEach((rep) => {
+      const rate = empRates.get(rep.employee_id) || 150;
+      (rep.tasks || []).forEach((tsk) => {
+        if (tsk.project_id === proj.id) {
+          const h = Number(tsk.heures) || 0;
+          totalHours += h;
+          coutMainOeuvre += h * rate;
+        }
+      });
+    });
+
+    // 3. Direct site visit travel expenses
+    const fraisDeplacement = round2(
+      siteVisits
+        .filter((v) => v.project_id === proj.id)
+        .reduce((acc, v) => {
+          const sum = (v.expenses || []).reduce((s, x) => s + (Number(x.montant) || 0), 0);
+          return acc + sum;
+        }, 0)
+    );
+
+    const roundedLabor = round2(coutMainOeuvre);
+    const chargesDirectes = round2(roundedLabor + fraisDeplacement);
+    const beneficeNet = round2(revenusEncaisses - chargesDirectes);
+    const beneficeNetContractuel = round2((proj.prix_vente_ht || 0) - chargesDirectes);
+    const tauxMarge = revenusEncaisses > 0 ? Math.round((beneficeNet / revenusEncaisses) * 100) : 0;
+
+    const shortName =
+      proj.nom_systeme.length > 22
+        ? proj.nom_systeme.slice(0, 20).trim() + '…'
+        : proj.nom_systeme;
+
+    return {
+      id: proj.id,
+      nom: proj.nom_systeme,
+      shortName,
+      clientName: client?.raison_sociale || 'Client',
+      statut: proj.statut,
+      prixVenteHT: round2(proj.prix_vente_ht || 0),
+      revenusEncaisses,
+      coutMainOeuvre: roundedLabor,
+      fraisDeplacement,
+      chargesDirectes,
+      beneficeNet,
+      beneficeNetContractuel,
+      tauxMarge,
+      totalHours: round2(totalHours),
     };
   });
 }

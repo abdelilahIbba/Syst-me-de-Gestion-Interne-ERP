@@ -5,25 +5,16 @@
 
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { useI18n } from '../context/I18nContext';
 import { Client, ClientType, ClientStatus } from '../types';
 import { formatDH, round2 } from '../utils/calculations';
 import {
-  Building2,
   Search,
   Plus,
   Phone,
   Mail,
-  MapPin,
-  FolderGit2,
-  FileCheck2,
-  Receipt,
-  CreditCard,
-  MapPinCheck,
   AlertTriangle,
   X,
-  Edit2,
-  CheckCircle2,
-  ExternalLink,
 } from 'lucide-react';
 
 export const ClientsView: React.FC = () => {
@@ -35,8 +26,8 @@ export const ClientsView: React.FC = () => {
     payments,
     siteVisits,
     addClient,
-    updateClient,
   } = useApp();
+  const { t } = useI18n();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatut, setFilterStatut] = useState<string>('all');
@@ -62,6 +53,12 @@ export const ClientsView: React.FC = () => {
     commercial_id: 'EMP-004',
     notes: '',
   });
+
+  const translateClientStatus = (status: ClientStatus) => {
+    if (status === 'actif') return t('clients.status.actif');
+    if (status === 'prospect') return t('clients.status.prospect');
+    return t('clients.status.inactif');
+  };
 
   const filteredClients = clients.filter((c) => {
     const term = searchTerm.toLowerCase();
@@ -104,9 +101,12 @@ export const ClientsView: React.FC = () => {
     e.preventDefault();
     setNewError(null);
 
-    const result = addClient(formData);
+    const result = addClient({
+      ...formData,
+      date_creation: new Date().toISOString().split('T')[0],
+    });
     if (!result.success) {
-      setNewError(result.error || 'Erreur lors de l ajout');
+      setNewError(result.error || 'Error');
       return;
     }
 
@@ -121,9 +121,9 @@ export const ClientsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Clients & Fiche 360°</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('clients.title')}</h2>
           <div className="text-xs text-slate-500 mt-0.5">
-            Module CL-1 à CL-8 · Centralisation des systèmes, contrats, factures et interventions
+            {t('clients.subtitle')}
           </div>
         </div>
 
@@ -132,10 +132,10 @@ export const ClientsView: React.FC = () => {
             setNewError(null);
             setIsNewModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>Nouveau Client</span>
+          <span>{t('clients.newBtn')}</span>
         </button>
       </div>
 
@@ -146,28 +146,28 @@ export const ClientsView: React.FC = () => {
           {/* Search bar */}
           <div className="p-3 border-b border-slate-100 space-y-2">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Rechercher nom, ICE, tél..."
+                placeholder={t('clients.searchShort')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white focus:ring-1 focus:ring-blue-500"
+                className="w-full ps-9 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
             <div className="flex items-center gap-1">
-              {['all', 'actif', 'prospect', 'inactif'].map((st) => (
+              {(['all', 'actif', 'prospect', 'inactif'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setFilterStatut(st)}
-                  className={`px-2.5 py-1 text-[11px] rounded-md transition-colors capitalize ${
+                  className={`px-2.5 py-1 text-[11px] rounded-md transition-colors whitespace-nowrap ${
                     filterStatut === st
                       ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold shadow-2xs'
                       : 'text-slate-600 hover:bg-slate-100'
                   }`}
                 >
-                  {st === 'all' ? 'Tous' : st}
+                  {st === 'all' ? t('common.all') : translateClientStatus(st)}
                 </button>
               ))}
             </div>
@@ -182,7 +182,7 @@ export const ClientsView: React.FC = () => {
                   key={client.id}
                   onClick={() => setSelectedClient(client)}
                   className={`p-3.5 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-blue-50/80 border-l-2 border-l-blue-600' : 'hover:bg-slate-50'
+                    isSelected ? 'bg-blue-50/80 border-s-2 border-s-blue-600' : 'hover:bg-slate-50'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -190,7 +190,7 @@ export const ClientsView: React.FC = () => {
                       {client.raison_sociale}
                     </div>
                     <span
-                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded-sm capitalize ${
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded-sm ${
                         client.statut === 'actif'
                           ? 'text-emerald-700 bg-emerald-50'
                           : client.statut === 'prospect'
@@ -198,7 +198,7 @@ export const ClientsView: React.FC = () => {
                           : 'text-slate-500 bg-slate-100'
                       }`}
                     >
-                      {client.statut}
+                      {translateClientStatus(client.statut)}
                     </span>
                   </div>
 
@@ -233,14 +233,14 @@ export const ClientsView: React.FC = () => {
                     <a
                       href={`tel:${selectedClient.telephone}`}
                       className="p-2 bg-white border border-slate-200 text-slate-700 hover:text-blue-600 rounded-lg transition-colors"
-                      title="Appeler"
+                      title={t('clients.call')}
                     >
                       <Phone className="w-3.5 h-3.5" />
                     </a>
                     <a
                       href={`mailto:${selectedClient.email}`}
                       className="p-2 bg-white border border-slate-200 text-slate-700 hover:text-blue-600 rounded-lg transition-colors"
-                      title="Envoyer un email"
+                      title={t('clients.sendEmail')}
                     >
                       <Mail className="w-3.5 h-3.5" />
                     </a>
@@ -250,19 +250,19 @@ export const ClientsView: React.FC = () => {
                 {/* Financial Summary Strip (R10) */}
                 <div className="grid grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-200/80">
                   <div className="bg-white p-3 rounded-lg border border-slate-200">
-                    <div className="text-[11px] text-slate-500 font-medium">Total Facturé (TTC)</div>
+                    <div className="text-[11px] text-slate-500 font-medium">{t('clients.totalBilled')}</div>
                     <div className="text-sm font-bold font-mono text-slate-900 mt-0.5">
                       {formatDH(totalFacture)}
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded-lg border border-slate-200">
-                    <div className="text-[11px] text-slate-500 font-medium">Total Encaissé</div>
+                    <div className="text-[11px] text-slate-500 font-medium">{t('clients.totalCollected')}</div>
                     <div className="text-sm font-bold font-mono text-emerald-700 mt-0.5">
                       {formatDH(totalEncaisse)}
                     </div>
                   </div>
-                  <div className="bg-white p-3 rounded-lg border border-amber-200 bg-amber-50/40">
-                    <div className="text-[11px] text-amber-800 font-medium">Reste Dû</div>
+                  <div className="p-3 rounded-lg border border-amber-200 bg-amber-50/40">
+                    <div className="text-[11px] text-amber-800 font-medium">{t('clients.balanceDue')}</div>
                     <div className="text-sm font-bold font-mono text-amber-700 mt-0.5">
                       {formatDH(resteDu)}
                     </div>
@@ -273,12 +273,12 @@ export const ClientsView: React.FC = () => {
               {/* 360° Tabs */}
               <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white overflow-x-auto text-xs font-medium">
                 {[
-                  { key: 'infos', label: 'Informations' },
-                  { key: 'projets', label: `Systèmes Vendus (${clientProjects.length})` },
-                  { key: 'contrats', label: `Contrats (${clientContracts.length})` },
-                  { key: 'factures', label: `Factures (${clientInvoices.length})` },
-                  { key: 'paiements', label: `Paiements (${clientPayments.length})` },
-                  { key: 'interventions', label: `Interventions (${clientVisits.length})` },
+                  { key: 'infos', label: t('clients.tab.infos') },
+                  { key: 'projets', label: t('clients.tab.projects', { count: clientProjects.length }) },
+                  { key: 'contrats', label: t('clients.tab.contracts', { count: clientContracts.length }) },
+                  { key: 'factures', label: t('clients.tab.invoices', { count: clientInvoices.length }) },
+                  { key: 'paiements', label: t('clients.tab.payments', { count: clientPayments.length }) },
+                  { key: 'interventions', label: t('clients.tab.visits', { count: clientVisits.length }) },
                 ].map((tab) => (
                   <button
                     key={tab.key}
@@ -300,41 +300,41 @@ export const ClientsView: React.FC = () => {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-slate-50 p-3.5 rounded-lg space-y-2 border border-slate-100">
-                        <div className="font-semibold text-slate-900">Identifiants Fiscaux Marocains</div>
+                        <div className="font-semibold text-slate-900">{t('clients.taxIds')}</div>
                         <div className="grid grid-cols-2 gap-2 text-[11px]">
                           <div>
                             <span className="text-slate-500">ICE :</span>
                             <div className="font-mono font-medium text-slate-800">{selectedClient.ice || '-'}</div>
                           </div>
                           <div>
-                            <span className="text-slate-500">Identifiant Fiscal (IF) :</span>
+                            <span className="text-slate-500">IF :</span>
                             <div className="font-mono font-medium text-slate-800">{selectedClient.if || '-'}</div>
                           </div>
                           <div>
-                            <span className="text-slate-500">Registre de Commerce :</span>
+                            <span className="text-slate-500">RC :</span>
                             <div className="font-mono font-medium text-slate-800">{selectedClient.rc || '-'}</div>
                           </div>
                           <div>
-                            <span className="text-slate-500">Type de structure :</span>
+                            <span className="text-slate-500">{t('clients.structureType')}</span>
                             <div className="capitalize text-slate-800">{selectedClient.type}</div>
                           </div>
                         </div>
                       </div>
 
                       <div className="bg-slate-50 p-3.5 rounded-lg space-y-2 border border-slate-100">
-                        <div className="font-semibold text-slate-900">Coordonnées Complètes</div>
+                        <div className="font-semibold text-slate-900">{t('clients.fullDetails')}</div>
                         <div className="text-[11px] space-y-1 text-slate-700">
-                          <div><span className="text-slate-500">Adresse :</span> {selectedClient.adresse}</div>
-                          <div><span className="text-slate-500">Ville :</span> {selectedClient.ville}</div>
-                          <div><span className="text-slate-500">Téléphone :</span> <span className="font-mono">{selectedClient.telephone}</span></div>
-                          <div><span className="text-slate-500">Email :</span> {selectedClient.email}</div>
+                          <div><span className="text-slate-500">{t('clients.address')}</span> {selectedClient.adresse}</div>
+                          <div><span className="text-slate-500">{t('clients.city')}</span> {selectedClient.ville}</div>
+                          <div><span className="text-slate-500">{t('clients.phone')}</span> <span className="font-mono" dir="ltr">{selectedClient.telephone}</span></div>
+                          <div><span className="text-slate-500">{t('clients.email')}</span> {selectedClient.email}</div>
                         </div>
                       </div>
                     </div>
 
                     {selectedClient.notes && (
                       <div className="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <span className="font-semibold text-slate-900 block mb-1">Notes internes sur le compte :</span>
+                        <span className="font-semibold text-slate-900 block mb-1">{t('clients.internalNotes')}</span>
                         <p className="text-slate-600 leading-relaxed text-[11px]">{selectedClient.notes}</p>
                       </div>
                     )}
@@ -351,13 +351,13 @@ export const ClientsView: React.FC = () => {
                         </div>
                         <p className="text-slate-600 mt-1 text-[11px]">{p.description}</p>
                         <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
-                          <span>Tech: {p.technologies}</span>
-                          <span className="capitalize font-medium text-slate-700">Statut: {p.statut}</span>
+                          <span>{t('projects.techPrefix')} {p.technologies}</span>
+                          <span className="capitalize font-medium text-slate-700">{t('common.status')}: {p.statut}</span>
                         </div>
                       </div>
                     ))}
                     {clientProjects.length === 0 && (
-                      <div className="py-12 text-center text-slate-400">Aucun projet rattaché à ce client.</div>
+                      <div className="py-12 text-center text-slate-400">{t('clients.noProjects')}</div>
                     )}
                   </div>
                 )}
@@ -371,13 +371,13 @@ export const ClientsView: React.FC = () => {
                           <span className="font-mono font-bold text-slate-800">{formatDH(c.montant_ht)} HT / {c.periodicite}</span>
                         </div>
                         <div className="text-[11px] text-slate-600 mt-1">
-                          Période : {c.date_debut} au {c.date_fin} · Heures incluses : {c.heures_incluses}h/mois
+                          {t('clients.periodIncluded', { start: c.date_debut, end: c.date_fin, hours: c.heures_incluses })}
                         </div>
                         <div className="text-[11px] text-slate-500 mt-0.5">{c.sla_description}</div>
                       </div>
                     ))}
                     {clientContracts.length === 0 && (
-                      <div className="py-12 text-center text-slate-400">Aucun contrat de maintenance en cours.</div>
+                      <div className="py-12 text-center text-slate-400">{t('clients.noContracts')}</div>
                     )}
                   </div>
                 )}
@@ -388,9 +388,11 @@ export const ClientsView: React.FC = () => {
                       <div key={inv.id} className="py-2.5 flex items-center justify-between">
                         <div>
                           <div className="font-semibold text-slate-900">{inv.numero}</div>
-                          <div className="text-[11px] text-slate-400">Émise le {inv.date_emission} · Échéance {inv.date_echeance}</div>
+                          <div className="text-[11px] text-slate-400">
+                            {t('clients.issuedOn', { date: inv.date_emission, due: inv.date_echeance })}
+                          </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-end">
                           <div className="font-mono font-bold text-slate-900">{formatDH(inv.total_ttc)}</div>
                           <span className="text-[10px] font-medium text-slate-600 capitalize">{inv.statut}</span>
                         </div>
@@ -404,14 +406,14 @@ export const ClientsView: React.FC = () => {
                     {clientPayments.map((p) => (
                       <div key={p.id} className="py-2.5 flex items-center justify-between">
                         <div>
-                          <div className="font-semibold text-slate-900">{p.mode} · Réf: {p.reference}</div>
+                          <div className="font-semibold text-slate-900">{p.mode} · {p.reference}</div>
                           <div className="text-[11px] text-slate-400">{p.date_paiement} ({p.banque})</div>
                         </div>
                         <div className="font-mono font-bold text-emerald-700">{formatDH(p.montant)}</div>
                       </div>
                     ))}
                     {clientPayments.length === 0 && (
-                      <div className="py-12 text-center text-slate-400">Aucun paiement encaissé.</div>
+                      <div className="py-12 text-center text-slate-400">{t('clients.noPayments')}</div>
                     )}
                   </div>
                 )}
@@ -426,13 +428,13 @@ export const ClientsView: React.FC = () => {
                         </div>
                         <p className="text-slate-600 text-[11px] mt-1">{v.travail_effectue}</p>
                         <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
-                          <span>Résultat : <strong className="text-slate-700">{v.resultat}</strong></span>
-                          <span>Facturable : {v.facturable ? `${formatDH(v.montant_facturable)}` : 'Non'}</span>
+                          <span>{t('clients.result')} <strong className="text-slate-700">{v.resultat}</strong></span>
+                          <span>{t('clients.billable')} {v.facturable ? `${formatDH(v.montant_facturable)}` : t('clients.no')}</span>
                         </div>
                       </div>
                     ))}
                     {clientVisits.length === 0 && (
-                      <div className="py-12 text-center text-slate-400">Aucune intervention enregistrée.</div>
+                      <div className="py-12 text-center text-slate-400">{t('clients.noVisits')}</div>
                     )}
                   </div>
                 )}
@@ -440,7 +442,7 @@ export const ClientsView: React.FC = () => {
             </div>
           ) : (
             <div className="py-24 text-center text-slate-400 text-xs">
-              Sélectionnez un client pour ouvrir sa fiche 360°.
+              {t('clients.selectPrompt')}
             </div>
           )}
         </div>
@@ -451,7 +453,7 @@ export const ClientsView: React.FC = () => {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">Créer un nouveau client (CL-1)</h3>
+              <h3 className="text-base font-bold text-slate-900">{t('clients.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X className="w-4 h-4" />
               </button>
@@ -467,7 +469,7 @@ export const ClientsView: React.FC = () => {
             <form onSubmit={handleCreateClient} className="space-y-3.5 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2">
-                  <label className="block text-slate-600 mb-1 font-medium">Raison Sociale / Nom *</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.company')}</label>
                   <input
                     type="text"
                     required
@@ -480,7 +482,7 @@ export const ClientsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Numéro ICE (15 chiffres)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.ice')}</label>
                   <input
                     type="text"
                     placeholder="001928374000032"
@@ -490,7 +492,7 @@ export const ClientsView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Identifiant Fiscal (IF)</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.if')}</label>
                   <input
                     type="text"
                     value={formData.if}
@@ -502,7 +504,7 @@ export const ClientsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Contact Principal</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.contact')}</label>
                   <input
                     type="text"
                     value={formData.contact_nom}
@@ -511,7 +513,7 @@ export const ClientsView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Fonction</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.role')}</label>
                   <input
                     type="text"
                     value={formData.contact_fonction}
@@ -523,7 +525,7 @@ export const ClientsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Téléphone</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.phone')}</label>
                   <input
                     type="text"
                     value={formData.telephone}
@@ -544,7 +546,7 @@ export const ClientsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Ville</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.city')}</label>
                   <input
                     type="text"
                     value={formData.ville}
@@ -553,21 +555,21 @@ export const ClientsView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">Statut</label>
+                  <label className="block text-slate-600 mb-1 font-medium">{t('common.status')}</label>
                   <select
                     value={formData.statut}
                     onChange={(e) => setFormData({ ...formData, statut: e.target.value as ClientStatus })}
                     className="w-full p-2 border border-slate-200 rounded-lg"
                   >
-                    <option value="actif">Actif</option>
-                    <option value="prospect">Prospect</option>
-                    <option value="inactif">Inactif</option>
+                    <option value="actif">{t('clients.status.actif')}</option>
+                    <option value="prospect">{t('clients.status.prospect')}</option>
+                    <option value="inactif">{t('clients.status.inactif')}</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">Adresse</label>
+                <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.address')}</label>
                 <input
                   type="text"
                   value={formData.adresse}
@@ -582,13 +584,13 @@ export const ClientsView: React.FC = () => {
                   onClick={() => setIsNewModalOpen(false)}
                   className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg font-semibold shadow-xs"
                 >
-                  Créer le client
+                  {t('clients.saveBtn')}
                 </button>
               </div>
             </form>

@@ -520,7 +520,7 @@ export const initialContracts: Contract[] = [
     numero_contrat: 'CTR-2026-002',
     client_id: 'CLI-003',
     project_id: 'PRJ-002',
-    type: 'corrective',
+    type: 'maintenance corrective',
     date_debut: '2026-01-01',
     date_fin: '2026-11-07', // Alert CL-5: 6 days left (Urgent!)
     periodicite: 'mensuelle',

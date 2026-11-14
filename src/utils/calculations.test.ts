@@ -15,6 +15,7 @@ import {
   checkContractExpiration,
   validateDailyReportHours,
   calculateMonthlyProjectProfitability,
+  calculateProjectsComparisonData,
 } from './calculations';
 
 test('formatDH formats numbers cleanly with DH currency symbol', () => {
@@ -164,4 +165,55 @@ test('calculateMonthlyProjectProfitability calculates timeline, profit, and marg
   assert.equal(feb.beneficeNet, 144000 - 2500);
   assert.ok(feb.tauxMarge > 90);
 });
+
+test('calculateProjectsComparisonData compares project revenues against direct charges', () => {
+  const result = calculateProjectsComparisonData({
+    projects: [
+      { id: 'PRJ-1', client_id: 'CLI-1', nom_systeme: 'ERP Global', prix_vente_ht: 100000, statut: 'livré' },
+      { id: 'PRJ-2', client_id: 'CLI-1', nom_systeme: 'POS Caisse', prix_vente_ht: 30000, statut: 'en cours' },
+    ],
+    clients: [{ id: 'CLI-1', raison_sociale: 'Client Test SARL' }],
+    invoices: [
+      { id: 'INV-1', project_id: 'PRJ-1', statut: 'payée' },
+      { id: 'INV-2', project_id: 'PRJ-2', statut: 'annulée' },
+    ],
+    payments: [
+      { id: 'PAY-1', invoice_id: 'INV-1', montant: 120000, statut: 'encaissé' },
+      { id: 'PAY-2', invoice_id: 'INV-2', montant: 30000, statut: 'encaissé' },
+    ],
+    dailyReports: [
+      {
+        id: 'REP-1',
+        employee_id: 'EMP-1',
+        tasks: [
+          { project_id: 'PRJ-1', heures: 10 },
+          { project_id: 'PRJ-2', heures: 5 },
+        ],
+      },
+    ],
+    siteVisits: [
+      {
+        id: 'VIS-1',
+        project_id: 'PRJ-1',
+        expenses: [{ montant: 450 }],
+      },
+    ],
+    employees: [{ id: 'EMP-1', hourly_cost: 200 }],
+  });
+
+  assert.equal(result.length, 2);
+
+  // PRJ-1: encaissé 120000, labor 2000, travel 450 => direct charges 2450, net profit 117550
+  assert.equal(result[0].revenusEncaisses, 120000);
+  assert.equal(result[0].coutMainOeuvre, 2000);
+  assert.equal(result[0].fraisDeplacement, 450);
+  assert.equal(result[0].chargesDirectes, 2450);
+  assert.equal(result[0].beneficeNet, 117550);
+
+  // PRJ-2: invoice cancelled so encaissé 0, labor 1000, direct charges 1000
+  assert.equal(result[1].revenusEncaisses, 0);
+  assert.equal(result[1].chargesDirectes, 1000);
+  assert.equal(result[1].beneficeNet, -1000);
+});
+
 
