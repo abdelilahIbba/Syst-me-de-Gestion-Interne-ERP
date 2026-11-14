@@ -140,10 +140,10 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         </div>
 
         {/* Period Selector */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium">
+        <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium w-full sm:w-auto">
           <button
             onClick={() => setPeriod('mois')}
-            className={`px-3 py-1.5 rounded-md transition-colors ${
+            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
               period === 'mois' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -151,7 +151,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
           </button>
           <button
             onClick={() => setPeriod('trimestre')}
-            className={`px-3 py-1.5 rounded-md transition-colors ${
+            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
               period === 'trimestre' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -159,7 +159,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
           </button>
           <button
             onClick={() => setPeriod('annee')}
-            className={`px-3 py-1.5 rounded-md transition-colors ${
+            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
               period === 'annee' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -417,12 +417,12 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               const client = clients.find((cl) => cl.id === c.client_id);
               const alert = checkContractExpiration(c.date_fin);
               return (
-                <div key={c.id} className="text-xs flex items-center justify-between bg-white/80 p-2 rounded-lg border border-amber-100">
-                  <div>
+                <div key={c.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-white/80 p-2.5 rounded-lg border border-amber-100">
+                  <div className="min-w-0">
                     <span className="font-semibold text-slate-900">{c.numero_contrat}</span>
-                    <span className="text-slate-500 ms-2">({client?.raison_sociale})</span>
+                    <span className="text-slate-500 ms-2 break-words">({client?.raison_sociale})</span>
                   </div>
-                  <span className="font-medium text-amber-700 font-mono">{alert.message}</span>
+                  <span className="font-medium text-amber-700 font-mono shrink-0">{alert.message}</span>
                 </div>
               );
             })}
@@ -440,16 +440,16 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               facturesEnRetard.slice(0, 3).map((inv) => {
                 const client = clients.find((cl) => cl.id === inv.client_id);
                 return (
-                  <div key={inv.id} className="text-xs flex items-center justify-between bg-white/80 p-2 rounded-lg border border-rose-100">
-                    <div>
+                  <div key={inv.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-white/80 p-2.5 rounded-lg border border-rose-100">
+                    <div className="min-w-0">
                       <span className="font-semibold text-slate-900">{inv.numero}</span>
-                      <span className="text-slate-500 ms-2">({client?.raison_sociale})</span>
+                      <span className="text-slate-500 ms-2 break-words">({client?.raison_sociale})</span>
                     </div>
-                    <div className="text-end">
+                    <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
                       <span className="font-bold text-rose-700 font-mono">{formatDH(inv.reste_a_payer)}</span>
                       <button
                         onClick={() => onNavigate('reminders')}
-                        className="ms-2 text-[11px] text-blue-600 hover:underline"
+                        className="text-[11px] text-blue-600 hover:underline font-medium"
                       >
                         {t('dash.remind')}
                       </button>

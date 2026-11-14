@@ -99,18 +99,18 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
     : null;
 
   return (
-    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+    <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 sm:space-y-5">
       {/* Header and Project Filter Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-slate-100">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-600">
+          <div className="flex items-start sm:items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-600 shrink-0 mt-0.5 sm:mt-0">
               <TrendingUp className="w-4 h-4" />
             </div>
-            <div>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span>{t('chart.monthly.title')}</span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 whitespace-nowrap">
                   {t('chart.monthly.badge')}
                 </span>
               </h3>
@@ -121,14 +121,14 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
           {/* Project Selector Dropdown */}
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 shadow-2xs">
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 shadow-2xs w-full sm:w-auto">
             <FolderGit2 className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden max-w-[220px] truncate"
+              className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden flex-1 sm:max-w-[220px] truncate"
             >
               <option value="all">{t('chart.monthly.allProjects')}</option>
               {projects.map((p) => (
@@ -140,10 +140,10 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           </div>
 
           {/* Mode Switcher */}
-          <div className="flex items-center p-0.5 bg-slate-100 rounded-lg text-xs font-medium">
+          <div className="grid grid-cols-2 sm:flex items-center p-0.5 bg-slate-100 rounded-lg text-xs font-medium w-full sm:w-auto">
             <button
               onClick={() => setChartMode('mixed')}
-              className={`px-2.5 py-1 rounded-md transition-colors ${
+              className={`px-2.5 py-1.5 sm:py-1 rounded-md transition-colors text-center ${
                 chartMode === 'mixed'
                   ? 'bg-white text-slate-900 font-semibold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -153,7 +153,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             </button>
             <button
               onClick={() => setChartMode('profit_only')}
-              className={`px-2.5 py-1 rounded-md transition-colors ${
+              className={`px-2.5 py-1.5 sm:py-1 rounded-md transition-colors text-center ${
                 chartMode === 'profit_only'
                   ? 'bg-white text-slate-900 font-semibold shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -222,11 +222,11 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
       </div>
 
       {/* Main Recharts Visual Display */}
-      <div dir="ltr" className="h-80 w-full pt-2">
+      <div dir="ltr" className="h-64 sm:h-80 w-full pt-2">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={monthlyData}
-            margin={{ top: 10, right: 20, left: 10, bottom: 0 }}
+            margin={{ top: 8, right: 4, left: -12, bottom: 0 }}
           >
             <defs>
               <linearGradient id="colorRevenus" x1="0" y1="0" x2="0" y2="1">
@@ -249,11 +249,12 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
               dataKey="monthLabel"
               axisLine={{ stroke: '#e2e8f0' }}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
+              tick={{ fill: '#64748b', fontSize: 10, fontWeight: 500 }}
             />
 
             <YAxis
               yAxisId="left"
+              width={40}
               axisLine={{ stroke: '#e2e8f0' }}
               tickLine={false}
               tick={{ fill: '#64748b', fontSize: 10 }}
@@ -263,6 +264,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
             {chartMode === 'mixed' && (
               <YAxis
                 yAxisId="right"
+                width={34}
                 orientation="right"
                 axisLine={false}
                 tickLine={false}
@@ -279,7 +281,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   return (
                     <div
                       dir={dir}
-                      className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 shadow-2xl text-xs space-y-2 min-w-[210px]"
+                      className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 shadow-2xl text-xs space-y-2 min-w-[185px] sm:min-w-[210px] max-w-[calc(100vw-32px)]"
                     >
                       <div className="font-bold text-slate-100 flex items-center justify-between border-b border-slate-800 pb-1.5">
                         <span className="text-cyan-300 font-semibold">{data.monthLabel} 2026</span>

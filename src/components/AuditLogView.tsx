@@ -102,10 +102,10 @@ export const AuditLogView: React.FC = () => {
       </div>
 
       {/* Split View: Table on Left / JSON Diff on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Table of logs (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto max-h-[650px] overflow-y-auto">
+        <div className="lg:col-span-7 min-w-0 bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="overflow-x-auto max-h-[400px] lg:max-h-[650px] overflow-y-auto">
             <table className="w-full text-start text-xs">
               <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 sticky top-0 z-10">
                 <tr>
@@ -128,7 +128,7 @@ export const AuditLogView: React.FC = () => {
                         isSelected ? 'bg-blue-50/80 font-medium' : 'hover:bg-slate-50/70'
                       }`}
                     >
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600" dir="ltr">
+                      <td className="py-2.5 px-3 font-mono text-[11px] text-slate-600 whitespace-nowrap" dir="ltr">
                         {log.horodatage}
                       </td>
 
@@ -138,7 +138,7 @@ export const AuditLogView: React.FC = () => {
 
                       <td className="py-2.5 px-3">
                         <span
-                          className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-sm ${
+                          className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-sm whitespace-nowrap ${
                             log.action === 'valider'
                               ? 'bg-emerald-50 text-emerald-800'
                               : log.action === 'créer'
@@ -157,7 +157,7 @@ export const AuditLogView: React.FC = () => {
                         <div className="text-[10px] text-slate-400 font-mono">{log.enregistrement_id}</div>
                       </td>
 
-                      <td className="py-2.5 px-3 text-end font-mono text-[11px] text-slate-500" dir="ltr">
+                      <td className="py-2.5 px-3 text-end font-mono text-[11px] text-slate-500 whitespace-nowrap" dir="ltr">
                         {log.ip}
                       </td>
                     </tr>
@@ -169,10 +169,10 @@ export const AuditLogView: React.FC = () => {
         </div>
 
         {/* JSON Diff Inspector (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+        <div className="lg:col-span-5 min-w-0 bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-4">
           {selectedLog ? (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="space-y-4 min-w-0">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">{t('audit.detailTitle')}</h3>
                   <div className="text-[11px] text-slate-500 font-mono">

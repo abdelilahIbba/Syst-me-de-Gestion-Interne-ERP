@@ -127,15 +127,15 @@ export const TeamReportsView: React.FC = () => {
           const emp = employees.find((e) => e.id === rep.employee_id);
 
           return (
-            <div key={rep.id} className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div key={rep.id} className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-xs shrink-0">
                     {emp?.prenom.charAt(0)}
                     {emp?.nom.charAt(0)}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900 text-sm">
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-slate-900 text-sm truncate">
                       {emp?.prenom} {emp?.nom}
                     </h4>
                     <div className="text-xs text-slate-500">
@@ -144,7 +144,7 @@ export const TeamReportsView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
                   <div className="font-mono bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
                     {t('team.totalHoursBadge', { hours: rep.heures_total })}
                   </div>
@@ -169,17 +169,17 @@ export const TeamReportsView: React.FC = () => {
                     const project = projects.find((p) => p.id === taskItem.project_id);
 
                     return (
-                      <div key={idx} className="py-2 first:pt-0 last:pb-0 flex items-start justify-between gap-3 text-xs">
-                        <div>
+                      <div key={idx} className="py-2 first:pt-0 last:pb-0 flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-3 text-xs">
+                        <div className="min-w-0">
                           <div className="font-medium text-slate-900">{taskItem.description}</div>
                           <div className="text-[11px] text-slate-500 mt-0.5">
                             {t('common.client')}: <strong>{client?.raison_sociale || t('team.internal')}</strong>
                             {project && ` · ${t('common.project')}: ${project.nom_systeme}`}
                           </div>
                         </div>
-                        <div className="text-end shrink-0">
+                        <div className="flex items-center gap-2 sm:block text-start sm:text-end shrink-0">
                           <span className="font-mono font-bold text-slate-800">{taskItem.heures}{t('common.hours')}</span>
-                          <span className="block text-[10px] text-slate-400">{translateTaskStatus(taskItem.statut_tache)}</span>
+                          <span className="sm:block text-[10px] text-slate-400">{translateTaskStatus(taskItem.statut_tache)}</span>
                         </div>
                       </div>
                     );
@@ -221,7 +221,7 @@ export const TeamReportsView: React.FC = () => {
                 {rep.statut !== 'validé' ? (
                   <button
                     onClick={() => handleValidate(rep.id)}
-                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-xs transition-colors shrink-0 whitespace-nowrap"
+                    className="w-full sm:w-auto px-3.5 py-2 sm:py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-xs transition-colors shrink-0 whitespace-nowrap"
                   >
                     {t('team.validateBtn')}
                   </button>

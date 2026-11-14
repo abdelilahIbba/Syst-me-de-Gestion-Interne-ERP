@@ -132,8 +132,8 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="relative bg-slate-900 text-white rounded-[44px] p-4 shadow-2xl border-4 border-slate-700 max-w-[360px] w-full h-[720px] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 z-50">
+      <div className="relative bg-slate-900 text-white rounded-[36px] sm:rounded-[44px] p-3 sm:p-4 shadow-2xl border-4 border-slate-700 max-w-[360px] w-full h-[min(720px,calc(100vh-1rem))] sm:h-[720px] flex flex-col overflow-hidden">
         {/* Device Notch & Status bar */}
         <div className="flex items-center justify-between px-6 pt-1 pb-2 shrink-0 text-[11px] font-semibold" dir="ltr">
           <span>{new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}</span>

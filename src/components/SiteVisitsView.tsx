@@ -47,11 +47,11 @@ export const SiteVisitsView: React.FC = () => {
           const allExpensesValidated = (visit.expenses || []).every((e) => e.statut === 'validé');
 
           return (
-            <div key={visit.id} className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div key={visit.id} className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-sm">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-sm shrink-0">
                       {visit.id}
                     </span>
                     <h3 className="text-sm font-bold text-slate-900">{visit.motif}</h3>
@@ -65,7 +65,7 @@ export const SiteVisitsView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span
                     className={`font-semibold px-2.5 py-1 rounded-md ${
                       visit.resultat === 'résolu'
@@ -123,7 +123,7 @@ export const SiteVisitsView: React.FC = () => {
 
               {/* Expenses Breakdown & Validation (DP-3 & DP-4) */}
               <div className="space-y-2 pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between text-xs gap-2">
+                <div className="flex flex-wrap items-center justify-between text-xs gap-2">
                   <span className="font-semibold text-slate-900">
                     {t('visits.expensesTitle', { amount: formatDH(totalFrais) })}
                   </span>
@@ -168,9 +168,9 @@ export const SiteVisitsView: React.FC = () => {
 
       {/* Modal: Intervention Slip PDF with Signature (DP-6) */}
       {selectedVisitForBon && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3 no-print">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 no-print">
               <h3 className="text-sm font-bold text-slate-900">{t('visits.slipModalTitle')}</h3>
               <div className="flex items-center gap-2">
                 <button
@@ -190,13 +190,13 @@ export const SiteVisitsView: React.FC = () => {
             </div>
 
             {/* Document Body */}
-            <div className="p-5 border border-slate-200 rounded-lg text-xs space-y-4">
-              <div className="flex justify-between items-start border-b border-slate-200 pb-3">
+            <div className="p-3.5 sm:p-5 border border-slate-200 rounded-lg text-xs space-y-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 border-b border-slate-200 pb-3">
                 <div className="flex items-start gap-3">
                   <img
                     src="/assets/aistudio/devnappLogo_10b7b539.jpg"
                     alt="DEVNAPP SARL"
-                    className="w-12 h-12 rounded-lg object-contain bg-slate-950 p-1 border border-slate-800 shadow-xs"
+                    className="w-12 h-12 rounded-lg object-contain bg-slate-950 p-1 border border-slate-800 shadow-xs shrink-0"
                   />
                   <div>
                     <div className="font-bold text-base text-slate-900">{settings.company_name}</div>
@@ -205,7 +205,7 @@ export const SiteVisitsView: React.FC = () => {
                     <div className="text-[11px] text-slate-500 font-mono">ICE : {settings.ice}</div>
                   </div>
                 </div>
-                <div className="text-end">
+                <div className="text-start sm:text-end">
                   <div className="font-bold text-sm text-slate-900">{t('visits.slipBannerTitle')}</div>
                   <div className="font-mono text-slate-500">{t('visits.refLabel')} {selectedVisitForBon.id}</div>
                   <div className="text-slate-600">{t('common.date')} : {selectedVisitForBon.date}</div>
@@ -217,7 +217,7 @@ export const SiteVisitsView: React.FC = () => {
                 const emp = employees.find((e) => e.id === selectedVisitForBon.employee_id);
 
                 return (
-                  <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-md text-[11px]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-md text-[11px]">
                     <div>
                       <div><span className="text-slate-500">{t('common.client')} :</span> <strong>{client?.raison_sociale}</strong></div>
                       <div><span className="text-slate-500">{t('clients.address')}</span> {client?.adresse}, {client?.ville}</div>
@@ -239,7 +239,7 @@ export const SiteVisitsView: React.FC = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
                 <div className="p-3 bg-slate-50 rounded-lg text-[11px]">
                   <span className="font-bold text-slate-800 block mb-1">{t('visits.techVisa')}</span>
                   <div className="text-slate-500">{t('visits.techSignedNote')}</div>

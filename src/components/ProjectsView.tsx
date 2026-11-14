@@ -186,7 +186,7 @@ export const ProjectsView: React.FC = () => {
           const prof = calculateProfitability(p);
 
           return (
-            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-semibold uppercase text-blue-600 tracking-wider">
@@ -228,24 +228,24 @@ export const ProjectsView: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-[11px] pt-1 border-t border-slate-200 text-slate-600">
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">{t('projects.collectedRevenue')}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] pt-2 border-t border-slate-200 text-slate-600">
+                  <div className="flex sm:block items-center justify-between">
+                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.collectedRevenue')}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.encaissé)}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">{t('projects.laborCost', { hours: prof.totalHours })}</span>
+                  <div className="flex sm:block items-center justify-between">
+                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.laborCost', { hours: prof.totalHours })}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.laborCost)}</span>
                   </div>
-                  <div>
-                    <span className="text-slate-400 block text-[10px]">{t('projects.travelExpenses')}</span>
+                  <div className="flex sm:block items-center justify-between">
+                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.travelExpenses')}</span>
                     <span className="font-mono font-medium text-slate-800">{formatDH(prof.travelExpenses)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Bottom links and details */}
-              <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1 border-t border-slate-100">
                 <span>{t('projects.projectManager')} <strong className="text-slate-700">{chef?.prenom} {chef?.nom}</strong></span>
                 {p.url_production && (
                   <a
@@ -266,8 +266,8 @@ export const ProjectsView: React.FC = () => {
 
       {/* Modal: New Project */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('projects.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -303,7 +303,7 @@ export const ProjectsView: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.type')}</label>
                   <select

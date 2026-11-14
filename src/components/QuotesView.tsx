@@ -135,14 +135,14 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
       </div>
 
       {convertedQuoteNum && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center justify-between gap-2">
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{t('quotes.convertedBanner', { num: convertedQuoteNum })}</span>
           </div>
           <button
             onClick={onNavigateToInvoices}
-            className="font-bold underline text-emerald-800 hover:text-emerald-900 whitespace-nowrap"
+            className="font-bold underline text-emerald-800 hover:text-emerald-900 whitespace-nowrap self-start sm:self-auto"
           >
             {t('quotes.goToInvoices')}
           </button>
@@ -151,7 +151,65 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
 
       {/* Quotes Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Card List (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {quotes.map((q) => {
+            const client = clients.find((c) => c.id === q.client_id);
+            return (
+              <div key={q.id} className="p-4 space-y-2.5 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-mono font-bold text-slate-900">{q.numero}</div>
+                    <div className="font-semibold text-slate-800 truncate">{client?.raison_sociale}</div>
+                  </div>
+                  <span
+                    className={`text-[11px] font-semibold px-2 py-0.5 rounded-sm shrink-0 ${
+                      q.statut === 'converti'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : q.statut === 'accepté'
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'bg-amber-50 text-amber-700'
+                    }`}
+                  >
+                    {translateQuoteStatus(q.statut)}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-lg text-[11px]">
+                  <div>
+                    <span className="text-slate-500 block">{t('quotes.col.totalHt')}</span>
+                    <span className="font-mono font-medium text-slate-800">{formatDH(q.total_ht)}</span>
+                  </div>
+                  <div className="text-end">
+                    <span className="text-slate-500 block">{t('quotes.col.totalTtc')}</span>
+                    <span className="font-mono font-bold text-slate-900">{formatDH(q.total_ttc)}</span>
+                  </div>
+                  <div className="col-span-2 flex flex-wrap items-center justify-between gap-1 pt-1 border-t border-slate-200/70">
+                    <span className="text-slate-700">{q.date_emission}</span>
+                    <span className="text-slate-400">{t('quotes.validUntil', { date: q.date_validite })}</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  {q.statut !== 'converti' ? (
+                    <button
+                      onClick={() => handleConvert(q)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-md shadow-xs transition-colors whitespace-nowrap"
+                    >
+                      <FileCheck className="w-3.5 h-3.5" />
+                      <span>{t('quotes.convertBtn')}</span>
+                    </button>
+                  ) : (
+                    <span className="text-[11px] text-slate-400 italic">{t('quotes.convertedTag')}</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
@@ -228,8 +286,8 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
 
       {/* Modal: New Quote */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('quotes.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -238,7 +296,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
             </div>
 
             <form onSubmit={handleCreate} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
                   <select
@@ -280,7 +338,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                 <div className="space-y-2 max-h-48 overflow-y-auto pe-1">
                   {formData.items.map((item, idx) => (
                     <div key={idx} className="grid grid-cols-12 gap-2 p-2 bg-slate-50 rounded-lg items-center">
-                      <div className="col-span-6">
+                      <div className="col-span-12 sm:col-span-6">
                         <input
                           type="text"
                           required
@@ -290,7 +348,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
                         />
                       </div>
-                      <div className="col-span-2">
+                      <div className="col-span-4 sm:col-span-2">
                         <input
                           type="number"
                           placeholder={t('invoices.col.qty')}
@@ -299,7 +357,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
                         />
                       </div>
-                      <div className="col-span-3">
+                      <div className="col-span-6 sm:col-span-3">
                         <input
                           type="number"
                           placeholder={t('invoices.col.unitPrice')}
@@ -308,7 +366,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
                         />
                       </div>
-                      <div className="col-span-1 flex justify-end">
+                      <div className="col-span-2 sm:col-span-1 flex justify-end">
                         {formData.items.length > 1 && (
                           <button
                             type="button"
@@ -324,7 +382,7 @@ export const QuotesView: React.FC<{ onNavigateToInvoices: () => void }> = ({ onN
                 </div>
               </div>
 
-              <div className="bg-slate-100 p-3 rounded-lg flex items-center justify-between text-xs font-mono">
+              <div className="bg-slate-100 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono">
                 <div>{t('invoices.totalHt')} <strong>{formatDH(totals.totalHt)}</strong></div>
                 <div>{t('invoices.vatLabel', { rate: totals.tauxTva })} <strong>{formatDH(totals.montantTva)}</strong></div>
                 <div className="text-sm font-bold text-slate-900">{t('invoices.totalTtc')} {formatDH(totals.totalTtc)}</div>

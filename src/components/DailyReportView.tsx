@@ -109,15 +109,28 @@ export const DailyReportView: React.FC = () => {
   const hoursValidation = validateDailyReportHours(totalHours);
 
   // Canvas drawing handlers for Client Signature (DP-6)
+  const getCanvasPoint = (
+    canvas: HTMLCanvasElement,
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
+  };
+
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     isDrawing.current = true;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const { x, y } = getCanvasPoint(canvas, e);
     ctx.beginPath();
     ctx.moveTo(x, y);
   };
@@ -128,9 +141,7 @@ export const DailyReportView: React.FC = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const { x, y } = getCanvasPoint(canvas, e);
     ctx.lineTo(x, y);
     ctx.strokeStyle = '#0f172a';
     ctx.lineWidth = 2;
@@ -257,7 +268,7 @@ export const DailyReportView: React.FC = () => {
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="space-y-6 text-xs">
         {/* Top parameters card */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-slate-600 mb-1 font-medium">{t('daily.dateLabel')}</label>
@@ -297,8 +308,8 @@ export const DailyReportView: React.FC = () => {
         </div>
 
         {/* Tasks Section (RJ-1) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
             <div>
               <h3 className="text-sm font-bold text-slate-900">{t('daily.tasksTitle')}</h3>
               <p className="text-[11px] text-slate-500">{t('daily.tasksSub')}</p>
@@ -442,10 +453,10 @@ export const DailyReportView: React.FC = () => {
         </div>
 
         {/* Section Déplacement chez le client (DP-1 à DP-7) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Car className="w-4 h-4 text-blue-600" />
+              <Car className="w-4 h-4 text-blue-600 shrink-0" />
               <h3 className="text-sm font-bold text-slate-900">{t('daily.visitSectionTitle')}</h3>
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
@@ -533,7 +544,7 @@ export const DailyReportView: React.FC = () => {
               </div>
 
               {/* DP-5: Option facturable */}
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between gap-2">
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -560,10 +571,10 @@ export const DailyReportView: React.FC = () => {
               </div>
 
               {/* DP-6: Signature tactile du client sur l'écran */}
-              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
-                <div className="flex items-center justify-between">
+              <div className="p-3.5 sm:p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 font-semibold text-slate-900">
-                    <FileSignature className="w-4 h-4 text-blue-600" />
+                    <FileSignature className="w-4 h-4 text-blue-600 shrink-0" />
                     <span>{t('daily.signatureTitle')}</span>
                   </div>
                   <button
@@ -601,7 +612,7 @@ export const DailyReportView: React.FC = () => {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-sm transition-colors"
+            className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-sm transition-colors"
           >
             {t('daily.submitBtn')}
           </button>

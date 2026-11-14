@@ -140,9 +140,9 @@ export const ClientsView: React.FC = () => {
       </div>
 
       {/* Main split: Client List (Left) / 360° View (Right) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Left Client List (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col h-[750px]">
+        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col max-h-[340px] lg:max-h-none lg:h-[750px]">
           {/* Search bar */}
           <div className="p-3 border-b border-slate-100 space-y-2">
             <div className="relative">
@@ -156,7 +156,7 @@ export const ClientsView: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
               {(['all', 'actif', 'prospect', 'inactif'] as const).map((st) => (
                 <button
                   key={st}
@@ -213,15 +213,15 @@ export const ClientsView: React.FC = () => {
         </div>
 
         {/* Right 360° Detail View (8 cols) */}
-        <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col h-[750px] overflow-hidden">
+        <div className="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col h-auto lg:h-[750px] lg:overflow-hidden">
           {selectedClient ? (
-            <div className="flex flex-col h-full overflow-hidden">
+            <div className="flex flex-col h-full lg:overflow-hidden">
               {/* Header 360°: Total Facturé / Total Encaissé / Reste Dû (CL-2 & R10) */}
-              <div className="p-5 border-b border-slate-200 bg-slate-50/50">
+              <div className="p-4 sm:p-5 border-b border-slate-200 bg-slate-50/50">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-lg font-bold text-slate-900">{selectedClient.raison_sociale}</h3>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900">{selectedClient.raison_sociale}</h3>
                       <span className="text-[11px] font-mono text-slate-400">({selectedClient.code_client})</span>
                     </div>
                     <div className="text-xs text-slate-500 mt-0.5">
@@ -229,7 +229,7 @@ export const ClientsView: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <a
                       href={`tel:${selectedClient.telephone}`}
                       className="p-2 bg-white border border-slate-200 text-slate-700 hover:text-blue-600 rounded-lg transition-colors"
@@ -248,7 +248,7 @@ export const ClientsView: React.FC = () => {
                 </div>
 
                 {/* Financial Summary Strip (R10) */}
-                <div className="grid grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-200/80">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-4 pt-3 border-t border-slate-200/80">
                   <div className="bg-white p-3 rounded-lg border border-slate-200">
                     <div className="text-[11px] text-slate-500 font-medium">{t('clients.totalBilled')}</div>
                     <div className="text-sm font-bold font-mono text-slate-900 mt-0.5">
@@ -271,7 +271,7 @@ export const ClientsView: React.FC = () => {
               </div>
 
               {/* 360° Tabs */}
-              <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white overflow-x-auto text-xs font-medium">
+              <div className="flex items-center gap-1 px-3 sm:px-5 border-b border-slate-200 bg-white overflow-x-auto text-xs font-medium shrink-0">
                 {[
                   { key: 'infos', label: t('clients.tab.infos') },
                   { key: 'projets', label: t('clients.tab.projects', { count: clientProjects.length }) },
@@ -295,10 +295,10 @@ export const ClientsView: React.FC = () => {
               </div>
 
               {/* Tab Contents */}
-              <div className="p-5 overflow-y-auto flex-1 text-xs">
+              <div className="p-4 sm:p-5 overflow-y-auto flex-1 text-xs">
                 {activeTab === 'infos' && (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div className="bg-slate-50 p-3.5 rounded-lg space-y-2 border border-slate-100">
                         <div className="font-semibold text-slate-900">{t('clients.taxIds')}</div>
                         <div className="grid grid-cols-2 gap-2 text-[11px]">
@@ -345,12 +345,12 @@ export const ClientsView: React.FC = () => {
                   <div className="space-y-3">
                     {clientProjects.map((p) => (
                       <div key={p.id} className="p-3.5 border border-slate-200 rounded-lg hover:border-slate-300">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <h4 className="font-bold text-slate-900 text-xs">{p.nom_systeme}</h4>
-                          <span className="font-mono text-emerald-700 font-bold">{formatDH(p.prix_vente_ht)} HT</span>
+                          <span className="font-mono text-emerald-700 font-bold shrink-0">{formatDH(p.prix_vente_ht)} HT</span>
                         </div>
                         <p className="text-slate-600 mt-1 text-[11px]">{p.description}</p>
-                        <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
+                        <div className="flex flex-wrap items-center justify-between gap-1.5 text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
                           <span>{t('projects.techPrefix')} {p.technologies}</span>
                           <span className="capitalize font-medium text-slate-700">{t('common.status')}: {p.statut}</span>
                         </div>
@@ -366,9 +366,9 @@ export const ClientsView: React.FC = () => {
                   <div className="space-y-3">
                     {clientContracts.map((c) => (
                       <div key={c.id} className="p-3.5 border border-slate-200 rounded-lg">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span className="font-bold text-slate-900">{c.numero_contrat} ({c.type})</span>
-                          <span className="font-mono font-bold text-slate-800">{formatDH(c.montant_ht)} HT / {c.periodicite}</span>
+                          <span className="font-mono font-bold text-slate-800 shrink-0">{formatDH(c.montant_ht)} HT / {c.periodicite}</span>
                         </div>
                         <div className="text-[11px] text-slate-600 mt-1">
                           {t('clients.periodIncluded', { start: c.date_debut, end: c.date_fin, hours: c.heures_incluses })}
@@ -385,7 +385,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'factures' && (
                   <div className="divide-y divide-slate-100">
                     {clientInvoices.map((inv) => (
-                      <div key={inv.id} className="py-2.5 flex items-center justify-between">
+                      <div key={inv.id} className="py-2.5 flex flex-wrap items-center justify-between gap-2">
                         <div>
                           <div className="font-semibold text-slate-900">{inv.numero}</div>
                           <div className="text-[11px] text-slate-400">
@@ -404,7 +404,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'paiements' && (
                   <div className="divide-y divide-slate-100">
                     {clientPayments.map((p) => (
-                      <div key={p.id} className="py-2.5 flex items-center justify-between">
+                      <div key={p.id} className="py-2.5 flex flex-wrap items-center justify-between gap-2">
                         <div>
                           <div className="font-semibold text-slate-900">{p.mode} · {p.reference}</div>
                           <div className="text-[11px] text-slate-400">{p.date_paiement} ({p.banque})</div>
@@ -422,12 +422,12 @@ export const ClientsView: React.FC = () => {
                   <div className="space-y-3">
                     {clientVisits.map((v) => (
                       <div key={v.id} className="p-3 border border-slate-200 rounded-lg">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span className="font-bold text-slate-900">{v.motif}</span>
-                          <span className="text-[11px] font-mono text-slate-500">{v.date} ({v.heure_depart} - {v.heure_retour})</span>
+                          <span className="text-[11px] font-mono text-slate-500 shrink-0">{v.date} ({v.heure_depart} - {v.heure_retour})</span>
                         </div>
                         <p className="text-slate-600 text-[11px] mt-1">{v.travail_effectue}</p>
-                        <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
+                        <div className="flex flex-wrap items-center justify-between gap-1.5 text-[11px] text-slate-400 mt-2 pt-2 border-t border-slate-100">
                           <span>{t('clients.result')} <strong className="text-slate-700">{v.resultat}</strong></span>
                           <span>{t('clients.billable')} {v.facturable ? `${formatDH(v.montant_facturable)}` : t('clients.no')}</span>
                         </div>
@@ -450,8 +450,8 @@ export const ClientsView: React.FC = () => {
 
       {/* Modal: Add Client (CL-1 with duplicate ICE & name check) */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('clients.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -467,8 +467,8 @@ export const ClientsView: React.FC = () => {
             )}
 
             <form onSubmit={handleCreateClient} className="space-y-3.5 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="sm:col-span-2">
                   <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.company')}</label>
                   <input
                     type="text"
@@ -480,7 +480,7 @@ export const ClientsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.ice')}</label>
                   <input
@@ -502,7 +502,7 @@ export const ClientsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.contact')}</label>
                   <input
@@ -523,7 +523,7 @@ export const ClientsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.phone')}</label>
                   <input
@@ -544,7 +544,7 @@ export const ClientsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('clients.field.city')}</label>
                   <input

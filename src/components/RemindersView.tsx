@@ -128,7 +128,7 @@ export const RemindersView: React.FC = () => {
               </span>
             </div>
 
-            <div className="divide-y divide-slate-100 overflow-y-auto max-h-[600px]">
+            <div className="divide-y divide-slate-100 overflow-y-auto max-h-[340px] lg:max-h-[600px]">
               {overdueInvoices.map((inv) => {
                 const isSelected = selectedInv?.id === inv.id;
 
@@ -163,7 +163,7 @@ export const RemindersView: React.FC = () => {
           </div>
 
           {/* Right: Reminder Composer & Template (7 cols) */}
-          <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
+          <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-4">
             {selectedInv ? (
               <>
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -218,10 +218,10 @@ export const RemindersView: React.FC = () => {
                     {t('reminders.copyHint')}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => handleCopyMessage(generateMessage(selectedInv, reminderType), selectedInv.id)}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0"
+                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 flex-1 sm:flex-none"
                     >
                       {copiedId === selectedInv.id ? (
                         <>
@@ -238,7 +238,7 @@ export const RemindersView: React.FC = () => {
 
                     <button
                       onClick={handleLogReminder}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0"
+                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 flex-1 sm:flex-none"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>{t('reminders.logBtn')}</span>
@@ -252,7 +252,7 @@ export const RemindersView: React.FC = () => {
                     <span className="text-xs font-semibold text-slate-700">{t('reminders.historyTitle')}</span>
                     <div className="space-y-1">
                       {reminderHistory.map((h) => (
-                        <div key={h.id} className="text-[11px] flex justify-between bg-slate-50 p-2 rounded text-slate-600">
+                        <div key={h.id} className="text-[11px] flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2 rounded text-slate-600">
                           <span>
                             {t('reminders.historyEntry', {
                               date: h.date,

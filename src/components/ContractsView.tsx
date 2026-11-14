@@ -78,7 +78,7 @@ export const ContractsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Recurring Billing Button (CL-6) */}
           <button
             onClick={handleRunBilling}
@@ -127,7 +127,83 @@ export const ContractsView: React.FC = () => {
 
       {/* Contracts Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Card List (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {contracts.map((c) => {
+            const client = clients.find((cl) => cl.id === c.client_id);
+            const project = projects.find((p) => p.id === c.project_id);
+            const alert = checkContractExpiration(c.date_fin);
+
+            return (
+              <div key={c.id} className="p-4 space-y-2.5 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-slate-900">{c.numero_contrat}</div>
+                    <div className="text-[11px] text-slate-500 truncate">
+                      {client?.raison_sociale} · {project?.nom_systeme}
+                    </div>
+                  </div>
+                  <span
+                    className={`text-[11px] font-semibold shrink-0 ${
+                      c.statut === 'résilié' ? 'text-rose-700' : 'text-emerald-700'
+                    }`}
+                  >
+                    {translateContractStatus(c.statut)}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-lg text-[11px]">
+                  <div>
+                    <span className="text-slate-500 block">{t('contracts.col.amountHt')}</span>
+                    <span className="font-mono font-bold text-slate-900">{formatDH(c.montant_ht)}</span>
+                  </div>
+                  <div className="text-end">
+                    <span className="text-slate-500 block">{t('contracts.col.nextBilling')}</span>
+                    <span className="font-mono text-slate-700">{c.prochaine_facturation}</span>
+                  </div>
+                  <div className="col-span-2 flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-slate-200/70">
+                    <span className="text-slate-600">{c.date_debut} → {c.date_fin}</span>
+                    <span className="text-slate-400">
+                      {translatePeriodicity(c.periodicite)} ({c.heures_incluses}{t('common.hours')})
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                  <span
+                    className={`text-[11px] font-medium px-2 py-0.5 rounded-sm ${
+                      alert.alertLevel === 'urgent'
+                        ? 'bg-rose-100 text-rose-800 border border-rose-200'
+                        : alert.alertLevel === 'warning'
+                        ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                        : alert.alertLevel === 'expired'
+                        ? 'bg-slate-100 text-slate-700'
+                        : 'text-slate-600'
+                    }`}
+                  >
+                    {alert.message}
+                  </span>
+
+                  {canCancelPack && c.statut === 'actif' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCancelPackTarget(c);
+                        setCancelMotif(t('contracts.cancelPackDesc', { num: c.numero_contrat }));
+                      }}
+                      className="px-2.5 py-1.5 text-[11px] font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-md transition-colors whitespace-nowrap"
+                    >
+                      {t('contracts.cancelPackBtn')}
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
@@ -228,8 +304,8 @@ export const ContractsView: React.FC = () => {
 
       {/* Modal: Add Contract */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('contracts.modalNewTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -268,7 +344,7 @@ export const ContractsView: React.FC = () => {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.start')}</label>
                   <input
@@ -289,7 +365,7 @@ export const ContractsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.periodicity')}</label>
                   <select
@@ -313,7 +389,7 @@ export const ContractsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('contracts.field.hoursIncluded')}</label>
                   <input
@@ -366,8 +442,8 @@ export const ContractsView: React.FC = () => {
 
       {/* Modal: Cancel Pack / Annuler le pack */}
       {cancelPackTarget && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2 text-rose-700 font-bold text-sm">
                 <AlertTriangle className="w-4 h-4 shrink-0" />

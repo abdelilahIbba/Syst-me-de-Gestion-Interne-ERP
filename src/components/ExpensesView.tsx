@@ -108,10 +108,10 @@ export const ExpensesView: React.FC = () => {
       </div>
 
       {/* Category Breakdown Progress Bar (CH-5) */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-cyan-600" />
+            <Layers className="w-4 h-4 text-cyan-600 shrink-0" />
             <h3 className="text-sm font-semibold text-slate-900">{t('expenses.breakdownTitle')}</h3>
           </div>
           <div className="text-xs font-mono font-bold text-slate-900">
@@ -119,7 +119,7 @@ export const ExpensesView: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-1">
           {categoryTotals.slice(0, 4).map((c) => (
             <div key={c.category.id} className="bg-slate-50 p-2.5 rounded-lg border border-slate-100 text-xs">
               <div className="text-slate-500 truncate text-[11px] font-medium">{c.category.nom}</div>
@@ -146,7 +146,7 @@ export const ExpensesView: React.FC = () => {
         <select
           value={filterSource}
           onChange={(e) => setFilterSource(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
         >
           <option value="all">{t('expenses.allSources')}</option>
           <option value="manuelle">{t('expenses.source.manuelle')}</option>
@@ -157,7 +157,7 @@ export const ExpensesView: React.FC = () => {
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
         >
           <option value="all">{t('expenses.allCategories')}</option>
           {expenseCategories.map((c) => (
@@ -170,7 +170,68 @@ export const ExpensesView: React.FC = () => {
 
       {/* Expenses Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Card List (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {filteredExpenses.map((exp) => {
+            const cat = expenseCategories.find((c) => c.id === exp.categorie_id);
+            return (
+              <div key={exp.id} className="p-4 space-y-2.5 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-slate-900">{exp.libelle}</div>
+                    <div className="text-[11px] text-slate-400">
+                      {t('expenses.vendorPrefix')} {exp.fournisseur} · <span className="font-mono">{exp.date}</span>
+                    </div>
+                  </div>
+                  <span
+                    className={`text-[11px] font-semibold shrink-0 ${
+                      exp.statut === 'validée' ? 'text-emerald-700' : 'text-amber-700'
+                    }`}
+                  >
+                    {translateExpenseStatus(exp.statut)}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-lg text-[11px]">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="font-medium text-slate-700">{cat?.nom || '-'}</span>
+                    <span
+                      className={`text-[10px] font-medium px-1.5 py-0.5 rounded-sm ${
+                        exp.source === 'paie'
+                          ? 'bg-purple-50 text-purple-700 font-semibold'
+                          : exp.source === 'déplacement'
+                          ? 'bg-amber-50 text-amber-700 font-semibold'
+                          : 'bg-slate-200/70 text-slate-600'
+                      }`}
+                    >
+                      {translateSource(exp.source)}
+                    </span>
+                    {exp.recurrente && (
+                      <span className="text-[10px] text-blue-700 bg-blue-50 px-1 py-0.5 rounded-sm">
+                        {t('expenses.recurring')}
+                      </span>
+                    )}
+                  </div>
+                  <span className="font-mono font-bold text-slate-900 text-xs">{formatDH(exp.montant_ttc)}</span>
+                </div>
+
+                {exp.statut === 'en attente' && canValidateExpense && (
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => validateExpense(exp.id)}
+                      className="px-3 py-1.5 text-[11px] font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors whitespace-nowrap"
+                    >
+                      {t('expenses.validateBtn')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
@@ -253,8 +314,8 @@ export const ExpensesView: React.FC = () => {
 
       {/* Modal: New Expense */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('expenses.modalTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -275,7 +336,7 @@ export const ExpensesView: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('expenses.field.category')}</label>
                   <select
@@ -302,7 +363,7 @@ export const ExpensesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('expenses.field.amountHt')}</label>
                   <input
@@ -335,7 +396,7 @@ export const ExpensesView: React.FC = () => {
                 <span>{formatDH(formData.montant_ttc)}</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('common.date')}</label>
                   <input

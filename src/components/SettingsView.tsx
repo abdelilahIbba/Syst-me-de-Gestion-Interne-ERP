@@ -85,7 +85,7 @@ export const SettingsView: React.FC = () => {
       </div>
 
       {/* Sub-navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 rounded-xl border border-slate-200/80">
+      <div className="flex items-center gap-1.5 p-1.5 bg-slate-100 rounded-xl border border-slate-200/80 overflow-x-auto sm:flex-wrap">
         {visibleTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeSubTab === tab.id;
@@ -119,10 +119,10 @@ export const SettingsView: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6 text-xs">
             {/* Identité Société & Mentions Légales */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
-                  <Building className="w-4 h-4 text-cyan-600" />
+                  <Building className="w-4 h-4 text-cyan-600 shrink-0" />
                   <span>{t('settings.legalIdentity')}</span>
                 </div>
                 <div className="flex items-center gap-2.5 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
@@ -221,13 +221,13 @@ export const SettingsView: React.FC = () => {
             </div>
 
             {/* Taux Fiscaux & Barème RH */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-sm">
-                <Percent className="w-4 h-4 text-emerald-600" />
+                <Percent className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>{t('settings.taxPayrollTitle')}</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('settings.defaultVat')}</label>
                   <input
@@ -270,7 +270,7 @@ export const SettingsView: React.FC = () => {
             </div>
 
             {/* Règles Métier & Heure Limite */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-sm">
                 <Clock className="w-4 h-4 text-purple-600" />
                 <span>{t('settings.opsTitle')}</span>
@@ -321,7 +321,7 @@ export const SettingsView: React.FC = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-sm transition-colors whitespace-nowrap shrink-0"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-sm transition-colors whitespace-nowrap shrink-0"
               >
                 <Save className="w-4 h-4" />
                 <span>{t('settings.saveBtn')}</span>

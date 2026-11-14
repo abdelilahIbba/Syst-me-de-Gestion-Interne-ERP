@@ -72,14 +72,14 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
   }, [chartData, revenueBasis]);
 
   return (
-    <div className="bg-white p-5 rounded-xl border border-slate-200 space-y-5">
+    <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 space-y-4 sm:space-y-5">
       {/* Header & Basis Toggle */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-slate-100">
+        <div className="flex items-center gap-3 min-w-0">
           <div className="w-9 h-9 rounded-lg bg-[#070b18] text-cyan-400 flex items-center justify-center shrink-0">
             <BarChart3 className="w-4 h-4" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
               {t('chart.proj.title')}
             </h3>
@@ -90,11 +90,11 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
         </div>
 
         {/* Segmented Control */}
-        <div className="flex items-center p-1 bg-slate-100 rounded-lg text-xs font-medium shrink-0">
+        <div className="grid grid-cols-2 sm:flex items-center p-1 bg-slate-100 rounded-lg text-xs font-medium shrink-0 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setRevenueBasis('encaisses')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap shrink-0 ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-md transition-colors text-center whitespace-nowrap truncate ${
               revenueBasis === 'encaisses'
                 ? 'bg-white text-slate-900 font-semibold shadow-2xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -105,7 +105,7 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
           <button
             type="button"
             onClick={() => setRevenueBasis('contractuel')}
-            className={`px-3 py-1.5 rounded-md transition-colors whitespace-nowrap shrink-0 ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-md transition-colors text-center whitespace-nowrap truncate ${
               revenueBasis === 'contractuel'
                 ? 'bg-white text-slate-900 font-semibold shadow-2xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -117,13 +117,13 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
       </div>
 
       {/* Aggregate Metric Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pb-1">
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
-            <span>{revenueBasis === 'encaisses' ? t('chart.proj.totalCollected') : t('chart.proj.totalPriceHt')}</span>
-            <DollarSign className="w-3.5 h-3.5 text-cyan-600" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 pb-1">
+        <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 min-w-0">
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium gap-1">
+            <span className="truncate">{revenueBasis === 'encaisses' ? t('chart.proj.totalCollected') : t('chart.proj.totalPriceHt')}</span>
+            <DollarSign className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
           </div>
-          <div className="text-base font-bold font-mono tabular-nums text-slate-900 mt-1">
+          <div className="text-sm sm:text-base font-bold font-mono tabular-nums text-slate-900 mt-1 truncate">
             {formatDH(totals.rev)}
           </div>
         </div>
@@ -176,12 +176,12 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
           </div>
         </div>
       ) : (
-        <div dir="ltr" className="h-72 w-full">
+        <div dir="ltr" className="h-64 sm:h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
-              margin={{ top: 10, right: 20, left: 10, bottom: 5 }}
-              barGap={6}
+              margin={{ top: 8, right: 6, left: -12, bottom: 5 }}
+              barGap={4}
             >
               <defs>
                 <linearGradient id="projRevGrad" x1="0" y1="0" x2="0" y2="1">
@@ -200,10 +200,12 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
                 dataKey="shortName"
                 axisLine={{ stroke: '#e2e8f0' }}
                 tickLine={false}
-                tick={{ fill: '#475569', fontSize: 11, fontWeight: 500 }}
+                interval={0}
+                tick={{ fill: '#475569', fontSize: 10, fontWeight: 500 }}
               />
 
               <YAxis
+                width={40}
                 axisLine={{ stroke: '#e2e8f0' }}
                 tickLine={false}
                 tick={{ fill: '#64748b', fontSize: 10 }}
@@ -223,7 +225,7 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
                     return (
                       <div
                         dir={dir}
-                        className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3.5 shadow-xl text-xs space-y-2 min-w-[240px]"
+                        className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 sm:p-3.5 shadow-xl text-xs space-y-2 min-w-[200px] sm:min-w-[240px] max-w-[calc(100vw-32px)]"
                       >
                         <div className="border-b border-slate-800 pb-2">
                           <div className="font-bold text-cyan-300 leading-snug">{item.nom}</div>

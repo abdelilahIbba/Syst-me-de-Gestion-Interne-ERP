@@ -212,7 +212,7 @@ export const EmployeesView: React.FC = () => {
             <select
               value={filterDepartement}
               onChange={(e) => setFilterDepartement(e.target.value)}
-              className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+              className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
             >
               <option value="all">{t('emp.allDepts')}</option>
               {departments.map((d) => (
@@ -225,7 +225,7 @@ export const EmployeesView: React.FC = () => {
             <select
               value={filterStatut}
               onChange={(e) => setFilterStatut(e.target.value)}
-              className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+              className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
             >
               <option value="all">{t('emp.allStatuses')}</option>
               <option value="actif">{t('emp.status.actif')}</option>
@@ -234,8 +234,67 @@ export const EmployeesView: React.FC = () => {
             </select>
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto flex-1">
+          {/* Mobile Card List (< md) */}
+          <div className="md:hidden divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
+            {filteredEmployees.map((emp) => {
+              const isSelected = selectedEmployee?.id === emp.id;
+              const expiring = isExpiringSoon(emp);
+              return (
+                <div
+                  key={emp.id}
+                  onClick={() => setSelectedEmployee(emp)}
+                  className={`p-3.5 cursor-pointer transition-colors space-y-2 ${
+                    isSelected ? 'bg-blue-50/80 border-s-2 border-s-blue-600' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0">
+                        {emp.prenom.charAt(0)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-xs text-slate-900 truncate">
+                          {emp.prenom} {emp.nom}
+                        </div>
+                        <div className="text-[11px] text-slate-500 truncate">
+                          {emp.poste} · {emp.departement}
+                        </div>
+                      </div>
+                    </div>
+                    <span
+                      className={`text-[11px] font-medium shrink-0 ${
+                        emp.statut === 'actif'
+                          ? 'text-emerald-700'
+                          : emp.statut === 'suspendu'
+                          ? 'text-amber-700'
+                          : 'text-slate-400'
+                      }`}
+                    >
+                      {translateEmployeeStatus(emp.statut)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono">{emp.matricule}</span>
+                      <span>·</span>
+                      <span className="font-medium text-slate-700">{emp.type_contrat}</span>
+                      {expiring && (
+                        <span className="text-[10px] text-amber-700 font-semibold">{t('emp.endingSoon')}</span>
+                      )}
+                    </div>
+                    <span className="font-mono font-bold text-slate-900">{formatDH(emp.salaire_brut_base)}</span>
+                  </div>
+                </div>
+              );
+            })}
+            {filteredEmployees.length === 0 && (
+              <div className="py-8 text-center text-slate-400 text-xs">{t('emp.noMatch')}</div>
+            )}
+          </div>
+
+          {/* Desktop Table (>= md) */}
+          <div className="hidden md:block overflow-x-auto flex-1">
             <table className="w-full text-start text-xs">
               <thead className="bg-slate-50/80 text-slate-500 font-semibold border-b border-slate-100">
                 <tr>
@@ -318,7 +377,7 @@ export const EmployeesView: React.FC = () => {
         </div>
 
         {/* Right Detail: Employee 360° Card (RH-2 & RH-3) */}
-        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-5">
+        <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-5">
           {selectedEmployee ? (
             <>
               {/* Header card */}
@@ -459,8 +518,8 @@ export const EmployeesView: React.FC = () => {
 
       {/* Modal: New Employee */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('emp.modalNewTitle')}</h3>
               <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -469,7 +528,7 @@ export const EmployeesView: React.FC = () => {
             </div>
 
             <form onSubmit={handleCreateEmployee} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.lastName')}</label>
                   <input
@@ -492,7 +551,7 @@ export const EmployeesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.email')}</label>
                   <input
@@ -514,7 +573,7 @@ export const EmployeesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.cin')}</label>
                   <input
@@ -535,7 +594,7 @@ export const EmployeesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.role')}</label>
                   <input
@@ -561,7 +620,7 @@ export const EmployeesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('emp.field.contractType')}</label>
                   <select
@@ -631,8 +690,8 @@ export const EmployeesView: React.FC = () => {
 
       {/* Modal: Edit Employee (Poste / Salaire / Contrat) */}
       {isEditModalOpen && selectedEmployee && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">
                 {t('emp.modalEditTitle', { name: `${selectedEmployee.prenom} ${selectedEmployee.nom}` })}

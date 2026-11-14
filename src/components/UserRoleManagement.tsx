@@ -235,8 +235,8 @@ export const UserManagementSection: React.FC = () => {
       )}
 
       {/* Search & Filter */}
-      <div className="flex flex-wrap items-center gap-2.5 p-3 bg-white rounded-xl border border-slate-200 shadow-2xs">
-        <div className="relative flex-1 min-w-[220px]">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 p-3 bg-white rounded-xl border border-slate-200 shadow-2xs">
+        <div className="relative flex-1 min-w-0 sm:min-w-[220px]">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -250,7 +250,7 @@ export const UserManagementSection: React.FC = () => {
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 font-medium"
+          className="w-full sm:w-auto text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 font-medium"
         >
           <option value="all">{t('users.allRoles', { count: roles.length })}</option>
           {roles.map((r) => (
@@ -261,9 +261,135 @@ export const UserManagementSection: React.FC = () => {
         </select>
       </div>
 
-      {/* Users Table */}
+      {/* Users List (Mobile Cards) + Desktop Table */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Cards */}
+        <div className="lg:hidden divide-y divide-slate-100">
+          {filteredUsers.map((u) => {
+            const emp = employees.find((e) => e.id === u.employee_id);
+            const roleObj = findRole(u.role_id || u.role, roles);
+            const roleLabel = tRole(roleObj?.key || u.role, roleObj?.name || u.role);
+            const isLocked = u.failed_attempts >= 5 || !!u.locked_until;
+            const isSelf = u.id === currentUser.id;
+
+            return (
+              <div key={u.id} className="p-3.5 space-y-2.5 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-slate-900">{u.name}</span>
+                      {isSelf && (
+                        <span className="text-[10px] font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-1.5 py-0.2 rounded-sm">
+                          {t('users.activeSession')}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-400 font-mono truncate">
+                      {emp ? `${emp.prenom} ${emp.nom} · ${emp.poste}` : t('users.systemAccount')}
+                    </div>
+                  </div>
+
+                  {isLocked ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-sm shrink-0">
+                      <Lock className="w-3 h-3" />
+                      <span>{t('common.locked')}</span>
+                    </span>
+                  ) : u.active ? (
+                    <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-sm shrink-0">
+                      {t('common.active')}
+                    </span>
+                  ) : (
+                    <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-sm shrink-0">
+                      {t('common.suspended')}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span
+                    className={`inline-flex items-center gap-1 font-semibold px-2.5 py-0.5 rounded-md border text-[11px] ${
+                      roleObj?.badgeColor || 'bg-blue-50 text-blue-800 border-blue-200'
+                    }`}
+                  >
+                    <Shield className="w-3 h-3 shrink-0" />
+                    <span>{roleLabel}</span>
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-500 truncate">{u.email}</span>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 font-mono">
+                  <span>ID: {u.id}</span>
+                  <span>{u.last_login || t('users.neverLogged')}</span>
+                </div>
+
+                {canManageUsers && (
+                  <div className="flex flex-wrap items-center justify-end gap-1.5 pt-2 border-t border-slate-100">
+                    {isLocked && (
+                      <button
+                        type="button"
+                        onClick={() => handleUnlock(u)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-md transition-colors"
+                      >
+                        <Unlock className="w-3.5 h-3.5" />
+                        <span>{t('users.unlock')}</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(u)}
+                      className="p-2 text-slate-600 hover:text-cyan-700 hover:bg-cyan-50 rounded-md transition-colors"
+                      title={t('users.action.editTitle')}
+                      aria-label={`${t('common.edit')} ${u.name}`}
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleResetPassword(u)}
+                      className="p-2 text-slate-600 hover:text-amber-700 hover:bg-amber-50 rounded-md transition-colors"
+                      title={t('users.action.resetPwdTitle')}
+                    >
+                      <KeyRound className="w-3.5 h-3.5" />
+                    </button>
+
+                    {!isSelf && (
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(u)}
+                        className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-md transition-colors ${
+                          u.active
+                            ? 'text-amber-700 bg-amber-50 hover:bg-amber-100'
+                            : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
+                        }`}
+                      >
+                        {u.active ? t('users.suspend') : t('users.reactivate')}
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteUser(u)}
+                      className="p-2 text-slate-500 hover:text-rose-700 hover:bg-rose-50 rounded-md transition-colors"
+                      title={t('users.action.deleteTitle')}
+                      aria-label={`${t('common.delete')} ${u.name}`}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {filteredUsers.length === 0 && (
+            <div className="py-8 text-center text-slate-400 text-xs">{t('users.noMatch')}</div>
+          )}
+        </div>
+
+        {/* Desktop Table */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-start text-xs">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
@@ -416,8 +542,8 @@ export const UserManagementSection: React.FC = () => {
 
       {/* Create / Edit User Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h4 className="text-sm font-bold text-slate-900">
                 {editingUser ? t('users.modal.editTitle', { name: editingUser.name }) : t('users.modal.createTitle')}
@@ -533,8 +659,8 @@ export const UserManagementSection: React.FC = () => {
 
       {/* Delete User Confirmation Modal */}
       {confirmDeleteUser && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-5 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-4 sm:p-5 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center gap-2.5 text-rose-700">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <h4 className="text-sm font-bold">{t('users.deleteTitle')}</h4>
@@ -763,7 +889,7 @@ export const RoleManagementSection: React.FC = () => {
                 <p className="text-xs text-slate-600 leading-relaxed">{r.description || t('roles.customDesc')}</p>
               </div>
 
-              <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <div className="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
                 <span className="flex items-center gap-1.5 font-medium">
                   <UsersIcon className="w-3.5 h-3.5 text-cyan-600" />
                   <span>{t('roles.assignedUsers', { count: userCount })}</span>
@@ -779,8 +905,8 @@ export const RoleManagementSection: React.FC = () => {
 
       {/* Create / Edit Role Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h4 className="text-sm font-bold text-slate-900">
                 {editingRole ? t('roles.modal.editTitle', { name: tRole(editingRole.key, editingRole.name) }) : t('roles.modal.createTitle')}
@@ -878,8 +1004,8 @@ export const RoleManagementSection: React.FC = () => {
 
       {/* Delete Role Confirmation Modal */}
       {confirmDeleteRole && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-5 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-4 sm:p-5 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center gap-2.5 text-rose-700">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <h4 className="text-sm font-bold">{t('roles.deleteTitle')}</h4>
@@ -972,8 +1098,8 @@ export const RolePermissionsMatrixSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[11px] text-cyan-800 bg-cyan-50 border border-cyan-200 px-3 py-1.5 rounded-lg shrink-0">
-          <Info className="w-3.5 h-3.5 text-cyan-600" />
+        <div className="flex items-center gap-1.5 text-[11px] text-cyan-800 bg-cyan-50 border border-cyan-200 px-3 py-1.5 rounded-lg shrink-0 self-start sm:self-auto">
+          <Info className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
           <span>{t('matrix.liveBadge')}</span>
         </div>
       </div>
@@ -1001,15 +1127,15 @@ export const RolePermissionsMatrixSection: React.FC = () => {
           <table className="w-full text-start text-xs border-collapse">
             <thead className="bg-[#070b18] text-slate-200">
               <tr>
-                <th className="py-3.5 px-4 text-start font-semibold min-w-[260px] sticky start-0 bg-[#070b18] z-10 border-e border-slate-800">
+                <th className="py-3 px-2.5 sm:py-3.5 sm:px-4 text-start font-semibold min-w-[150px] sm:min-w-[260px] max-w-[165px] sm:max-w-none sticky start-0 bg-[#070b18] z-10 border-e border-slate-800">
                   {t('matrix.col.modulePerm')}
                 </th>
                 {roles.map((r) => {
                   const isSuperAdmin = normalizeRoleKey(r.key) === 'super_admin';
                   const roleDisplay = tRole(r.key, r.name);
                   return (
-                    <th key={r.id} className="py-3 px-3 text-center min-w-[115px] border-s border-slate-800/80">
-                      <div className="font-bold text-white truncate max-w-[130px] mx-auto" title={roleDisplay}>
+                    <th key={r.id} className="py-2.5 px-2 sm:py-3 sm:px-3 text-center min-w-[96px] sm:min-w-[115px] border-s border-slate-800/80">
+                      <div className="font-bold text-white truncate max-w-[100px] sm:max-w-[130px] mx-auto" title={roleDisplay}>
                         {roleDisplay}
                       </div>
                       <div className="text-[10px] text-cyan-400 font-mono font-normal mt-0.5">{r.key}</div>
@@ -1040,7 +1166,7 @@ export const RolePermissionsMatrixSection: React.FC = () => {
                     <tr className="bg-slate-50/90 border-y border-slate-200">
                       <td
                         colSpan={roles.length + 1}
-                        className="py-2 px-4 text-[11px] font-bold text-slate-700 uppercase tracking-wider"
+                        className="py-2 px-2.5 sm:px-4 text-[11px] font-bold text-slate-700 uppercase tracking-wider"
                       >
                         {tModule(mod)}
                       </td>
@@ -1050,9 +1176,9 @@ export const RolePermissionsMatrixSection: React.FC = () => {
                       const localizedPerm = tPerm(perm.key);
                       return (
                         <tr key={perm.key} className="hover:bg-cyan-50/30 transition-colors">
-                          <td className="py-2.5 px-4 sticky start-0 bg-white z-10 border-e border-slate-100">
-                            <div className="font-semibold text-slate-900">{localizedPerm.label}</div>
-                            <div className="text-[11px] text-slate-500">{localizedPerm.description}</div>
+                          <td className="py-2.5 px-2.5 sm:px-4 sticky start-0 bg-white z-10 border-e border-slate-100 max-w-[165px] sm:max-w-none">
+                            <div className="font-semibold text-slate-900 leading-snug">{localizedPerm.label}</div>
+                            <div className="text-[11px] text-slate-500 leading-snug">{localizedPerm.description}</div>
                           </td>
 
                           {roles.map((r) => {
@@ -1061,14 +1187,14 @@ export const RolePermissionsMatrixSection: React.FC = () => {
                             const roleDisplay = tRole(r.key, r.name);
 
                             return (
-                              <td key={`${r.id}-${perm.key}`} className="py-2.5 px-3 text-center border-s border-slate-100">
+                              <td key={`${r.id}-${perm.key}`} className="py-2.5 px-2 sm:px-3 text-center border-s border-slate-100">
                                 <button
                                   type="button"
                                   disabled={!canManageRoles || isSuperAdmin}
                                   onClick={() => togglePermission(r, perm.key)}
                                   aria-label={t('matrix.permAria', { perm: localizedPerm.label, role: roleDisplay })}
                                   aria-pressed={checked}
-                                  className={`w-6 h-6 rounded-md inline-flex items-center justify-center border transition-all ${
+                                  className={`w-7 h-7 sm:w-6 sm:h-6 rounded-md inline-flex items-center justify-center border transition-all ${
                                     isSuperAdmin
                                       ? 'bg-slate-900 border-slate-800 text-cyan-400 cursor-not-allowed opacity-80'
                                       : checked

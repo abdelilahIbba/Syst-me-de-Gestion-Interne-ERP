@@ -79,6 +79,7 @@ function MainLayout() {
   const [isSheetsModalOpen, setIsSheetsModalOpen] = useState(false);
   const [isMobileSimOpen, setIsMobileSimOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [accessDeniedPayload, setAccessDeniedPayload] = useState<{
     type: 'redirect' | 'denied';
     tab: NavItemKey;
@@ -126,23 +127,32 @@ function MainLayout() {
     : null;
 
   return (
-    <div dir={dir} className="flex h-screen bg-slate-50 overflow-hidden font-sans">
+    <div dir={dir} className="flex min-h-screen lg:h-screen bg-slate-50 overflow-x-hidden lg:overflow-hidden font-sans">
       {/* Sidebar Navigation (filters items automatically via RBAC) */}
-      <Sidebar currentTab={currentTab} onSelectTab={handleSelectTab} />
+      <Sidebar
+        currentTab={currentTab}
+        onSelectTab={handleSelectTab}
+        mobileOpen={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+        onOpenSheets={() => setIsSheetsModalOpen(true)}
+        onToggleMobileSim={() => setIsMobileSimOpen(!isMobileSimOpen)}
+        isMobileSimOpen={isMobileSimOpen}
+      />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden lg:overflow-hidden">
         {/* Top Header */}
         <Header
           activeViewTitle={t(viewTitleKeys[currentTab]) || t('app.systemName')}
           onOpenSheets={() => setIsSheetsModalOpen(true)}
           onToggleMobileSim={() => setIsMobileSimOpen(!isMobileSimOpen)}
           onOpenLogin={() => setIsLoginModalOpen(true)}
+          onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
           isMobileSimOpen={isMobileSimOpen}
         />
 
         {/* Viewport Content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-4">
             {accessDeniedNotice && (
               <div className="p-3.5 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl text-xs flex items-center gap-2.5 shadow-2xs">

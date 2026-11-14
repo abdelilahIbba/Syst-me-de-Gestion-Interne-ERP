@@ -99,13 +99,13 @@ export const ReportsExportsView: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-xs">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-xs flex-1 sm:flex-none min-w-0">
+            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden"
+              className="w-full text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden"
             >
               <option value="2026-11">{t('payroll.month.2026-11')}</option>
               <option value="2026-10">{t('payroll.month.2026-10')}</option>
@@ -115,7 +115,7 @@ export const ReportsExportsView: React.FC = () => {
 
           <button
             onClick={exportMonthCSV}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
           >
             <Download className="w-4 h-4" />
             <span>{t('exports.exportMonthBtn', { month: selectedMonth })}</span>
@@ -124,11 +124,11 @@ export const ReportsExportsView: React.FC = () => {
       </div>
 
       {/* 3 Analytics Tables */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {/* Table 1: By Employee */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <Users className="w-4 h-4 text-blue-600" />
+            <Users className="w-4 h-4 text-blue-600 shrink-0" />
             <span>{t('exports.byEmployee')}</span>
           </div>
 
@@ -136,12 +136,12 @@ export const ReportsExportsView: React.FC = () => {
             {employees.map((emp) => {
               const data = employeeHoursMap.get(emp.id) || { totalHours: 0, countReports: 0 };
               return (
-                <div key={emp.id} className="py-2.5 flex items-center justify-between text-xs">
-                  <div>
-                    <div className="font-semibold text-slate-900">{emp.prenom} {emp.nom}</div>
+                <div key={emp.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-slate-900 truncate">{emp.prenom} {emp.nom}</div>
                     <div className="text-[11px] text-slate-400">{t('exports.reportsCount', { count: data.countReports })}</div>
                   </div>
-                  <span className="font-mono font-bold text-blue-700">{data.totalHours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-blue-700 shrink-0">{data.totalHours} {t('common.hours')}</span>
                 </div>
               );
             })}
@@ -149,9 +149,9 @@ export const ReportsExportsView: React.FC = () => {
         </div>
 
         {/* Table 2: By Client */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <Building2 className="w-4 h-4 text-emerald-600" />
+            <Building2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{t('exports.byClient')}</span>
           </div>
 
@@ -159,12 +159,12 @@ export const ReportsExportsView: React.FC = () => {
             {clients.map((cli) => {
               const hours = clientHoursMap.get(cli.id) || 0;
               return (
-                <div key={cli.id} className="py-2.5 flex items-center justify-between text-xs">
-                  <div>
-                    <div className="font-semibold text-slate-900 truncate max-w-[170px]">{cli.raison_sociale}</div>
-                    <div className="text-[11px] text-slate-400">{cli.ville}</div>
+                <div key={cli.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-slate-900 truncate">{cli.raison_sociale}</div>
+                    <div className="text-[11px] text-slate-400 truncate">{cli.ville}</div>
                   </div>
-                  <span className="font-mono font-bold text-emerald-700">{hours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-emerald-700 shrink-0">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}
@@ -172,9 +172,9 @@ export const ReportsExportsView: React.FC = () => {
         </div>
 
         {/* Table 3: By Project */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <FolderGit2 className="w-4 h-4 text-purple-600" />
+            <FolderGit2 className="w-4 h-4 text-purple-600 shrink-0" />
             <span>{t('exports.byProject')}</span>
           </div>
 
@@ -182,12 +182,12 @@ export const ReportsExportsView: React.FC = () => {
             {projects.map((proj) => {
               const hours = projectHoursMap.get(proj.id) || 0;
               return (
-                <div key={proj.id} className="py-2.5 flex items-center justify-between text-xs">
-                  <div>
-                    <div className="font-semibold text-slate-900 truncate max-w-[170px]">{proj.nom_systeme}</div>
-                    <div className="text-[11px] text-slate-400 capitalize">{proj.type}</div>
+                <div key={proj.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-slate-900 truncate">{proj.nom_systeme}</div>
+                    <div className="text-[11px] text-slate-400 capitalize truncate">{proj.type}</div>
                   </div>
-                  <span className="font-mono font-bold text-purple-700">{hours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-purple-700 shrink-0">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}

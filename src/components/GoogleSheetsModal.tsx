@@ -129,34 +129,39 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-50 text-emerald-700 rounded-lg shrink-0">
-              <FileSpreadsheet className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">
-                {t('sheets.modalHeading')}
-              </h2>
-              <div className="text-xs text-slate-500">
-                {t('sheets.modalSub', { sync: lastSheetsSync })}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2 bg-emerald-50 text-emerald-700 rounded-lg shrink-0">
+                <FileSpreadsheet className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-base font-bold text-slate-900">
+                  {t('sheets.modalHeading')}
+                </h2>
+                <div className="text-xs text-slate-500">
+                  {t('sheets.modalSub', { sync: lastSheetsSync })}
+                </div>
               </div>
             </div>
+            <button onClick={onClose} className="sm:hidden p-1.5 text-slate-400 hover:text-slate-600 rounded-lg shrink-0">
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={syncWithGoogleSheets}
               disabled={sheetsSyncStatus === 'syncing'}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors whitespace-nowrap shrink-0"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors whitespace-nowrap shrink-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${sheetsSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
               <span>{sheetsSyncStatus === 'syncing' ? t('sheets.syncing') : t('sheets.syncNow')}</span>
             </button>
-            <button onClick={onClose} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
+            <button onClick={onClose} className="hidden sm:block p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
               <X className="w-5 h-5" />
             </button>
           </div>

@@ -340,7 +340,7 @@ export const InvoicesView: React.FC = () => {
         <select
           value={filterStatut}
           onChange={(e) => setFilterStatut(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
         >
           <option value="all">{t('invoices.allStatuses')}</option>
           <option value="brouillon">{t('invoices.status.brouillon')}</option>
@@ -353,7 +353,7 @@ export const InvoicesView: React.FC = () => {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700 flex-1 sm:flex-none"
         >
           <option value="all">{t('invoices.allTypes')}</option>
           <option value="vente">{t('invoices.type.vente')}</option>
@@ -365,7 +365,121 @@ export const InvoicesView: React.FC = () => {
 
       {/* Table of Invoices */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Card List (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {filteredInvoices.map((inv) => {
+            const client = clients.find((c) => c.id === inv.client_id);
+            const isLocked = inv.statut !== 'brouillon' && inv.statut !== 'envoyée';
+            const isOverdue =
+              ['validée', 'payée partiellement'].includes(inv.statut) &&
+              inv.date_echeance < new Date().toISOString().split('T')[0] &&
+              inv.reste_a_payer > 0;
+
+            return (
+              <div key={inv.id} className="p-4 space-y-3 text-xs">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-slate-900 font-mono flex items-center gap-1.5">
+                      {isLocked && <Lock className="w-3 h-3 text-slate-400 shrink-0" />}
+                      <span>{inv.numero}</span>
+                      <span className="text-[10px] uppercase font-sans font-semibold text-slate-400">
+                        · {translateInvoiceType(inv.type)}
+                      </span>
+                    </div>
+                    <div className="font-semibold text-slate-800 truncate mt-0.5">
+                      {client?.raison_sociale || t('common.client')}
+                    </div>
+                  </div>
+                  <span
+                    className={`text-[11px] font-semibold px-2 py-0.5 rounded-sm shrink-0 ${
+                      inv.statut === 'payée'
+                        ? 'bg-emerald-50 text-emerald-700'
+                        : inv.statut === 'payée partiellement'
+                        ? 'bg-sky-50 text-sky-700'
+                        : inv.statut === 'validée'
+                        ? 'bg-blue-50 text-blue-700'
+                        : inv.statut === 'annulée'
+                        ? 'bg-rose-50 text-rose-700'
+                        : 'bg-amber-50 text-amber-700'
+                    }`}
+                  >
+                    {translateInvoiceStatus(inv.statut)}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-lg text-[11px]">
+                  <div>
+                    <span className="text-slate-500 block">{t('invoices.col.totalTtc')}</span>
+                    <span className="font-mono font-bold text-slate-900">{formatDH(inv.total_ttc)}</span>
+                  </div>
+                  <div className="text-end">
+                    <span className="text-slate-500 block">{t('invoices.col.remaining')}</span>
+                    <span className="font-mono font-semibold text-amber-700">{formatDH(inv.reste_a_payer)}</span>
+                  </div>
+                  <div className="col-span-2 flex flex-wrap items-center justify-between gap-1 pt-1 border-t border-slate-200/70">
+                    <span className="text-slate-600">{inv.date_emission}</span>
+                    <span className={isOverdue ? 'text-rose-600 font-semibold' : 'text-slate-400'}>
+                      {t('invoices.duePrefix')} {inv.date_echeance} {isOverdue && t('invoices.overdueTag')}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-end gap-1.5">
+                  {inv.statut === 'brouillon' && canValidate && (
+                    <button
+                      onClick={() => handleValidate(inv)}
+                      className="px-2.5 py-1.5 text-[11px] font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 rounded-md shadow-xs whitespace-nowrap"
+                    >
+                      {t('invoices.validateBtn')}
+                    </button>
+                  )}
+
+                  {isLocked && inv.reste_a_payer > 0 && inv.type !== 'avoir' && (
+                    <button
+                      onClick={() => handleOpenPayment(inv)}
+                      className="px-2.5 py-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-md whitespace-nowrap"
+                    >
+                      {t('invoices.recordPayBtn')}
+                    </button>
+                  )}
+
+                  {isLocked && inv.type !== 'avoir' && (
+                    <button
+                      onClick={() => handleOpenCreditNote(inv)}
+                      className="px-2.5 py-1.5 text-[11px] text-slate-600 bg-slate-100 rounded-md whitespace-nowrap"
+                    >
+                      {t('invoices.creditBtn')}
+                    </button>
+                  )}
+
+                  {canCancelExtras && inv.items && inv.items.length > 0 && inv.statut !== 'annulée' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setExtrasTargetInvoice(inv);
+                        setSelectedExtraItemId(inv.items?.[0]?.id || '');
+                        setExtrasMotif(t('invoices.cancelExtrasTitle'));
+                      }}
+                      className="px-2.5 py-1.5 text-[11px] font-semibold text-amber-800 bg-amber-50 border border-amber-200 rounded-md whitespace-nowrap"
+                    >
+                      {t('invoices.cancelExtrasBtn')}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={() => setSelectedInvoice(inv)}
+                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md whitespace-nowrap"
+                  >
+                    {t('invoices.pdfBtn')}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-start text-xs min-w-[950px]">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
@@ -505,11 +619,11 @@ export const InvoicesView: React.FC = () => {
 
       {/* Printable PDF Modal (FA-4 Moroccan legal mentions) */}
       {selectedInvoice && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3 no-print">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 no-print">
               <div className="flex items-center gap-2">
-                <Receipt className="w-4 h-4 text-cyan-600" />
+                <Receipt className="w-4 h-4 text-cyan-600 shrink-0" />
                 <h3 className="text-sm font-bold text-slate-900">
                   {selectedInvoice.type === 'avoir' ? t('invoices.docCredit') : t('invoices.docInvoice')} : {selectedInvoice.numero}
                 </h3>
@@ -532,17 +646,17 @@ export const InvoicesView: React.FC = () => {
             </div>
 
             {/* Invoice Print Document */}
-            <div className="p-6 border border-slate-200 rounded-lg text-xs space-y-6">
+            <div className="p-3.5 sm:p-6 border border-slate-200 rounded-lg text-xs space-y-5 sm:space-y-6">
               {/* Header: Company & Client */}
-              <div className="flex justify-between items-start border-b border-slate-200 pb-5">
-                <div className="flex items-start gap-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-200 pb-5">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <img
                     src="/assets/aistudio/devnappLogo_10b7b539.jpg"
                     alt="DEVNAPP SARL"
-                    className="w-16 h-16 rounded-xl object-contain bg-slate-950 p-1.5 shadow-sm border border-slate-800"
+                    className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-contain bg-slate-950 p-1.5 shadow-sm border border-slate-800 shrink-0"
                   />
                   <div>
-                    <h1 className="text-lg font-bold text-slate-900 tracking-tight">{settings.company_name}</h1>
+                    <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">{settings.company_name}</h1>
                     <div className="text-cyan-700 font-semibold text-[10px] tracking-wider uppercase">{t('app.tagline')}</div>
                     <div className="text-slate-600 text-[11px] mt-1 space-y-0.5">
                       <div>{settings.adresse}</div>
@@ -561,7 +675,7 @@ export const InvoicesView: React.FC = () => {
                 {(() => {
                   const client = clients.find((c) => c.id === selectedInvoice.client_id);
                   return (
-                    <div className="text-end bg-slate-50 p-3 rounded-lg border border-slate-100 min-w-[220px]">
+                    <div className="text-start sm:text-end bg-slate-50 p-3 rounded-lg border border-slate-100 w-full sm:w-auto sm:min-w-[220px]">
                       <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{t('invoices.billedTo')}</div>
                       <div className="font-bold text-sm text-slate-900 mt-0.5">{client?.raison_sociale}</div>
                       <div className="text-[11px] text-slate-600 mt-1">{client?.adresse}</div>
@@ -575,7 +689,7 @@ export const InvoicesView: React.FC = () => {
               </div>
 
               {/* Invoice details strip */}
-              <div className="grid grid-cols-4 gap-2 bg-slate-50 p-3 rounded-lg text-[11px]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3 rounded-lg text-[11px]">
                 <div>
                   <span className="text-slate-500">{t('invoices.docNumber')}</span>
                   <div className="font-mono font-bold text-slate-900">{selectedInvoice.numero}</div>
@@ -595,7 +709,8 @@ export const InvoicesView: React.FC = () => {
               </div>
 
               {/* Line items table */}
-              <table className="w-full text-start text-xs border border-slate-200">
+              <div className="overflow-x-auto">
+              <table className="w-full text-start text-xs border border-slate-200 min-w-[500px]">
                 <thead className="bg-slate-100 font-semibold text-slate-700">
                   <tr>
                     <th className="p-2.5 text-start">{t('payroll.col.designation')}</th>
@@ -617,10 +732,11 @@ export const InvoicesView: React.FC = () => {
                   ))}
                 </tbody>
               </table>
+              </div>
 
               {/* Totals computation */}
               <div className="flex justify-end">
-                <div className="w-64 space-y-1.5 text-xs">
+                <div className="w-full sm:w-64 space-y-1.5 text-xs">
                   <div className="flex justify-between py-1 text-slate-600">
                     <span>{t('invoices.totalHt')}</span>
                     <span className="font-mono font-medium">{formatDH(selectedInvoice.total_ht)}</span>
@@ -664,8 +780,8 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Record Payment (FA-5 & FA-7) */}
       {isPaymentModalOpen && selectedInvoice && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-sm font-bold text-slate-900">
                 {t('invoices.payModalTitle', { num: selectedInvoice.numero })}
@@ -709,7 +825,7 @@ export const InvoicesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('invoices.payMethodLabel')}</label>
                   <select
@@ -734,7 +850,7 @@ export const InvoicesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('invoices.payRefLabel')}</label>
                   <input
@@ -779,8 +895,8 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Create Credit Note (FA-10 & R3) */}
       {isCreditNoteModalOpen && selectedInvoice && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-sm font-bold text-slate-900">
                 {t('invoices.creditModalTitle', { num: selectedInvoice.numero })}
@@ -844,8 +960,8 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Invoice Editor (FA-1) */}
       {isEditorOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">{t('invoices.editorTitle')}</h3>
               <button onClick={() => setIsEditorOpen(false)} className="text-slate-400 hover:text-slate-600">
@@ -854,7 +970,7 @@ export const InvoicesView: React.FC = () => {
             </div>
 
             <form onSubmit={handleSaveInvoice} className="space-y-4 text-xs">
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
                   <select
@@ -894,7 +1010,7 @@ export const InvoicesView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-600 mb-1 font-medium">{t('invoices.issueDate')}</label>
                   <input
@@ -931,7 +1047,7 @@ export const InvoicesView: React.FC = () => {
                 <div className="space-y-2 max-h-56 overflow-y-auto pe-1">
                   {editorData.items.map((item, idx) => (
                     <div key={idx} className="grid grid-cols-12 gap-2 p-2 bg-slate-50 rounded-lg items-center">
-                      <div className="col-span-5">
+                      <div className="col-span-12 sm:col-span-5">
                         <input
                           type="text"
                           required
@@ -941,7 +1057,7 @@ export const InvoicesView: React.FC = () => {
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
                         />
                       </div>
-                      <div className="col-span-2">
+                      <div className="col-span-4 sm:col-span-2">
                         <input
                           type="number"
                           placeholder={t('invoices.col.qty')}
@@ -950,7 +1066,7 @@ export const InvoicesView: React.FC = () => {
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
                         />
                       </div>
-                      <div className="col-span-3">
+                      <div className="col-span-4 sm:col-span-3">
                         <input
                           type="number"
                           placeholder={t('invoices.col.unitPrice')}
@@ -959,7 +1075,7 @@ export const InvoicesView: React.FC = () => {
                           className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
                         />
                       </div>
-                      <div className="col-span-2 flex items-center justify-end gap-2">
+                      <div className="col-span-4 sm:col-span-2 flex items-center justify-end gap-2">
                         <span className="font-mono text-[11px] font-semibold text-slate-800">
                           {formatDH(item.total_ligne_ht)}
                         </span>
@@ -979,7 +1095,7 @@ export const InvoicesView: React.FC = () => {
               </div>
 
               {/* Total Calculation Strip */}
-              <div className="bg-slate-100 p-3 rounded-lg flex items-center justify-between text-xs font-mono">
+              <div className="bg-slate-100 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono">
                 <div>{t('invoices.totalHt')} <strong>{formatDH(totals.totalHt)}</strong></div>
                 <div>{t('invoices.vatLabel', { rate: totals.tauxTva })} <strong>{formatDH(totals.montantTva)}</strong></div>
                 <div className="text-sm font-bold text-slate-900">{t('invoices.totalTtc')} {formatDH(totals.totalTtc)}</div>
@@ -1007,8 +1123,8 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Extras cancellation */}
       {extrasTargetInvoice && (
-        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+        <div className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2 text-amber-800 font-bold text-sm">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
