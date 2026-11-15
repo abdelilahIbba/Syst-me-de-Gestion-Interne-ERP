@@ -114,15 +114,15 @@ export const ProjectsView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('projects.title')}</h2>
-          <div className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('projects.title')}</h2>
+          <div className="text-xs text-[#546A8E] mt-0.5">
             {t('projects.subtitle')}
           </div>
         </div>
 
         <button
           onClick={() => setIsNewModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>{t('projects.newBtn')}</span>
@@ -130,22 +130,22 @@ export const ProjectsView: React.FC = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+      <div className="flex flex-wrap items-center gap-2.5 p-3.5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-8px_rgba(11,23,51,0.08)]">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-[#647BA0] absolute start-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder={t('projects.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full ps-9 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-hidden focus:bg-white"
+            className="w-full ps-9 pe-3 py-2 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
           />
         </div>
 
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] focus:outline-hidden focus:border-[#0284C7]"
         >
           <option value="all">{t('projects.allTypes')}</option>
           <option value="site web">{t('projects.type.website')}</option>
@@ -157,7 +157,7 @@ export const ProjectsView: React.FC = () => {
         <select
           value={filterStatut}
           onChange={(e) => setFilterStatut(e.target.value)}
-          className="text-xs bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-slate-700"
+          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] focus:outline-hidden focus:border-[#0284C7]"
         >
           <option value="all">{t('projects.allStatuses')}</option>
           <option value="en cours">En cours</option>
@@ -186,73 +186,73 @@ export const ProjectsView: React.FC = () => {
           const prof = calculateProfitability(p);
 
           return (
-            <div key={p.id} className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+            <div key={p.id} className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <span className="text-[10px] font-semibold uppercase text-blue-600 tracking-wider">
+                  <span className="text-[10px] font-semibold uppercase text-[#0284C7] tracking-wider">
                     {p.type}
                   </span>
-                  <h3 className="text-sm font-bold text-slate-900 mt-0.5">{p.nom_systeme}</h3>
-                  <div className="text-xs text-slate-500 font-medium">{client?.raison_sociale || 'Client'}</div>
+                  <h3 className="text-sm font-bold text-[#0D1B38] mt-0.5">{p.nom_systeme}</h3>
+                  <div className="text-xs text-[#546A8E] font-medium">{client?.raison_sociale || 'Client'}</div>
                 </div>
 
                 <span
-                  className={`text-[11px] font-semibold px-2 py-0.5 rounded-sm capitalize ${
+                  className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-lg capitalize border ${
                     p.statut === 'livré'
-                      ? 'bg-emerald-50 text-emerald-700'
+                      ? 'bg-[#DCF4E8] text-[#0E6245] border-[#A7DFC3]'
                       : p.statut === 'en cours'
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'bg-slate-100 text-slate-600'
+                      ? 'bg-[#DFF0FC] text-[#035388] border-[#A5D3F3]'
+                      : 'bg-[#E2EAF5] text-[#455B80] border-[#C5D5E8]'
                   }`}
                 >
                   {p.statut}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{p.description}</p>
+              <p className="text-xs text-[#3C5073] line-clamp-2 leading-relaxed">{p.description}</p>
 
               {/* Technologies strip */}
-              <div className="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-md font-mono">
+              <div className="text-[11px] text-[#3C5073] bg-[#E6EEF8] border border-[#D5E2F1] p-2.5 rounded-xl font-mono">
                 {t('projects.techPrefix')} {p.technologies}
               </div>
 
               {/* Profitability Box (CL-7) */}
-              <div className="bg-slate-50 rounded-lg p-3 border border-slate-200/80 space-y-2 text-xs">
-                <div className="flex items-center justify-between font-semibold text-slate-900">
+              <div className="bg-[#E6EEF8] rounded-xl p-3.5 border border-[#C9D9EC] space-y-2.5 text-xs">
+                <div className="flex items-center justify-between font-semibold text-[#0D1B38]">
                   <span className="flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
+                    <TrendingUp className="w-3.5 h-3.5 text-[#0284C7]" />
                     <span>{t('projects.realProfitability')}</span>
                   </span>
-                  <span className={`font-mono font-bold ${prof.netProfit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                  <span className={`font-mono font-bold ${prof.netProfit >= 0 ? 'text-[#0E6245]' : 'text-[#9F1239]'}`}>
                     {formatDH(prof.netProfit)} ({prof.margin}%)
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] pt-2 border-t border-slate-200 text-slate-600">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] pt-2.5 border-t border-[#CFDDED] text-[#3C5073]">
                   <div className="flex sm:block items-center justify-between">
-                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.collectedRevenue')}</span>
-                    <span className="font-mono font-medium text-slate-800">{formatDH(prof.encaissé)}</span>
+                    <span className="text-[#546A8E] sm:block text-[10px]">{t('projects.collectedRevenue')}</span>
+                    <span className="font-mono font-semibold text-[#0D1B38]">{formatDH(prof.encaissé)}</span>
                   </div>
                   <div className="flex sm:block items-center justify-between">
-                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.laborCost', { hours: prof.totalHours })}</span>
-                    <span className="font-mono font-medium text-slate-800">{formatDH(prof.laborCost)}</span>
+                    <span className="text-[#546A8E] sm:block text-[10px]">{t('projects.laborCost', { hours: prof.totalHours })}</span>
+                    <span className="font-mono font-semibold text-[#0D1B38]">{formatDH(prof.laborCost)}</span>
                   </div>
                   <div className="flex sm:block items-center justify-between">
-                    <span className="text-slate-400 sm:block text-[10px]">{t('projects.travelExpenses')}</span>
-                    <span className="font-mono font-medium text-slate-800">{formatDH(prof.travelExpenses)}</span>
+                    <span className="text-[#546A8E] sm:block text-[10px]">{t('projects.travelExpenses')}</span>
+                    <span className="font-mono font-semibold text-[#0D1B38]">{formatDH(prof.travelExpenses)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Bottom links and details */}
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1 border-t border-slate-100">
-                <span>{t('projects.projectManager')} <strong className="text-slate-700">{chef?.prenom} {chef?.nom}</strong></span>
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#546A8E] pt-2 border-t border-[#DCE6F3]">
+                <span>{t('projects.projectManager')} <strong className="text-[#1C2E4F]">{chef?.prenom} {chef?.nom}</strong></span>
                 {p.url_production && (
                   <a
                     href={p.url_production}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1 text-blue-600 hover:underline"
+                    className="flex items-center gap-1 text-[#0284C7] hover:underline font-medium"
                   >
                     <span>{t('projects.prodLink')}</span>
                     <ExternalLink className="w-3 h-3" />
@@ -266,22 +266,22 @@ export const ProjectsView: React.FC = () => {
 
       {/* Modal: New Project */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">{t('projects.modalTitle')}</h3>
-              <button onClick={() => setIsNewModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
+              <h3 className="text-base font-bold text-[#0D1B38]">{t('projects.modalTitle')}</h3>
+              <button onClick={() => setIsNewModalOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleCreate} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.client')}</label>
+                <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.client')}</label>
                 <select
                   value={formData.client_id}
                   onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                  className="w-full p-2 border border-slate-200 rounded-lg"
+                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                 >
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -292,24 +292,24 @@ export const ProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.name')}</label>
+                <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.name')}</label>
                 <input
                   type="text"
                   required
                   placeholder={t('projects.field.namePlaceholder')}
                   value={formData.nom_systeme}
                   onChange={(e) => setFormData({ ...formData, nom_systeme: e.target.value })}
-                  className="w-full p-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-blue-500"
+                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.type')}</label>
+                  <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.type')}</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value as ProjectType })}
-                    className="w-full p-2 border border-slate-200 rounded-lg"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                   >
                     <option value="site web">{t('projects.type.website')}</option>
                     <option value="application">{t('projects.type.app')}</option>
@@ -320,48 +320,48 @@ export const ProjectsView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.priceHt')}</label>
+                  <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.priceHt')}</label>
                   <input
                     type="number"
                     value={formData.prix_vente_ht}
                     onChange={(e) => setFormData({ ...formData, prix_vente_ht: Number(e.target.value) })}
-                    className="w-full p-2 border border-slate-200 rounded-lg font-mono"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.tech')}</label>
+                <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.tech')}</label>
                 <input
                   type="text"
                   placeholder={t('projects.field.techPlaceholder')}
                   value={formData.technologies}
                   onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-                  className="w-full p-2 border border-slate-200 rounded-lg"
+                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">{t('projects.field.description')}</label>
+                <label className="block text-[#273B63] mb-1 font-semibold">{t('projects.field.description')}</label>
                 <textarea
                   rows={2}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full p-2 border border-slate-200 rounded-lg"
+                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex justify-end gap-2">
+              <div className="pt-3 border-t border-[#DCE6F3] flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="px-4 py-2 border border-slate-200 rounded-lg text-slate-700"
+                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg font-semibold shadow-xs"
+                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs"
                 >
                   {t('projects.saveBtn')}
                 </button>

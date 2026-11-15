@@ -40,10 +40,10 @@ export const PayrollView: React.FC = () => {
   // Dynamic RBAC access check
   if (!hasUserPermission('manage_payroll')) {
     return (
-      <div className="p-12 text-center bg-white rounded-xl border border-slate-200">
-        <ShieldAlert className="w-12 h-12 text-rose-500 mx-auto mb-3" />
-        <h3 className="text-base font-bold text-slate-900">{t('access.restrictedPayrollTitle')}</h3>
-        <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+      <div className="p-12 text-center bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-xs">
+        <ShieldAlert className="w-12 h-12 text-rose-600 mx-auto mb-3" />
+        <h3 className="text-base font-bold text-[#0D1B38]">{t('access.restrictedPayrollTitle')}</h3>
+        <p className="text-xs text-[#546A8E] mt-1 max-w-sm mx-auto">
           {t('access.restrictedPayrollDesc', { role: localizedRoleName })}
         </p>
       </div>
@@ -81,20 +81,20 @@ export const PayrollView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('payroll.title')}</h2>
-          <div className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('payroll.title')}</h2>
+          <div className="text-xs text-[#546A8E] mt-0.5">
             {t('payroll.subtitle')}
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {/* Month selector */}
-          <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-xs">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+          <div className="flex items-center gap-1.5 bg-[#F1F5FB] border border-[#C9D9EC] rounded-xl px-3 py-1.5 shadow-xs">
+            <Calendar className="w-3.5 h-3.5 text-[#0284C7]" />
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden"
+              className="text-xs font-semibold text-[#0D1B38] bg-transparent focus:outline-hidden"
             >
               <option value="2026-11">{t('payroll.month.2026-11')}</option>
               <option value="2026-10">{t('payroll.month.2026-10')}</option>
@@ -106,7 +106,7 @@ export const PayrollView: React.FC = () => {
           {!isComptable && (
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-sm shadow-[#0284C7]/20 transition-all whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t('payroll.generateBtn', { month: selectedMonth })}</span>
@@ -117,27 +117,27 @@ export const PayrollView: React.FC = () => {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[11px] text-slate-500 font-medium">{t('payroll.kpi.gross')}</div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-900 mt-1">{formatDH(totalBrut)}</div>
+        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+          <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.gross')}</div>
+          <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38] mt-1">{formatDH(totalBrut)}</div>
         </div>
 
-        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[11px] text-slate-500 font-medium">{t('payroll.kpi.cnss')}</div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-700 mt-1">{formatDH(totalCnss)}</div>
+        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+          <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.cnss')}</div>
+          <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalCnss)}</div>
         </div>
 
-        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[11px] text-slate-500 font-medium">{t('payroll.kpi.amo')}</div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-700 mt-1">{formatDH(totalAmo)}</div>
+        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+          <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.amo')}</div>
+          <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalAmo)}</div>
         </div>
 
-        <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="text-[11px] text-slate-500 font-medium">{t('payroll.kpi.ir')}</div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-700 mt-1">{formatDH(totalIr)}</div>
+        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+          <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.ir')}</div>
+          <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalIr)}</div>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 p-3.5 sm:p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 shadow-xs">
+        <div className="col-span-2 sm:col-span-1 p-3.5 sm:p-4 rounded-2xl border border-emerald-200 bg-emerald-50/75 shadow-[0_4px_16px_-6px_rgba(5,150,105,0.08)]">
           <div className="text-[11px] text-emerald-800 font-medium">{t('payroll.kpi.net')}</div>
           <div className="text-base sm:text-lg font-bold font-mono text-emerald-700 mt-1">{formatDH(totalNet)}</div>
         </div>
@@ -145,13 +145,13 @@ export const PayrollView: React.FC = () => {
 
       {/* Workflow Action Bar (RH-6 & R6) */}
       {!isComptable && monthPayrolls.length > 0 && !allValidated && (
-        <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="text-xs text-blue-900">
+        <div className="p-3.5 bg-[#DFF0FC] border border-[#A5D3F3] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="text-xs text-[#0C4A6E] font-medium">
             {t('payroll.workflowBanner')}
           </div>
           <button
             onClick={handleValidateAll}
-            className="px-4 py-2 sm:py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-xs shrink-0 whitespace-nowrap w-full sm:w-auto text-center"
+            className="px-4 py-2 sm:py-1.5 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-xs shrink-0 whitespace-nowrap w-full sm:w-auto text-center"
           >
             {t('payroll.validateAll')}
           </button>
@@ -159,30 +159,30 @@ export const PayrollView: React.FC = () => {
       )}
 
       {/* Table of Payrolls */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
         {isComptable ? (
           /* Comptable restriction: Total only, not individual wages (Section 2) */
           <div className="p-6 text-center space-y-2">
-            <Lock className="w-8 h-8 text-slate-400 mx-auto" />
-            <div className="text-sm font-bold text-slate-900">{t('payroll.comptableHiddenTitle')}</div>
-            <div className="text-xs text-slate-500 max-w-md mx-auto">
+            <Lock className="w-8 h-8 text-[#627799] mx-auto" />
+            <div className="text-sm font-bold text-[#0D1B38]">{t('payroll.comptableHiddenTitle')}</div>
+            <div className="text-xs text-[#546A8E] max-w-md mx-auto">
               {t('payroll.comptableHiddenDesc', { total: formatDH(totalNet) })}
             </div>
           </div>
         ) : (
           <>
             {/* Mobile Card List (< md) */}
-            <div className="md:hidden divide-y divide-slate-100">
+            <div className="md:hidden divide-y divide-[#DCE6F3]">
               {monthPayrolls.map((payroll) => {
                 const emp = employees.find((e) => e.id === payroll.employee_id);
                 return (
                   <div key={payroll.id} className="p-4 space-y-3 text-xs">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="font-bold text-slate-900 truncate">
+                        <div className="font-bold text-[#0D1B38] truncate">
                           {emp ? `${emp.prenom} ${emp.nom}` : payroll.employee_id}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-mono truncate">
+                        <div className="text-[11px] text-[#627799] font-mono truncate">
                           {emp?.matricule} · {emp?.poste}
                         </div>
                       </div>
@@ -191,7 +191,7 @@ export const PayrollView: React.FC = () => {
                           payroll.statut === 'payée'
                             ? 'text-emerald-700'
                             : payroll.statut === 'validée'
-                            ? 'text-blue-700'
+                            ? 'text-[#0284C7]'
                             : 'text-amber-700'
                         }`}
                       >
@@ -199,24 +199,24 @@ export const PayrollView: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-lg text-[11px]">
+                    <div className="grid grid-cols-2 gap-2 bg-[#E6EEF8] border border-[#CFDDED] p-2.5 rounded-xl text-[11px]">
                       <div>
-                        <span className="text-slate-500 block">{t('payroll.col.gross')}</span>
-                        <span className="font-mono font-semibold text-slate-800">{formatDH(payroll.salaire_brut)}</span>
+                        <span className="text-[#546A8E] block">{t('payroll.col.gross')}</span>
+                        <span className="font-mono font-semibold text-[#0D1B38]">{formatDH(payroll.salaire_brut)}</span>
                       </div>
                       <div className="text-end">
-                        <span className="text-slate-500 block">{t('payroll.col.net')}</span>
+                        <span className="text-[#546A8E] block">{t('payroll.col.net')}</span>
                         <span className="font-mono font-bold text-emerald-700">{formatDH(payroll.net_a_payer)}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">CNSS / AMO</span>
-                        <span className="font-mono text-slate-700">
+                        <span className="text-[#546A8E] block">CNSS / AMO</span>
+                        <span className="font-mono text-[#273B63]">
                           {formatDH(payroll.cnss_salarie + payroll.amo)}
                         </span>
                       </div>
                       <div className="text-end">
-                        <span className="text-slate-500 block">IR</span>
-                        <span className="font-mono text-slate-700">{formatDH(payroll.ir)}</span>
+                        <span className="text-[#546A8E] block">IR</span>
+                        <span className="font-mono text-[#273B63]">{formatDH(payroll.ir)}</span>
                       </div>
                     </div>
 
@@ -224,7 +224,7 @@ export const PayrollView: React.FC = () => {
                       {payroll.statut === 'brouillon' && (
                         <button
                           onClick={() => validatePayroll(payroll.id)}
-                          className="px-3 py-1.5 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors whitespace-nowrap"
+                          className="px-3 py-1.5 text-[11px] font-medium text-[#0369A1] bg-[#DFF0FC] hover:bg-[#CDE6F9] rounded-lg transition-colors whitespace-nowrap"
                         >
                           {t('payroll.validateSlip')}
                         </button>
@@ -232,14 +232,14 @@ export const PayrollView: React.FC = () => {
                       {payroll.statut === 'validée' && (
                         <button
                           onClick={() => markPayrollPaid(payroll.id)}
-                          className="px-3 py-1.5 text-[11px] font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-md transition-colors whitespace-nowrap"
+                          className="px-3 py-1.5 text-[11px] font-medium text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200/70 rounded-lg transition-colors whitespace-nowrap"
                         >
                           {t('payroll.markPaid')}
                         </button>
                       )}
                       <button
                         onClick={() => setActivePayrollModal(payroll)}
-                        className="px-3 py-1.5 text-[11px] font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors whitespace-nowrap"
+                        className="px-3 py-1.5 text-[11px] font-medium text-[#273B63] bg-[#E2EAF5] hover:bg-[#D5E1F0] rounded-lg transition-colors whitespace-nowrap"
                       >
                         {t('payroll.pdfBtn')}
                       </button>
@@ -248,7 +248,7 @@ export const PayrollView: React.FC = () => {
                 );
               })}
               {monthPayrolls.length === 0 && (
-                <div className="py-10 text-center text-slate-400 text-xs">
+                <div className="py-10 text-center text-[#627799] text-xs">
                   {t('payroll.noSlips', { month: selectedMonth })}
                 </div>
               )}
@@ -257,7 +257,7 @@ export const PayrollView: React.FC = () => {
             {/* Desktop Table (>= md) */}
             <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-start text-xs min-w-[950px]">
-              <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+              <thead className="bg-[#E6EEF8] text-[#475E82] font-semibold border-b border-[#D1DFEE]">
                 <tr>
                   <th className="py-3 px-4 text-start">{t('payroll.col.employee')}</th>
                   <th className="py-3 px-3 text-end">{t('payroll.col.gross')}</th>
@@ -265,43 +265,43 @@ export const PayrollView: React.FC = () => {
                   <th className="py-3 px-3 text-end">CNSS (4.48%)</th>
                   <th className="py-3 px-3 text-end">AMO (2.26%)</th>
                   <th className="py-3 px-3 text-end">IR</th>
-                  <th className="py-3 px-3 text-end font-bold text-slate-900">{t('payroll.col.net')}</th>
+                  <th className="py-3 px-3 text-end font-bold text-[#0D1B38]">{t('payroll.col.net')}</th>
                   <th className="py-3 px-3 text-center">{t('common.status')}</th>
                   <th className="py-3 px-4 text-end">{t('common.actions')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#DCE6F3]">
                 {monthPayrolls.map((payroll) => {
                   const emp = employees.find((e) => e.id === payroll.employee_id);
 
                   return (
-                    <tr key={payroll.id} className="hover:bg-slate-50/60 transition-colors">
+                    <tr key={payroll.id} className="hover:bg-[#E7EFFA] transition-colors">
                       <td className="py-3 px-4">
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-[#0D1B38]">
                           {emp ? `${emp.prenom} ${emp.nom}` : payroll.employee_id}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-mono">
+                        <div className="text-[11px] text-[#627799] font-mono">
                           {emp?.matricule} · {emp?.poste}
                         </div>
                       </td>
 
-                      <td className="py-3 px-3 text-end font-mono font-medium text-slate-800 whitespace-nowrap">
+                      <td className="py-3 px-3 text-end font-mono font-medium text-[#1C2E4F] whitespace-nowrap">
                         {formatDH(payroll.salaire_brut)}
                       </td>
 
-                      <td className="py-3 px-3 text-end font-mono text-slate-600 whitespace-nowrap">
+                      <td className="py-3 px-3 text-end font-mono text-[#475E82] whitespace-nowrap">
                         {formatDH(payroll.indemnites_deplacement + payroll.primes)}
                       </td>
 
-                      <td className="py-3 px-3 text-end font-mono text-slate-600 whitespace-nowrap">
+                      <td className="py-3 px-3 text-end font-mono text-[#475E82] whitespace-nowrap">
                         {formatDH(payroll.cnss_salarie)}
                       </td>
 
-                      <td className="py-3 px-3 text-end font-mono text-slate-600 whitespace-nowrap">
+                      <td className="py-3 px-3 text-end font-mono text-[#475E82] whitespace-nowrap">
                         {formatDH(payroll.amo)}
                       </td>
 
-                      <td className="py-3 px-3 text-end font-mono text-slate-600 whitespace-nowrap">
+                      <td className="py-3 px-3 text-end font-mono text-[#475E82] whitespace-nowrap">
                         {formatDH(payroll.ir)}
                       </td>
 
@@ -315,7 +315,7 @@ export const PayrollView: React.FC = () => {
                             payroll.statut === 'payée'
                               ? 'text-emerald-700'
                               : payroll.statut === 'validée'
-                              ? 'text-blue-700'
+                              ? 'text-[#0284C7]'
                               : 'text-amber-700'
                           }`}
                         >
@@ -328,7 +328,7 @@ export const PayrollView: React.FC = () => {
                           {payroll.statut === 'brouillon' && (
                             <button
                               onClick={() => validatePayroll(payroll.id)}
-                              className="px-2.5 py-1 text-[11px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors whitespace-nowrap"
+                              className="px-2.5 py-1 text-[11px] font-medium text-[#0369A1] bg-[#DFF0FC] hover:bg-[#CDE6F9] rounded-lg transition-colors whitespace-nowrap"
                             >
                               {t('payroll.validateSlip')}
                             </button>
@@ -337,7 +337,7 @@ export const PayrollView: React.FC = () => {
                           {payroll.statut === 'validée' && (
                             <button
                               onClick={() => markPayrollPaid(payroll.id)}
-                              className="px-2.5 py-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-md transition-colors whitespace-nowrap"
+                              className="px-2.5 py-1 text-[11px] font-medium text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200/70 rounded-lg transition-colors whitespace-nowrap"
                             >
                               {t('payroll.markPaid')}
                             </button>
@@ -345,7 +345,7 @@ export const PayrollView: React.FC = () => {
 
                           <button
                             onClick={() => setActivePayrollModal(payroll)}
-                            className="px-2.5 py-1 text-[11px] font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors whitespace-nowrap"
+                            className="px-2.5 py-1 text-[11px] font-medium text-[#273B63] bg-[#E2EAF5] hover:bg-[#D5E1F0] rounded-lg transition-colors whitespace-nowrap"
                           >
                             {t('payroll.pdfBtn')}
                           </button>
@@ -357,7 +357,7 @@ export const PayrollView: React.FC = () => {
 
                 {monthPayrolls.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="py-10 text-center text-slate-400 text-xs">
+                    <td colSpan={9} className="py-10 text-center text-[#627799] text-xs">
                       {t('payroll.noSlips', { month: selectedMonth })}
                     </td>
                   </tr>
@@ -371,21 +371,21 @@ export const PayrollView: React.FC = () => {
 
       {/* Printable Bulletin de Paie Modal (RH-7) */}
       {activePayrollModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 no-print">
-              <h3 className="text-sm font-bold text-slate-900">{t('payroll.modalTitle')}</h3>
+        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+          <div className="bg-[#F1F5FB] border border-[#CFDDED] rounded-2xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DAE5F2] pb-3 no-print">
+              <h3 className="text-sm font-bold text-[#0D1B38]">{t('payroll.modalTitle')}</h3>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs rounded-lg font-medium shadow-xs"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-[#F4F8FD] text-xs rounded-xl font-medium shadow-xs"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>{t('payroll.printPdf')}</span>
                 </button>
                 <button
                   onClick={() => setActivePayrollModal(null)}
-                  className="px-3 py-1.5 border border-slate-200 text-slate-700 text-xs rounded-lg"
+                  className="px-3 py-1.5 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] text-[#273B63] text-xs rounded-xl transition-colors"
                 >
                   {t('common.close')}
                 </button>
@@ -393,27 +393,27 @@ export const PayrollView: React.FC = () => {
             </div>
 
             {/* Document Body */}
-            <div className="p-3 sm:p-4 border border-slate-200 rounded-lg text-xs space-y-4">
+            <div className="p-3 sm:p-4 border border-[#CFDDED] bg-[#F5F8FD] rounded-xl text-xs space-y-4">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 border-b border-slate-200 pb-3">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 border-b border-[#CFDDED] pb-3">
                 <div className="flex items-start gap-3">
                   <img
                     src="/assets/aistudio/devnappLogo_10b7b539.jpg"
                     alt="DEVNAPP SARL"
-                    className="w-12 h-12 rounded-lg object-contain bg-slate-950 p-1 border border-slate-800 shadow-xs shrink-0"
+                    className="w-12 h-12 rounded-xl object-contain bg-[#0B1733] p-1 border border-[#1E3669] shadow-xs shrink-0"
                   />
                   <div>
-                    <div className="font-bold text-base text-slate-900">{settings.company_name}</div>
-                    <div className="text-cyan-700 font-semibold text-[10px] uppercase">{t('app.tagline')}</div>
-                    <div className="text-[11px] text-slate-500">{settings.adresse}, {settings.ville}</div>
-                    <div className="text-[11px] text-slate-500 font-mono">
+                    <div className="font-bold text-base text-[#0D1B38]">{settings.company_name}</div>
+                    <div className="text-[#0284C7] font-semibold text-[10px] uppercase">{t('app.tagline')}</div>
+                    <div className="text-[11px] text-[#546A8E]">{settings.adresse}, {settings.ville}</div>
+                    <div className="text-[11px] text-[#546A8E] font-mono">
                       ICE: {settings.ice} · IF: {settings.if_number} · RC: {settings.rc}
                     </div>
                   </div>
                 </div>
                 <div className="text-start sm:text-end">
-                  <div className="font-bold text-sm text-slate-900">{t('payroll.docTitle')}</div>
-                  <div className="text-slate-600 font-mono">{t('payroll.period')} {activePayrollModal.mois}</div>
+                  <div className="font-bold text-sm text-[#0D1B38]">{t('payroll.docTitle')}</div>
+                  <div className="text-[#475E82] font-mono">{t('payroll.period')} {activePayrollModal.mois}</div>
                 </div>
               </div>
 
@@ -421,18 +421,18 @@ export const PayrollView: React.FC = () => {
               {(() => {
                 const emp = employees.find((e) => e.id === activePayrollModal.employee_id);
                 return (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-slate-50 p-3 rounded-md text-[11px]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 bg-[#E6EEF8] border border-[#CFDDED] p-3 rounded-xl text-[11px]">
                     <div>
-                      <div><span className="text-slate-500">{t('payroll.empLabel')}</span> <strong className="text-slate-900">{emp?.prenom} {emp?.nom}</strong></div>
-                      <div><span className="text-slate-500">{t('payroll.matriculeLabel')}</span> <span className="font-mono">{emp?.matricule}</span></div>
-                      <div><span className="text-slate-500">{t('payroll.cinLabel')}</span> <span className="font-mono">{emp?.cin}</span></div>
-                      <div><span className="text-slate-500">{t('payroll.cnssLabel')}</span> <span className="font-mono">{emp?.numero_cnss}</span></div>
+                      <div><span className="text-[#546A8E]">{t('payroll.empLabel')}</span> <strong className="text-[#0D1B38]">{emp?.prenom} {emp?.nom}</strong></div>
+                      <div><span className="text-[#546A8E]">{t('payroll.matriculeLabel')}</span> <span className="font-mono">{emp?.matricule}</span></div>
+                      <div><span className="text-[#546A8E]">{t('payroll.cinLabel')}</span> <span className="font-mono">{emp?.cin}</span></div>
+                      <div><span className="text-[#546A8E]">{t('payroll.cnssLabel')}</span> <span className="font-mono">{emp?.numero_cnss}</span></div>
                     </div>
                     <div>
-                      <div><span className="text-slate-500">{t('payroll.roleLabel')}</span> {emp?.poste}</div>
-                      <div><span className="text-slate-500">{t('payroll.deptLabel')}</span> {emp?.departement}</div>
-                      <div><span className="text-slate-500">{t('payroll.contractLabel')}</span> {emp?.type_contrat}</div>
-                      <div><span className="text-slate-500">{t('payroll.modeLabel')}</span> {emp?.mode_paiement}</div>
+                      <div><span className="text-[#546A8E]">{t('payroll.roleLabel')}</span> {emp?.poste}</div>
+                      <div><span className="text-[#546A8E]">{t('payroll.deptLabel')}</span> {emp?.departement}</div>
+                      <div><span className="text-[#546A8E]">{t('payroll.contractLabel')}</span> {emp?.type_contrat}</div>
+                      <div><span className="text-[#546A8E]">{t('payroll.modeLabel')}</span> {emp?.mode_paiement}</div>
                     </div>
                   </div>
                 );
@@ -440,8 +440,8 @@ export const PayrollView: React.FC = () => {
 
               {/* Breakdown lines */}
               <div className="overflow-x-auto">
-              <table className="w-full text-start text-xs border border-slate-200 min-w-[460px]">
-                <thead className="bg-slate-100 font-semibold text-slate-700">
+              <table className="w-full text-start text-xs border border-[#CFDDED] min-w-[460px]">
+                <thead className="bg-[#E4ECF7] font-semibold text-[#273B63]">
                   <tr>
                     <th className="p-2 text-start">{t('payroll.col.designation')}</th>
                     <th className="p-2 text-end">{t('payroll.col.base')}</th>
@@ -450,7 +450,7 @@ export const PayrollView: React.FC = () => {
                     <th className="p-2 text-end">{t('payroll.col.deductions')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
+                <tbody className="divide-y divide-[#DCE6F3] font-mono text-[11px]">
                   <tr>
                     <td className="p-2 font-sans">{t('payroll.line.baseSalary')}</td>
                     <td className="p-2 text-end">{formatDH(activePayrollModal.salaire_brut)}</td>
@@ -493,8 +493,8 @@ export const PayrollView: React.FC = () => {
               </div>
 
               {/* Total Net Box */}
-              <div className="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
-                <span className="font-bold text-slate-900">{t('payroll.netPayableFooter')}</span>
+              <div className="flex justify-between items-center bg-emerald-50/90 p-3 rounded-xl border border-emerald-200">
+                <span className="font-bold text-[#0D1B38]">{t('payroll.netPayableFooter')}</span>
                 <span className="font-mono text-base font-bold text-emerald-800">
                   {formatDH(activePayrollModal.net_a_payer)}
                 </span>

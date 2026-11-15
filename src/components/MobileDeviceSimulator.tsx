@@ -132,14 +132,14 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 z-50">
-      <div className="relative bg-slate-900 text-white rounded-[36px] sm:rounded-[44px] p-3 sm:p-4 shadow-2xl border-4 border-slate-700 max-w-[360px] w-full h-[min(720px,calc(100vh-1rem))] sm:h-[720px] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-[#0B1733]/65 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 z-50">
+      <div className="relative bg-[#0B1733] text-white rounded-[36px] sm:rounded-[44px] p-3 sm:p-4 shadow-2xl border-4 border-[#1E3566] max-w-[360px] w-full h-[min(720px,calc(100vh-1rem))] sm:h-[720px] flex flex-col overflow-hidden">
         {/* Device Notch & Status bar */}
         <div className="flex items-center justify-between px-6 pt-1 pb-2 shrink-0 text-[11px] font-semibold" dir="ltr">
           <span>{new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}</span>
 
           {/* Dynamic Island / Notch */}
-          <div className="w-20 h-4 bg-black rounded-full" />
+          <div className="w-20 h-4 bg-[#050C1D] rounded-full border border-[#1E3566]/60" />
 
           <div className="flex items-center gap-1.5">
             <button
@@ -149,33 +149,33 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
             >
               {isOnline ? <Wifi className="w-3.5 h-3.5 text-emerald-400" /> : <WifiOff className="w-3.5 h-3.5 text-rose-400" />}
             </button>
-            <Battery className="w-4 h-4 text-slate-300" />
+            <Battery className="w-4 h-4 text-[#9DB3D8]" />
           </div>
         </div>
 
         {/* Offline Notice banner (Section 14.6) */}
         {!isOnline && (
-          <div className="bg-amber-500/90 text-black px-3 py-1 text-[11px] font-bold text-center shrink-0">
+          <div className="bg-amber-400 text-[#0B1733] px-3 py-1 text-[11px] font-bold text-center shrink-0 rounded-md mx-2">
             {t('mobile.offlineNotice', { count: offlineQueue.length })}
           </div>
         )}
 
         {/* Mobile App Header */}
-        <div className="px-4 py-2.5 bg-slate-900 border-b border-cyan-500/20 flex items-center justify-between shrink-0">
+        <div className="px-4 py-2.5 bg-[#0B1733] border-b border-[#1E3566] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <img
               src="/assets/aistudio/devnappLogo_10b7b539.jpg"
               alt="DEVNAPP"
-              className="w-7 h-7 rounded-lg object-contain bg-slate-950 p-0.5 border border-cyan-500/40 shadow-xs"
+              className="w-7 h-7 rounded-lg object-contain bg-[#09132B] p-0.5 border border-[#38BDF8]/40 shadow-xs"
             />
             <div>
-              <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">{t('mobile.appLabel')}</div>
+              <div className="text-[10px] text-[#38BDF8] font-bold uppercase tracking-wider">{t('mobile.appLabel')}</div>
               <div className="text-xs font-bold text-white truncate">{currentUser.name}</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full bg-slate-800 text-slate-300 hover:text-white"
+            className="p-1 rounded-full bg-[#12234B] border border-[#1E3566] text-[#9DB3D8] hover:text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -183,7 +183,7 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
 
         {/* Push Notification Simulator Banner (MOB-12) */}
         {showDefaultNotif && (
-          <div className="mx-3 mt-2 p-2.5 bg-blue-600/90 rounded-xl text-[11px] flex items-start gap-2 shadow-lg">
+          <div className="mx-3 mt-2 p-2.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] rounded-xl text-[11px] flex items-start gap-2 shadow-lg">
             <Bell className="w-3.5 h-3.5 text-white shrink-0 mt-0.5" />
             <div className="flex-1 text-white font-medium">{t('mobile.defaultNotif')}</div>
             <button onClick={() => setShowDefaultNotif(false)} className="text-white/80 hover:text-white">
@@ -194,8 +194,8 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
 
         {/* Inline Action Toast */}
         {toastMessage && (
-          <div className="mx-3 mt-2 p-2.5 bg-emerald-600 rounded-xl text-[11px] flex items-start gap-2 shadow-lg">
-            <CheckCircle2 className="w-3.5 h-3.5 text-white shrink-0 mt-0.5" />
+          <div className="mx-3 mt-2 p-2.5 bg-[#0E6245] border border-emerald-400/30 rounded-xl text-[11px] flex items-start gap-2 shadow-lg">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-200 shrink-0 mt-0.5" />
             <div className="flex-1 text-white font-medium">{toastMessage}</div>
             <button onClick={() => setToastMessage(null)} className="text-white/80 hover:text-white">
               <X className="w-3 h-3" />
@@ -208,31 +208,31 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
           {activeTab === 'accueil' && (
             <div className="space-y-4">
               {/* Daily status card (MOB-2) */}
-              <div className="p-3.5 bg-slate-800 rounded-2xl border border-slate-700/80 space-y-2">
+              <div className="p-3.5 bg-[#12234B] rounded-2xl border border-[#1E3566] space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[11px] text-slate-400 font-medium">{t('mobile.dailyStatusTitle')}</span>
-                  <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
+                  <span className="text-[11px] text-[#9DB3D8] font-medium">{t('mobile.dailyStatusTitle')}</span>
+                  <span className="text-[10px] font-bold text-amber-300 bg-amber-400/15 border border-amber-400/30 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
                     {t('mobile.toSubmitBadge')}
                   </span>
                 </div>
-                <div className="text-sm font-bold">{t('mobile.deadlineLabel')}</div>
+                <div className="text-sm font-bold text-white">{t('mobile.deadlineLabel')}</div>
                 <button
                   onClick={() => setActiveTab('deplacement')}
-                  className="w-full py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-bold text-white rounded-xl text-center shadow-xs"
+                  className="w-full py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] font-bold text-white rounded-xl text-center shadow-xs transition-all"
                 >
                   {t('mobile.startFieldBtn')}
                 </button>
               </div>
 
               {/* Quick Field Clocking (MOB-4) */}
-              <div className="p-3.5 bg-slate-800 rounded-2xl border border-slate-700/80 space-y-3">
-                <span className="text-[11px] font-bold text-slate-300 block">{t('mobile.quickClockTitle')}</span>
+              <div className="p-3.5 bg-[#12234B] rounded-2xl border border-[#1E3566] space-y-3">
+                <span className="text-[11px] font-bold text-[#DCE6F3] block">{t('mobile.quickClockTitle')}</span>
 
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <button
                     onClick={handleDepart}
                     className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all ${
-                      departTime ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-700 border-slate-600 text-slate-200'
+                      departTime ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-[#193064] border-[#284587] text-[#E6EEF8]'
                     }`}
                   >
                     <div>{t('mobile.depart')}</div>
@@ -242,7 +242,7 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
                   <button
                     onClick={handleArrivee}
                     className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all ${
-                      arriveeTime ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-700 border-slate-600 text-slate-200'
+                      arriveeTime ? 'bg-[#0284C7] border-[#38BDF8] text-white' : 'bg-[#193064] border-[#284587] text-[#E6EEF8]'
                     }`}
                   >
                     <div>{t('mobile.arrived')}</div>
@@ -252,7 +252,7 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
                   <button
                     onClick={handleRetour}
                     className={`p-2.5 rounded-xl border text-[11px] font-bold transition-all ${
-                      retourTime ? 'bg-purple-600 border-purple-500 text-white' : 'bg-slate-700 border-slate-600 text-slate-200'
+                      retourTime ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-[#193064] border-[#284587] text-[#E6EEF8]'
                     }`}
                   >
                     <div>{t('mobile.return')}</div>
@@ -263,17 +263,17 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
 
               {/* Offline sync queue box (Section 14.6) */}
               {offlineQueue.length > 0 && (
-                <div className="p-3 bg-amber-950/40 border border-amber-600/50 rounded-xl space-y-2">
+                <div className="p-3 bg-amber-950/50 border border-amber-500/40 rounded-xl space-y-2">
                   <div className="flex items-center justify-between text-amber-300 font-bold text-[11px]">
                     <span>{t('mobile.offlineQueueTitle', { count: offlineQueue.length })}</span>
                     <button
                       onClick={handleSyncOfflineQueue}
-                      className="text-xs bg-amber-500 text-black px-2 py-0.5 rounded font-bold whitespace-nowrap shrink-0"
+                      className="text-xs bg-amber-400 text-[#0B1733] px-2 py-0.5 rounded font-bold whitespace-nowrap shrink-0"
                     >
                       {t('mobile.syncBtn')}
                     </button>
                   </div>
-                  <div className="space-y-1 text-[10px] text-amber-200/80">
+                  <div className="space-y-1 text-[10px] text-amber-200/85">
                     {offlineQueue.map((item, i) => (
                       <div key={i}>• {item}</div>
                     ))}
@@ -286,11 +286,11 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
           {activeTab === 'deplacement' && (
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">{t('mobile.destClient')}</label>
+                <label className="block text-[11px] text-[#9DB3D8] mb-1">{t('mobile.destClient')}</label>
                 <select
                   value={selectedClientId}
                   onChange={(e) => setSelectedClientId(e.target.value)}
-                  className="w-full p-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white"
+                  className="w-full p-2 bg-[#12234B] border border-[#1E3566] rounded-xl text-xs text-white"
                 >
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -301,24 +301,24 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
               </div>
 
               <div>
-                <label className="block text-[11px] text-slate-400 mb-1">{t('mobile.workDoneLabel')}</label>
+                <label className="block text-[11px] text-[#9DB3D8] mb-1">{t('mobile.workDoneLabel')}</label>
                 <textarea
                   rows={2}
                   required
                   placeholder={t('mobile.workDonePlaceholder')}
                   value={visitNotes}
                   onChange={(e) => setVisitNotes(e.target.value)}
-                  className="w-full p-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white"
+                  className="w-full p-2 bg-[#12234B] border border-[#1E3566] rounded-xl text-xs text-white"
                 />
               </div>
 
               {/* Photo receipt capture (MOB-5) */}
-              <div className="p-3 bg-slate-800 rounded-xl border border-slate-700 space-y-2">
+              <div className="p-3 bg-[#12234B] rounded-xl border border-[#1E3566] space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold">{t('mobile.receiptTitle')}</span>
                   <button
                     onClick={handleSimulateCapturePhoto}
-                    className="flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 font-semibold whitespace-nowrap shrink-0"
+                    className="flex items-center gap-1 text-[11px] text-[#38BDF8] hover:text-[#7DD3FC] font-semibold whitespace-nowrap shrink-0"
                   >
                     <Camera className="w-3.5 h-3.5" />
                     <span>{t('mobile.takePhoto')}</span>
@@ -331,12 +331,12 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
                     value={fraisAmount}
                     onChange={(e) => setFraisAmount(e.target.value)}
                     placeholder={t('mobile.amountPlaceholder')}
-                    className="p-1.5 bg-slate-700 border border-slate-600 rounded text-xs text-white font-mono"
+                    className="p-1.5 bg-[#193064] border border-[#284587] rounded text-xs text-white font-mono"
                   />
                   <select
                     value={fraisType}
                     onChange={(e) => setFraisType(e.target.value)}
-                    className="p-1.5 bg-slate-700 border border-slate-600 rounded text-xs text-white"
+                    className="p-1.5 bg-[#193064] border border-[#284587] rounded text-xs text-white"
                   >
                     <option value="essence">{t('mobile.fuel')}</option>
                     <option value="transport">{t('mobile.transport')}</option>
@@ -345,16 +345,16 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
                 </div>
 
                 {simulatedPhoto && (
-                  <div className="mt-2 rounded border border-slate-600 overflow-hidden bg-white p-1">
+                  <div className="mt-2 rounded-lg border border-[#1E3566] overflow-hidden bg-[#E6EEF8] p-1">
                     <img src={simulatedPhoto} alt={t('mobile.photoCompressed')} className="w-full h-16 object-contain" />
-                    <div className="text-[9px] text-slate-700 text-center font-mono pt-0.5">{t('mobile.photoCompressed')}</div>
+                    <div className="text-[9px] text-[#273B63] text-center font-mono pt-0.5">{t('mobile.photoCompressed')}</div>
                   </div>
                 )}
               </div>
 
               <button
                 onClick={handleSaveMobileVisit}
-                className="w-full py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 font-bold text-white rounded-xl text-center shadow-lg transition-colors"
+                className="w-full py-2.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] font-bold text-white rounded-xl text-center shadow-lg transition-colors"
               >
                 {t('mobile.saveVisitBtn')}
               </button>
@@ -363,11 +363,11 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
         </div>
 
         {/* Mobile Bottom Tab Bar */}
-        <div className="h-14 bg-slate-950/90 border-t border-slate-800 flex items-center justify-around px-2 shrink-0">
+        <div className="h-14 bg-[#09132B] border-t border-[#1E3566] flex items-center justify-around px-2 shrink-0">
           <button
             onClick={() => setActiveTab('accueil')}
             className={`flex flex-col items-center gap-0.5 ${
-              activeTab === 'accueil' ? 'text-cyan-400' : 'text-slate-400'
+              activeTab === 'accueil' ? 'text-[#38BDF8]' : 'text-[#9DB3D8]'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -377,7 +377,7 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
           <button
             onClick={() => setActiveTab('deplacement')}
             className={`flex flex-col items-center gap-0.5 ${
-              activeTab === 'deplacement' ? 'text-cyan-400' : 'text-slate-400'
+              activeTab === 'deplacement' ? 'text-[#38BDF8]' : 'text-[#9DB3D8]'
             }`}
           >
             <MapPin className="w-4 h-4" />
@@ -387,7 +387,7 @@ export const MobileDeviceSimulator: React.FC<{ isOpen: boolean; onClose: () => v
           <button
             onClick={() => setIsOnline(!isOnline)}
             className={`flex flex-col items-center gap-0.5 ${
-              !isOnline ? 'text-amber-400' : 'text-slate-400'
+              !isOnline ? 'text-amber-400' : 'text-[#9DB3D8]'
             }`}
           >
             {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}

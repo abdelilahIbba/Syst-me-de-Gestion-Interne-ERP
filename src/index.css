@@ -2,9 +2,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root {
+    --devnapp-navy: #0B1733;
+    --devnapp-navy-soft: #10224A;
+    --devnapp-ocean: #0284C7;
+    --devnapp-cyan: #0EA5E9;
+    --devnapp-canvas: #E3ECF7;
+    --devnapp-surface: #F1F5FB;
+    --devnapp-well: #E6EEF8;
+    --devnapp-border: #CFDDED;
+  }
+
   html, body {
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+    background-color: #E3ECF7;
+    color: #0D1B38;
   }
 
   body {
@@ -19,6 +32,37 @@
     font-family: 'JetBrains Mono', monospace;
     font-variant-numeric: tabular-nums;
   }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #DCE6F3;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #B3C6DD;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0284C7;
+  }
+}
+
+.devnapp-canvas {
+  background-color: #E3ECF7;
+  background-image:
+    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.11) 0%, transparent 42%),
+    radial-gradient(circle at 12% 100%, rgba(11, 23, 51, 0.06) 0%, transparent 38%);
+}
+
+.devnapp-card {
+  background-color: #F1F5FB;
+  border-color: #D1DFEE;
+  box-shadow: 0 6px 22px -8px rgba(11, 23, 51, 0.08);
 }
 
 @media print {

@@ -103,32 +103,32 @@ export const RemindersView: React.FC = () => {
     <div className="space-y-6">
       {/* Top Bar */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('reminders.title')}</h2>
-        <div className="text-xs text-slate-500 mt-0.5">
+        <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('reminders.title')}</h2>
+        <div className="text-xs text-[#546A8E] mt-0.5">
           {t('reminders.subtitle')}
         </div>
       </div>
 
       {overdueInvoices.length === 0 ? (
-        <div className="p-12 text-center bg-white rounded-xl border border-slate-200">
-          <Clock className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-          <h3 className="text-sm font-bold text-slate-900">{t('reminders.noneTitle')}</h3>
-          <p className="text-xs text-slate-500 mt-1">{t('reminders.noneDesc')}</p>
+        <div className="p-12 text-center bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)]">
+          <Clock className="w-10 h-10 text-[#0E6245] mx-auto mb-2" />
+          <h3 className="text-sm font-bold text-[#0D1B38]">{t('reminders.noneTitle')}</h3>
+          <p className="text-xs text-[#546A8E] mt-1">{t('reminders.noneDesc')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left: Overdue List (5 cols) */}
-          <div className="lg:col-span-5 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-col">
-            <div className="p-3.5 border-b border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-900">
+          <div className="lg:col-span-5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex flex-col overflow-hidden">
+            <div className="p-3.5 border-b border-[#DCE6F3] flex items-center justify-between bg-[#E6EEF8]/65">
+              <span className="text-xs font-semibold text-[#0D1B38]">
                 {t('reminders.overdueList', { count: overdueInvoices.length })}
               </span>
-              <span className="text-[11px] font-mono text-rose-700 font-bold" dir="ltr">
+              <span className="text-[11px] font-mono text-[#9F1239] font-bold" dir="ltr">
                 {formatDH(overdueInvoices.reduce((s, i) => s + i.reste_a_payer, 0))}
               </span>
             </div>
 
-            <div className="divide-y divide-slate-100 overflow-y-auto max-h-[340px] lg:max-h-[600px]">
+            <div className="divide-y divide-[#DCE6F3] overflow-y-auto max-h-[340px] lg:max-h-[600px]">
               {overdueInvoices.map((inv) => {
                 const isSelected = selectedInv?.id === inv.id;
 
@@ -137,21 +137,21 @@ export const RemindersView: React.FC = () => {
                     key={inv.id}
                     onClick={() => setSelectedInvoiceId(inv.id)}
                     className={`p-3.5 cursor-pointer transition-colors ${
-                      isSelected ? 'bg-blue-50/80 border-s-2 border-s-blue-600' : 'hover:bg-slate-50'
+                      isSelected ? 'bg-[#DCE9F9]' : 'hover:bg-[#E7EFFA]'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <div className="font-bold text-xs text-slate-900 font-mono" dir="ltr">{inv.numero}</div>
-                        <div className="text-xs text-slate-700 font-medium mt-0.5">
+                        <div className="font-bold text-xs text-[#0D1B38] font-mono" dir="ltr">{inv.numero}</div>
+                        <div className="text-xs text-[#273B63] font-medium mt-0.5">
                           {inv.client?.raison_sociale}
                         </div>
                       </div>
                       <div className="text-end">
-                        <div className="font-mono font-bold text-rose-700 text-xs" dir="ltr">
+                        <div className="font-mono font-bold text-[#9F1239] text-xs" dir="ltr">
                           {formatDH(inv.reste_a_payer)}
                         </div>
-                        <span className="text-[10px] font-semibold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-sm">
+                        <span className="text-[10px] font-semibold text-[#9F1239] bg-[#FCE8EC] border border-[#F3BCC8] px-1.5 py-0.5 rounded-md">
                           {t('reminders.daysLate', { days: inv.daysOverdue })}
                         </span>
                       </div>
@@ -163,15 +163,15 @@ export const RemindersView: React.FC = () => {
           </div>
 
           {/* Right: Reminder Composer & Template (7 cols) */}
-          <div className="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-4">
+          <div className="lg:col-span-7 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-4">
             {selectedInv ? (
               <>
-                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#DCE6F3]">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">
+                    <h3 className="text-sm font-bold text-[#0D1B38]">
                       {t('reminders.templateTitle', { num: selectedInv.numero })}
                     </h3>
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs text-[#546A8E]">
                       {t('reminders.clientPhone', {
                         name: selectedInv.client?.raison_sociale || '',
                         phone: selectedInv.client?.telephone || '',
@@ -180,23 +180,23 @@ export const RemindersView: React.FC = () => {
                   </div>
 
                   {/* Channel Switcher */}
-                  <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs">
+                  <div className="flex items-center gap-1 p-1 bg-[#E6EEF8] border border-[#CFDDED] rounded-xl text-xs">
                     <button
                       onClick={() => setReminderType('whatsapp')}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors whitespace-nowrap shrink-0 ${
-                        reminderType === 'whatsapp' ? 'bg-white text-emerald-800 font-semibold shadow-xs' : 'text-slate-600'
+                      className={`flex items-center gap-1 px-3 py-1 rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+                        reminderType === 'whatsapp' ? 'bg-[#DCF4E8] text-[#0E6245] font-semibold shadow-xs' : 'text-[#455B80]'
                       }`}
                     >
-                      <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                      <MessageSquare className="w-3.5 h-3.5 text-[#0E6245]" />
                       <span>WhatsApp</span>
                     </button>
                     <button
                       onClick={() => setReminderType('email')}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-md transition-colors whitespace-nowrap shrink-0 ${
-                        reminderType === 'email' ? 'bg-white text-blue-800 font-semibold shadow-xs' : 'text-slate-600'
+                      className={`flex items-center gap-1 px-3 py-1 rounded-lg transition-colors whitespace-nowrap shrink-0 ${
+                        reminderType === 'email' ? 'bg-[#DFF0FC] text-[#035388] font-semibold shadow-xs' : 'text-[#455B80]'
                       }`}
                     >
-                      <Mail className="w-3.5 h-3.5 text-blue-600" />
+                      <Mail className="w-3.5 h-3.5 text-[#0284C7]" />
                       <span>Email</span>
                     </button>
                   </div>
@@ -208,24 +208,24 @@ export const RemindersView: React.FC = () => {
                     rows={8}
                     readOnly
                     value={generateMessage(selectedInv, reminderType)}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono leading-relaxed text-slate-800 focus:outline-hidden"
+                    className="w-full p-3.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-xs font-mono leading-relaxed text-[#0D1B38] focus:outline-hidden"
                   />
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                  <div className="text-[11px] text-slate-400">
+                  <div className="text-[11px] text-[#546A8E]">
                     {t('reminders.copyHint')}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => handleCopyMessage(generateMessage(selectedInv, reminderType), selectedInv.id)}
-                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors whitespace-nowrap shrink-0 flex-1 sm:flex-none"
+                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-[#1C2E4F] bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl transition-colors whitespace-nowrap shrink-0 flex-1 sm:flex-none"
                     >
                       {copiedId === selectedInv.id ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <Check className="w-3.5 h-3.5 text-[#0E6245]" />
                           <span>{t('reminders.copied')}</span>
                         </>
                       ) : (
@@ -238,7 +238,7 @@ export const RemindersView: React.FC = () => {
 
                     <button
                       onClick={handleLogReminder}
-                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors whitespace-nowrap shrink-0 flex-1 sm:flex-none"
+                      className="flex items-center justify-center gap-1.5 px-3.5 py-2 sm:py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0 flex-1 sm:flex-none"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>{t('reminders.logBtn')}</span>
@@ -248,11 +248,11 @@ export const RemindersView: React.FC = () => {
 
                 {/* History Strip */}
                 {reminderHistory.length > 0 && (
-                  <div className="pt-4 border-t border-slate-100 space-y-2">
-                    <span className="text-xs font-semibold text-slate-700">{t('reminders.historyTitle')}</span>
-                    <div className="space-y-1">
+                  <div className="pt-4 border-t border-[#DCE6F3] space-y-2">
+                    <span className="text-xs font-semibold text-[#273B63]">{t('reminders.historyTitle')}</span>
+                    <div className="space-y-1.5">
                       {reminderHistory.map((h) => (
-                        <div key={h.id} className="text-[11px] flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2 rounded text-slate-600">
+                        <div key={h.id} className="text-[11px] flex flex-wrap items-center justify-between gap-2 bg-[#E6EEF8] border border-[#D5E2F1] p-2.5 rounded-xl text-[#3C5073]">
                           <span>
                             {t('reminders.historyEntry', {
                               date: h.date,
@@ -261,7 +261,7 @@ export const RemindersView: React.FC = () => {
                               invoice: h.invoice,
                             })}
                           </span>
-                          <span className="text-emerald-700 font-semibold">{t('reminders.sent')}</span>
+                          <span className="text-[#0E6245] font-semibold">{t('reminders.sent')}</span>
                         </div>
                       ))}
                     </div>

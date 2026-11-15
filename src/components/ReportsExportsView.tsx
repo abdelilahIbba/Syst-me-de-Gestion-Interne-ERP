@@ -93,19 +93,19 @@ export const ReportsExportsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('exports.title')}</h2>
-          <div className="text-xs text-slate-500 mt-0.5">
+          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('exports.title')}</h2>
+          <div className="text-xs text-[#546A8E] mt-0.5">
             {t('exports.subtitle')}
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5 shadow-xs flex-1 sm:flex-none min-w-0">
-            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <div className="flex items-center gap-1.5 bg-[#F1F5FB] border border-[#D1DFEE] rounded-xl px-3 py-2 shadow-xs flex-1 sm:flex-none min-w-0">
+            <Calendar className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden"
+              className="w-full text-xs font-semibold text-[#0D1B38] bg-transparent focus:outline-hidden"
             >
               <option value="2026-11">{t('payroll.month.2026-11')}</option>
               <option value="2026-10">{t('payroll.month.2026-10')}</option>
@@ -115,7 +115,7 @@ export const ReportsExportsView: React.FC = () => {
 
           <button
             onClick={exportMonthCSV}
-            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition-colors whitespace-nowrap shrink-0"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all whitespace-nowrap shrink-0"
           >
             <Download className="w-4 h-4" />
             <span>{t('exports.exportMonthBtn', { month: selectedMonth })}</span>
@@ -126,22 +126,22 @@ export const ReportsExportsView: React.FC = () => {
       {/* 3 Analytics Tables */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {/* Table 1: By Employee */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <Users className="w-4 h-4 text-blue-600 shrink-0" />
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-[#DCE6F3] font-bold text-[#0D1B38] text-xs">
+            <Users className="w-4 h-4 text-[#0284C7] shrink-0" />
             <span>{t('exports.byEmployee')}</span>
           </div>
 
-          <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+          <div className="divide-y divide-[#DCE6F3] max-h-80 overflow-y-auto">
             {employees.map((emp) => {
               const data = employeeHoursMap.get(emp.id) || { totalHours: 0, countReports: 0 };
               return (
                 <div key={emp.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-slate-900 truncate">{emp.prenom} {emp.nom}</div>
-                    <div className="text-[11px] text-slate-400">{t('exports.reportsCount', { count: data.countReports })}</div>
+                    <div className="font-semibold text-[#0D1B38] truncate">{emp.prenom} {emp.nom}</div>
+                    <div className="text-[11px] text-[#546A8E]">{t('exports.reportsCount', { count: data.countReports })}</div>
                   </div>
-                  <span className="font-mono font-bold text-blue-700 shrink-0">{data.totalHours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-[#0284C7] shrink-0">{data.totalHours} {t('common.hours')}</span>
                 </div>
               );
             })}
@@ -149,22 +149,22 @@ export const ReportsExportsView: React.FC = () => {
         </div>
 
         {/* Table 2: By Client */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <Building2 className="w-4 h-4 text-emerald-600 shrink-0" />
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-[#DCE6F3] font-bold text-[#0D1B38] text-xs">
+            <Building2 className="w-4 h-4 text-[#0E6245] shrink-0" />
             <span>{t('exports.byClient')}</span>
           </div>
 
-          <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+          <div className="divide-y divide-[#DCE6F3] max-h-80 overflow-y-auto">
             {clients.map((cli) => {
               const hours = clientHoursMap.get(cli.id) || 0;
               return (
                 <div key={cli.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-slate-900 truncate">{cli.raison_sociale}</div>
-                    <div className="text-[11px] text-slate-400 truncate">{cli.ville}</div>
+                    <div className="font-semibold text-[#0D1B38] truncate">{cli.raison_sociale}</div>
+                    <div className="text-[11px] text-[#546A8E] truncate">{cli.ville}</div>
                   </div>
-                  <span className="font-mono font-bold text-emerald-700 shrink-0">{hours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-[#0E6245] shrink-0">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}
@@ -172,22 +172,22 @@ export const ReportsExportsView: React.FC = () => {
         </div>
 
         {/* Table 3: By Project */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-5 space-y-3">
-          <div className="flex items-center gap-2 pb-2 border-b border-slate-100 font-bold text-slate-900 text-xs">
-            <FolderGit2 className="w-4 h-4 text-purple-600 shrink-0" />
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-3">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-[#DCE6F3] font-bold text-[#0D1B38] text-xs">
+            <FolderGit2 className="w-4 h-4 text-[#5B35B5] shrink-0" />
             <span>{t('exports.byProject')}</span>
           </div>
 
-          <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+          <div className="divide-y divide-[#DCE6F3] max-h-80 overflow-y-auto">
             {projects.map((proj) => {
               const hours = projectHoursMap.get(proj.id) || 0;
               return (
                 <div key={proj.id} className="py-2.5 flex items-center justify-between gap-2 text-xs">
                   <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-slate-900 truncate">{proj.nom_systeme}</div>
-                    <div className="text-[11px] text-slate-400 capitalize truncate">{proj.type}</div>
+                    <div className="font-semibold text-[#0D1B38] truncate">{proj.nom_systeme}</div>
+                    <div className="text-[11px] text-[#546A8E] capitalize truncate">{proj.type}</div>
                   </div>
-                  <span className="font-mono font-bold text-purple-700 shrink-0">{hours} {t('common.hours')}</span>
+                  <span className="font-mono font-bold text-[#5B35B5] shrink-0">{hours} {t('common.hours')}</span>
                 </div>
               );
             })}

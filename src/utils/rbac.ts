@@ -290,7 +290,7 @@ export const DEFAULT_ROLES: Role[] = [
     name: 'Employé / Développeur',
     description: 'Saisie du rapport quotidien et enregistrement des déplacements sur le terrain',
     isSystem: true,
-    badgeColor: 'bg-slate-100 text-slate-800 border-slate-300',
+    badgeColor: 'bg-[#E2EAF5] text-[#1E355E] border-[#B8CAE2]',
     permissions: [
       'view_dashboard',
       'fill_daily_report',

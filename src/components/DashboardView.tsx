@@ -121,9 +121,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
   return (
     <div className="space-y-6">
       {/* Top Banner with Filter and Welcome */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#CFDDED]">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">
             {role === 'admin' || role === 'super_admin'
               ? t('dash.title.admin')
               : role === 'comptable'
@@ -134,33 +134,33 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               ? t('dash.title.commercial')
               : t('dash.title.default')}
           </h2>
-          <div className="text-xs text-slate-500 mt-0.5">
+          <div className="text-xs text-[#546A8E] mt-0.5">
             {t('app.companyName')} · {new Date().toLocaleDateString(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
         </div>
 
         {/* Period Selector */}
-        <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs font-medium w-full sm:w-auto">
+        <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 bg-[#DCE6F4] border border-[#C9D9EC] rounded-xl text-xs font-medium w-full sm:w-auto">
           <button
             onClick={() => setPeriod('mois')}
-            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
-              period === 'mois' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
+              period === 'mois' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             {t('dash.period.month')}
           </button>
           <button
             onClick={() => setPeriod('trimestre')}
-            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
-              period === 'trimestre' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
+              period === 'trimestre' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             {t('dash.period.quarter')}
           </button>
           <button
             onClick={() => setPeriod('annee')}
-            className={`px-3 py-1.5 rounded-md transition-colors text-center ${
-              period === 'annee' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
+              period === 'annee' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             {t('dash.period.year')}
@@ -172,76 +172,86 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* KPI 1: Revenus encaissés */}
         {['super_admin', 'admin', 'comptable', 'commercial', 'cashier'].includes(role) && (
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-            <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+            <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.collectedRevenue')}</span>
-              <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="w-8 h-8 rounded-xl bg-emerald-100/80 border border-emerald-200/80 flex items-center justify-center shrink-0">
+                <TrendingUp className="w-4 h-4 text-emerald-700" />
+              </span>
             </div>
-            <div className="text-lg sm:text-xl font-bold font-mono text-slate-900">
+            <div className="text-lg sm:text-xl font-bold font-mono text-[#0D1B38]">
               {formatDH(totalRevenusEncaisses)}
             </div>
-            <div className="text-xs text-slate-500 mt-2 flex items-center gap-1.5">
+            <div className="text-xs text-[#5F7394] mt-2 flex items-center gap-1.5">
               <span>{t('dash.kpi.billedTurnover')}</span>
-              <span className="font-mono font-medium text-slate-700">{formatDH(caFacture)}</span>
+              <span className="font-mono font-semibold text-[#2B4068]">{formatDH(caFacture)}</span>
             </div>
           </div>
         )}
 
         {/* KPI 2: Charges totales */}
         {['super_admin', 'admin', 'comptable'].includes(role) && (
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-            <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+            <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.validatedExpenses')}</span>
-              <Wallet className="w-4 h-4 text-rose-600 shrink-0" />
+              <span className="w-8 h-8 rounded-xl bg-rose-100/80 border border-rose-200/80 flex items-center justify-center shrink-0">
+                <Wallet className="w-4 h-4 text-rose-700" />
+              </span>
             </div>
-            <div className="text-lg sm:text-xl font-bold font-mono text-slate-900">
+            <div className="text-lg sm:text-xl font-bold font-mono text-[#0D1B38]">
               {formatDH(chargesTotales)}
             </div>
-            <div className="text-xs text-slate-500 mt-2">
-              {t('dash.kpi.salariesIncluded')} <span className="font-mono font-medium text-slate-700">{formatDH(masseSalariale)}</span>
+            <div className="text-xs text-[#5F7394] mt-2">
+              {t('dash.kpi.salariesIncluded')} <span className="font-mono font-semibold text-[#2B4068]">{formatDH(masseSalariale)}</span>
             </div>
           </div>
         )}
 
         {/* KPI 3: Bénéfice Net */}
         {['super_admin', 'admin'].includes(role) ? (
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-            <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+            <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.netProfit')}</span>
-              <DollarSign className={`w-4 h-4 shrink-0 ${beneficeNet >= 0 ? 'text-emerald-600' : 'text-rose-600'}`} />
+              <span className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${beneficeNet >= 0 ? 'bg-sky-100/80 border-sky-200/80' : 'bg-rose-100/80 border-rose-200/80'}`}>
+                <DollarSign className={`w-4 h-4 ${beneficeNet >= 0 ? 'text-[#0284C7]' : 'text-rose-700'}`} />
+              </span>
             </div>
             <div className={`text-lg sm:text-xl font-bold font-mono ${beneficeNet >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
               {formatDH(beneficeNet)}
             </div>
-            <div className="text-xs text-slate-500 mt-2">
+            <div className="text-xs text-[#5F7394] mt-2">
               {t('dash.kpi.netMargin')} {totalRevenusEncaisses > 0 ? Math.round((beneficeNet / totalRevenusEncaisses) * 100) : 0}%
             </div>
           </div>
         ) : (
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-            <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+            <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.monthlyPayroll')}</span>
-              <Users className="w-4 h-4 text-purple-600 shrink-0" />
+              <span className="w-8 h-8 rounded-xl bg-sky-100/80 border border-sky-200/80 flex items-center justify-center shrink-0">
+                <Users className="w-4 h-4 text-[#0284C7]" />
+              </span>
             </div>
-            <div className="text-lg sm:text-xl font-bold font-mono text-slate-900">
+            <div className="text-lg sm:text-xl font-bold font-mono text-[#0D1B38]">
               {formatDH(masseSalariale)}
             </div>
-            <div className="text-xs text-slate-500 mt-2">
+            <div className="text-xs text-[#5F7394] mt-2">
               {t('dash.kpi.activeEmployees', { count: employees.length })}
             </div>
           </div>
         )}
 
         {/* KPI 4: Impayés & Retards */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+          <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
             <span className="font-medium">{t('dash.kpi.unpaidInvoices')}</span>
-            <AlertTriangle className={`w-4 h-4 shrink-0 ${montantRetard > 0 ? 'text-amber-600' : 'text-slate-400'}`} />
+            <span className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${montantRetard > 0 ? 'bg-amber-100/80 border-amber-200/80' : 'bg-[#E6EEF8] border-[#CFDDED]'}`}>
+              <AlertTriangle className={`w-4 h-4 ${montantRetard > 0 ? 'text-amber-700' : 'text-[#5F7394]'}`} />
+            </span>
           </div>
-          <div className="text-lg sm:text-xl font-bold font-mono text-amber-700">
+          <div className="text-lg sm:text-xl font-bold font-mono text-amber-800">
             {formatDH(totalImpayes)}
           </div>
-          <div className="text-xs text-rose-600 mt-2 font-medium">
+          <div className="text-xs text-rose-700 mt-2 font-medium">
             {t('dash.kpi.overdueCount', { count: facturesEnRetard.length, amount: formatDH(montantRetard) })}
           </div>
         </div>
@@ -250,51 +260,51 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Middle Row: Operational Indicators */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Contrats à renouveler */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
           <div>
-            <div className="text-xs text-slate-500 font-medium">{t('dash.kpi.contractsExpiring')}</div>
-            <div className="text-xl font-bold text-slate-900 mt-1 font-mono">{contratsARenouveler.length}</div>
-            <div className="text-xs text-slate-500 mt-0.5">{t('dash.kpi.contractsSub')}</div>
+            <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.contractsExpiring')}</div>
+            <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">{contratsARenouveler.length}</div>
+            <div className="text-xs text-[#5F7394] mt-0.5">{t('dash.kpi.contractsSub')}</div>
           </div>
           <button
             onClick={() => onNavigate('contracts')}
-            className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
           >
-            <FileCheck2 className="w-5 h-5 text-blue-600" />
+            <FileCheck2 className="w-5 h-5 text-[#0284C7]" />
           </button>
         </div>
 
         {/* Activité du jour */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
           <div>
-            <div className="text-xs text-slate-500 font-medium">{t('dash.kpi.dailyActivity')}</div>
-            <div className="text-xl font-bold text-slate-900 mt-1 font-mono">
+            <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.dailyActivity')}</div>
+            <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">
               {reportsToday.length} / {activeEmps.length}
             </div>
-            <div className="text-xs text-slate-500 mt-0.5">
+            <div className="text-xs text-[#5F7394] mt-0.5">
               {missingReportsCount > 0 ? t('dash.kpi.reportsRemaining', { count: missingReportsCount }) : t('dash.kpi.allReportsSubmitted')}
             </div>
           </div>
           <button
             onClick={() => onNavigate('daily_report')}
-            className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
           >
-            <Clock className="w-5 h-5 text-emerald-600" />
+            <Clock className="w-5 h-5 text-emerald-700" />
           </button>
         </div>
 
         {/* Frais en attente */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
           <div>
-            <div className="text-xs text-slate-500 font-medium">{t('dash.kpi.pendingTravel')}</div>
-            <div className="text-xl font-bold text-slate-900 mt-1 font-mono">{formatDH(fraisEnAttente)}</div>
-            <div className="text-xs text-slate-500 mt-0.5">{t('dash.kpi.pendingTravelSub')}</div>
+            <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.pendingTravel')}</div>
+            <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">{formatDH(fraisEnAttente)}</div>
+            <div className="text-xs text-[#5F7394] mt-0.5">{t('dash.kpi.pendingTravelSub')}</div>
           </div>
           <button
             onClick={() => onNavigate('site_visits')}
-            className="p-2 bg-slate-50 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors"
+            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
           >
-            <Receipt className="w-5 h-5 text-amber-600" />
+            <Receipt className="w-5 h-5 text-amber-700" />
           </button>
         </div>
       </div>
@@ -313,19 +323,19 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Two-Column Detail View: Financial Comparison & Top Clients */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Breakdown Chart / Progress */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-slate-900">{t('dash.breakdownTitle')}</h3>
-            <span className="text-xs text-slate-400">{t('dash.currentPeriod')}</span>
+            <h3 className="text-sm font-bold text-[#0D1B38]">{t('dash.breakdownTitle')}</h3>
+            <span className="text-xs text-[#5F7394]">{t('dash.currentPeriod')}</span>
           </div>
 
           <div className="space-y-4 pt-2">
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
-                <span className="text-slate-600">{t('dash.collectedLine')}</span>
+                <span className="text-[#3B4F73]">{t('dash.collectedLine')}</span>
                 <span className="font-mono text-emerald-700 font-semibold">{formatDH(totalRevenusEncaisses)}</span>
               </div>
-              <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 rounded-full transition-all"
                   style={{ width: `${Math.min(100, totalRevenusEncaisses > 0 ? 100 : 0)}%` }}
@@ -335,10 +345,10 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
 
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
-                <span className="text-slate-600">{t('dash.validatedChargesLine')}</span>
+                <span className="text-[#3B4F73]">{t('dash.validatedChargesLine')}</span>
                 <span className="font-mono text-rose-700 font-semibold">{formatDH(chargesTotales)}</span>
               </div>
-              <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-rose-500 rounded-full transition-all"
                   style={{
@@ -350,20 +360,20 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
 
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
-                <span className="text-slate-600">{t('dash.payrollRatioLine', { pct: ratioMasseSalariale })}</span>
-                <span className="font-mono text-purple-700 font-semibold">{formatDH(masseSalariale)}</span>
+                <span className="text-[#3B4F73]">{t('dash.payrollRatioLine', { pct: ratioMasseSalariale })}</span>
+                <span className="font-mono text-[#0284C7] font-semibold">{formatDH(masseSalariale)}</span>
               </div>
-              <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-purple-500 rounded-full transition-all"
+                  className="h-full bg-gradient-to-r from-[#0284C7] to-[#0EA5E9] rounded-full transition-all"
                   style={{ width: `${Math.min(100, ratioMasseSalariale)}%` }}
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">{t('dash.netCashAvailable')}</span>
+          <div className="pt-4 border-t border-[#DAE5F2] flex items-center justify-between text-xs">
+            <span className="text-[#546A8E]">{t('dash.netCashAvailable')}</span>
             <span className={`font-mono font-bold text-sm ${beneficeNet >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
               {formatDH(beneficeNet)}
             </span>
@@ -371,34 +381,34 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         </div>
 
         {/* Top 5 Clients by Revenue */}
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-slate-900">{t('dash.topClientsTitle')}</h3>
+            <h3 className="text-sm font-bold text-[#0D1B38]">{t('dash.topClientsTitle')}</h3>
             <button
               onClick={() => onNavigate('clients')}
-              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+              className="text-xs text-[#0284C7] hover:text-[#0369A1] font-semibold"
             >
               {t('dash.viewAllClients')} {isRTL ? '←' : '→'}
             </button>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-[#DCE6F3]">
             {topClients.map((item, idx) => (
               <div key={idx} className="py-2.5 flex items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="w-5 text-slate-400 font-mono font-medium">#{idx + 1}</span>
+                  <span className="w-6 h-6 rounded-lg bg-[#E4ECF7] text-[#3B4F73] flex items-center justify-center font-mono font-semibold text-[11px]">#{idx + 1}</span>
                   <div className="min-w-0">
-                    <div className="font-semibold text-slate-900 truncate">
+                    <div className="font-semibold text-[#0D1B38] truncate">
                       {item.client?.raison_sociale || t('common.unknownClient')}
                     </div>
-                    <div className="text-[11px] text-slate-500">{item.client?.ville || 'Maroc'}</div>
+                    <div className="text-[11px] text-[#5F7394]">{item.client?.ville || 'Maroc'}</div>
                   </div>
                 </div>
-                <div className="font-mono font-bold text-slate-800 shrink-0">{formatDH(item.amount)}</div>
+                <div className="font-mono font-bold text-[#0D1B38] shrink-0">{formatDH(item.amount)}</div>
               </div>
             ))}
             {topClients.length === 0 && (
-              <div className="py-4 text-center text-xs text-slate-500">{t('dash.noPayments')}</div>
+              <div className="py-4 text-center text-xs text-[#5F7394]">{t('dash.noPayments')}</div>
             )}
           </div>
         </div>
@@ -407,8 +417,8 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Critical Alerts Banner */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Contrats à échéance */}
-        <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-4">
-          <div className="flex items-center gap-2 text-amber-900 font-semibold text-xs mb-2">
+        <div className="bg-amber-50/85 border border-amber-200/90 rounded-2xl p-4 shadow-[0_4px_16px_-6px_rgba(180,83,9,0.08)]">
+          <div className="flex items-center gap-2 text-amber-900 font-semibold text-xs mb-2.5">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
             <span>{t('dash.contractAlertsTitle')}</span>
           </div>
@@ -417,12 +427,12 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               const client = clients.find((cl) => cl.id === c.client_id);
               const alert = checkContractExpiration(c.date_fin);
               return (
-                <div key={c.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-white/80 p-2.5 rounded-lg border border-amber-100">
+                <div key={c.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F4F8FD]/90 p-2.5 rounded-xl border border-amber-200/70">
                   <div className="min-w-0">
-                    <span className="font-semibold text-slate-900">{c.numero_contrat}</span>
-                    <span className="text-slate-500 ms-2 break-words">({client?.raison_sociale})</span>
+                    <span className="font-semibold text-[#0D1B38]">{c.numero_contrat}</span>
+                    <span className="text-[#546A8E] ms-2 break-words">({client?.raison_sociale})</span>
                   </div>
-                  <span className="font-medium text-amber-700 font-mono shrink-0">{alert.message}</span>
+                  <span className="font-medium text-amber-800 font-mono shrink-0">{alert.message}</span>
                 </div>
               );
             })}
@@ -430,8 +440,8 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         </div>
 
         {/* Factures en retard */}
-        <div className="bg-rose-50/70 border border-rose-200 rounded-xl p-4">
-          <div className="flex items-center gap-2 text-rose-900 font-semibold text-xs mb-2">
+        <div className="bg-rose-50/85 border border-rose-200/90 rounded-2xl p-4 shadow-[0_4px_16px_-6px_rgba(190,18,60,0.08)]">
+          <div className="flex items-center gap-2 text-rose-900 font-semibold text-xs mb-2.5">
             <AlertTriangle className="w-4 h-4 text-rose-600" />
             <span>{t('dash.overdueAlertsTitle')}</span>
           </div>
@@ -440,16 +450,16 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               facturesEnRetard.slice(0, 3).map((inv) => {
                 const client = clients.find((cl) => cl.id === inv.client_id);
                 return (
-                  <div key={inv.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-white/80 p-2.5 rounded-lg border border-rose-100">
+                  <div key={inv.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F4F8FD]/90 p-2.5 rounded-xl border border-rose-200/70">
                     <div className="min-w-0">
-                      <span className="font-semibold text-slate-900">{inv.numero}</span>
-                      <span className="text-slate-500 ms-2 break-words">({client?.raison_sociale})</span>
+                      <span className="font-semibold text-[#0D1B38]">{inv.numero}</span>
+                      <span className="text-[#546A8E] ms-2 break-words">({client?.raison_sociale})</span>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
                       <span className="font-bold text-rose-700 font-mono">{formatDH(inv.reste_a_payer)}</span>
                       <button
                         onClick={() => onNavigate('reminders')}
-                        className="text-[11px] text-blue-600 hover:underline font-medium"
+                        className="text-[11px] text-[#0284C7] hover:underline font-semibold"
                       >
                         {t('dash.remind')}
                       </button>

@@ -245,22 +245,22 @@ export const DailyReportView: React.FC = () => {
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Top Header */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t('daily.title')}</h2>
-        <div className="text-xs text-slate-500 mt-0.5">
+        <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('daily.title')}</h2>
+        <div className="text-xs text-[#546A8E] mt-0.5">
           {t('daily.subtitle')}
         </div>
       </div>
 
       {validationError && (
-        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-900 rounded-xl text-xs flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+        <div className="p-4 bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] rounded-2xl text-xs flex items-center gap-2 font-medium">
+          <AlertCircle className="w-5 h-5 text-[#9F1239] shrink-0" />
           <span>{validationError}</span>
         </div>
       )}
 
       {submitSuccess && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+        <div className="p-4 bg-[#DCF4E8] border border-[#A7DFC3] text-[#0E6245] rounded-2xl text-xs flex items-center gap-2 font-medium">
+          <CheckCircle2 className="w-5 h-5 text-[#0E6245] shrink-0" />
           <span>{t('daily.submittedMsg')}</span>
         </div>
       )}
@@ -268,21 +268,21 @@ export const DailyReportView: React.FC = () => {
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="space-y-6 text-xs">
         {/* Top parameters card */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-600 mb-1 font-medium">{t('daily.dateLabel')}</label>
+              <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.dateLabel')}</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full p-2 border border-slate-200 rounded-lg font-mono"
+                className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
               />
             </div>
 
             <div>
-              <label className="block text-slate-600 mb-1 font-medium">{t('daily.locationLabel')}</label>
+              <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.locationLabel')}</label>
               <select
                 value={lieu}
                 onChange={(e) => {
@@ -290,7 +290,7 @@ export const DailyReportView: React.FC = () => {
                   setLieu(val);
                   if (val === 'chez client') setHasSiteVisit(true);
                 }}
-                className="w-full p-2 border border-slate-200 rounded-lg"
+                className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
               >
                 <option value="bureau">{t('daily.loc.office')}</option>
                 <option value="télétravail">{t('daily.loc.remote')}</option>
@@ -299,8 +299,8 @@ export const DailyReportView: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-slate-600 mb-1 font-medium">{t('daily.employeeLabel')}</label>
-              <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-900">
+              <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.employeeLabel')}</label>
+              <div className="p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-semibold text-[#0D1B38]">
                 {currentUser.name} ({roleLabel})
               </div>
             </div>
@@ -308,16 +308,16 @@ export const DailyReportView: React.FC = () => {
         </div>
 
         {/* Tasks Section (RJ-1) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">{t('daily.tasksTitle')}</h3>
-              <p className="text-[11px] text-slate-500">{t('daily.tasksSub')}</p>
+              <h3 className="text-sm font-bold text-[#0D1B38]">{t('daily.tasksTitle')}</h3>
+              <p className="text-[11px] text-[#546A8E]">{t('daily.tasksSub')}</p>
             </div>
             <button
               type="button"
               onClick={handleAddTask}
-              className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-semibold whitespace-nowrap shrink-0"
+              className="flex items-center gap-1 text-xs text-[#0284C7] hover:text-[#0369A1] font-semibold whitespace-nowrap shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>{t('daily.addTask')}</span>
@@ -326,14 +326,14 @@ export const DailyReportView: React.FC = () => {
 
           <div className="space-y-3">
             {tasks.map((task, idx) => (
-              <div key={idx} className="p-3 bg-slate-50 rounded-lg border border-slate-200/80 space-y-2">
+              <div key={idx} className="p-3.5 bg-[#E6EEF8] rounded-xl border border-[#D5E2F1] space-y-2.5">
                 <div className="grid grid-cols-12 gap-2">
                   <div className="col-span-12 sm:col-span-4">
-                    <label className="block text-[10px] text-slate-400 mb-0.5">{t('common.client')}</label>
+                    <label className="block text-[10px] text-[#546A8E] mb-0.5 font-medium">{t('common.client')}</label>
                     <select
                       value={task.client_id}
                       onChange={(e) => handleTaskChange(idx, 'client_id', e.target.value)}
-                      className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
+                      className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs text-[#0D1B38]"
                     >
                       {clients.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -344,11 +344,11 @@ export const DailyReportView: React.FC = () => {
                   </div>
 
                   <div className="col-span-12 sm:col-span-4">
-                    <label className="block text-[10px] text-slate-400 mb-0.5">{t('common.project')}</label>
+                    <label className="block text-[10px] text-[#546A8E] mb-0.5 font-medium">{t('common.project')}</label>
                     <select
                       value={task.project_id}
                       onChange={(e) => handleTaskChange(idx, 'project_id', e.target.value)}
-                      className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
+                      className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs text-[#0D1B38]"
                     >
                       {projects.map((p) => (
                         <option key={p.id} value={p.id}>
@@ -359,7 +359,7 @@ export const DailyReportView: React.FC = () => {
                   </div>
 
                   <div className="col-span-6 sm:col-span-2">
-                    <label className="block text-[10px] text-slate-400 mb-0.5">{t('daily.durationHours')}</label>
+                    <label className="block text-[10px] text-[#546A8E] mb-0.5 font-medium">{t('daily.durationHours')}</label>
                     <input
                       type="number"
                       step="0.5"
@@ -367,17 +367,17 @@ export const DailyReportView: React.FC = () => {
                       max="16"
                       value={task.heures}
                       onChange={(e) => handleTaskChange(idx, 'heures', Number(e.target.value))}
-                      className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs font-mono"
+                      className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs font-mono text-[#0D1B38]"
                     />
                   </div>
 
                   <div className="col-span-6 sm:col-span-2 flex items-end justify-between gap-2">
                     <div className="w-full">
-                      <label className="block text-[10px] text-slate-400 mb-0.5">{t('daily.taskStatus')}</label>
+                      <label className="block text-[10px] text-[#546A8E] mb-0.5 font-medium">{t('daily.taskStatus')}</label>
                       <select
                         value={task.statut_tache}
                         onChange={(e) => handleTaskChange(idx, 'statut_tache', e.target.value as TaskStatus)}
-                        className="w-full p-1.5 bg-white border border-slate-200 rounded text-xs"
+                        className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs text-[#0D1B38]"
                       >
                         <option value="terminée">{t('daily.taskStatus.terminée')}</option>
                         <option value="en cours">{t('daily.taskStatus.en cours')}</option>
@@ -389,7 +389,7 @@ export const DailyReportView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleRemoveTask(idx)}
-                        className="p-1.5 text-rose-500 hover:text-rose-700 shrink-0"
+                        className="p-1.5 text-[#C81E4A] hover:text-[#9F1239] shrink-0"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -404,7 +404,7 @@ export const DailyReportView: React.FC = () => {
                     placeholder={t('daily.taskDescPlaceholder')}
                     value={task.description}
                     onChange={(e) => handleTaskChange(idx, 'description', e.target.value)}
-                    className="w-full p-2 bg-white border border-slate-200 rounded text-xs"
+                    className="w-full p-2.5 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs text-[#0D1B38]"
                   />
                 </div>
               </div>
@@ -414,12 +414,12 @@ export const DailyReportView: React.FC = () => {
           {/* Automatic hours total & >12h warning (RJ-3) */}
           <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="text-xs">
-              <span className="text-slate-500">{t('daily.totalDayHours')} </span>
-              <strong className="font-mono text-sm text-slate-900">{totalHours} {t('daily.hoursWord')}</strong>
+              <span className="text-[#546A8E]">{t('daily.totalDayHours')} </span>
+              <strong className="font-mono text-sm text-[#0D1B38]">{totalHours} {t('daily.hoursWord')}</strong>
             </div>
 
             {hoursValidation.isWarning && (
-              <div className="p-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-[11px] flex items-center gap-1.5">
+              <div className="p-2.5 bg-[#FEF3D6] border border-[#F2D388] rounded-xl text-[#8F5600] text-[11px] flex items-center gap-1.5 font-medium">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{hoursValidation.message}</span>
               </div>
@@ -429,44 +429,44 @@ export const DailyReportView: React.FC = () => {
 
         {/* Blocages & Plan du lendemain (RJ-1) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-2">
-            <label className="block text-slate-900 font-semibold">{t('daily.blockersLabel')}</label>
+          <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-2">
+            <label className="block text-[#0D1B38] font-semibold">{t('daily.blockersLabel')}</label>
             <textarea
               rows={3}
               placeholder={t('daily.blockersPlaceholder')}
               value={blocages}
               onChange={(e) => setBlocages(e.target.value)}
-              className="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-hidden"
+              className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
             />
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-2">
-            <label className="block text-slate-900 font-semibold">{t('daily.tomorrowLabel')}</label>
+          <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-2">
+            <label className="block text-[#0D1B38] font-semibold">{t('daily.tomorrowLabel')}</label>
             <textarea
               rows={3}
               placeholder={t('daily.tomorrowPlaceholder')}
               value={planDemain}
               onChange={(e) => setPlanDemain(e.target.value)}
-              className="w-full p-2.5 border border-slate-200 rounded-lg focus:outline-hidden"
+              className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
             />
           </div>
         </div>
 
         {/* Section Déplacement chez le client (DP-1 à DP-7) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100">
+        <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">
             <div className="flex items-center gap-2">
-              <Car className="w-4 h-4 text-blue-600 shrink-0" />
-              <h3 className="text-sm font-bold text-slate-900">{t('daily.visitSectionTitle')}</h3>
+              <Car className="w-4 h-4 text-[#0284C7] shrink-0" />
+              <h3 className="text-sm font-bold text-[#0D1B38]">{t('daily.visitSectionTitle')}</h3>
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={hasSiteVisit}
                 onChange={(e) => setHasSiteVisit(e.target.checked)}
-                className="rounded border-slate-300 text-blue-600"
+                className="rounded border-[#9FB6D6] text-[#0284C7]"
               />
-              <span className="font-semibold text-slate-700">{t('daily.visitCheckbox')}</span>
+              <span className="font-semibold text-[#1C2E4F]">{t('daily.visitCheckbox')}</span>
             </label>
           </div>
 
@@ -474,49 +474,49 @@ export const DailyReportView: React.FC = () => {
             <div className="space-y-4 pt-1">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">{t('daily.departTime')}</label>
+                  <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.departTime')}</label>
                   <input
                     type="time"
                     value={visitData.heure_depart}
                     onChange={(e) => setVisitData({ ...visitData, heure_depart: e.target.value })}
-                    className="w-full p-2 border border-slate-200 rounded-lg font-mono"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38]"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">{t('daily.arrivalTime')}</label>
+                  <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.arrivalTime')}</label>
                   <input
                     type="time"
                     value={visitData.heure_arrivee}
                     onChange={(e) => setVisitData({ ...visitData, heure_arrivee: e.target.value })}
-                    className="w-full p-2 border border-slate-200 rounded-lg font-mono"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38]"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 mb-1 font-medium">{t('daily.returnTime')}</label>
+                  <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.returnTime')}</label>
                   <input
                     type="time"
                     value={visitData.heure_retour}
                     onChange={(e) => setVisitData({ ...visitData, heure_retour: e.target.value })}
-                    className="w-full p-2 border border-slate-200 rounded-lg font-mono"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-600 mb-1 font-medium">{t('daily.visitReason')}</label>
+                <label className="block text-[#273B63] mb-1 font-semibold">{t('daily.visitReason')}</label>
                 <input
                   type="text"
                   required={hasSiteVisit}
                   value={visitData.motif}
                   onChange={(e) => setVisitData({ ...visitData, motif: e.target.value })}
-                  className="w-full p-2 border border-slate-200 rounded-lg"
+                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38]"
                 />
               </div>
 
               {/* DP-2: Travail effectué OBLIGATOIRE et Résultat */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
-                  <label className="block text-slate-900 mb-1 font-semibold">
+                  <label className="block text-[#0D1B38] mb-1 font-semibold">
                     {t('daily.workPerformedLabel')}
                   </label>
                   <textarea
@@ -525,16 +525,16 @@ export const DailyReportView: React.FC = () => {
                     placeholder={t('daily.workPerformedPlaceholder')}
                     value={visitData.travail_effectue}
                     onChange={(e) => setVisitData({ ...visitData, travail_effectue: e.target.value })}
-                    className="w-full p-2 border border-slate-200 rounded-lg"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-900 mb-1 font-semibold">{t('daily.resultLabel')}</label>
+                  <label className="block text-[#0D1B38] mb-1 font-semibold">{t('daily.resultLabel')}</label>
                   <select
                     value={visitData.resultat}
                     onChange={(e) => setVisitData({ ...visitData, resultat: e.target.value as VisitResult })}
-                    className="w-full p-2 border border-slate-200 rounded-lg"
+                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38]"
                   >
                     <option value="résolu">{t('daily.result.résolu')}</option>
                     <option value="partiel">{t('daily.result.partiel')}</option>
@@ -544,26 +544,26 @@ export const DailyReportView: React.FC = () => {
               </div>
 
               {/* DP-5: Option facturable */}
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="p-3.5 bg-[#E6EEF8] rounded-xl border border-[#C9D9EC] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={visitData.facturable}
                     onChange={(e) => setVisitData({ ...visitData, facturable: e.target.checked })}
-                    className="rounded border-slate-300 text-blue-600"
+                    className="rounded border-[#9FB6D6] text-[#0284C7]"
                   />
-                  <span className="font-medium text-slate-800">
+                  <span className="font-medium text-[#1C2E4F]">
                     {t('daily.billableCheckbox')}
                   </span>
                 </label>
                 {visitData.facturable && (
                   <div className="flex items-center gap-1.5 font-mono shrink-0">
-                    <span className="text-slate-500">{t('daily.amountHtLabel')}</span>
+                    <span className="text-[#546A8E]">{t('daily.amountHtLabel')}</span>
                     <input
                       type="number"
                       value={visitData.montant_facturable}
                       onChange={(e) => setVisitData({ ...visitData, montant_facturable: Number(e.target.value) })}
-                      className="w-24 p-1 border border-slate-200 bg-white rounded text-xs font-bold"
+                      className="w-24 p-1.5 border border-[#C9D9EC] bg-[#F5F8FD] rounded-lg text-xs font-bold text-[#0D1B38]"
                     />
                     <span>DH</span>
                   </div>
@@ -571,22 +571,22 @@ export const DailyReportView: React.FC = () => {
               </div>
 
               {/* DP-6: Signature tactile du client sur l'écran */}
-              <div className="p-3.5 sm:p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+              <div className="p-3.5 sm:p-4 bg-[#E6EEF8] rounded-xl border border-[#C9D9EC] space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 font-semibold text-slate-900">
-                    <FileSignature className="w-4 h-4 text-blue-600 shrink-0" />
+                  <div className="flex items-center gap-1.5 font-semibold text-[#0D1B38]">
+                    <FileSignature className="w-4 h-4 text-[#0284C7] shrink-0" />
                     <span>{t('daily.signatureTitle')}</span>
                   </div>
                   <button
                     type="button"
                     onClick={clearSignature}
-                    className="text-xs text-slate-500 hover:text-slate-800 underline"
+                    className="text-xs text-[#546A8E] hover:text-[#0D1B38] underline"
                   >
                     {t('daily.clearSignature')}
                   </button>
                 </div>
 
-                <div className="bg-white border border-slate-300 rounded-lg overflow-hidden touch-none">
+                <div className="bg-[#F5F8FD] border border-[#B8CAE2] rounded-xl overflow-hidden touch-none">
                   <canvas
                     ref={canvasRef}
                     width={500}
@@ -600,7 +600,7 @@ export const DailyReportView: React.FC = () => {
                     className="w-full h-24 cursor-crosshair block"
                   />
                 </div>
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[#546A8E]">
                   {t('daily.signatureHint')}
                 </div>
               </div>
@@ -612,7 +612,7 @@ export const DailyReportView: React.FC = () => {
         <div className="flex justify-end pt-2">
           <button
             type="submit"
-            className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-sm transition-colors"
+            className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all"
           >
             {t('daily.submitBtn')}
           </button>

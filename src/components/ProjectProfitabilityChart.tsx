@@ -99,22 +99,22 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
     : null;
 
   return (
-    <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 sm:space-y-5">
+    <div className="bg-[#F1F5FB] p-3.5 sm:p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4 sm:space-y-5">
       {/* Header and Project Filter Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-[#DAE5F2]">
         <div>
-          <div className="flex items-start sm:items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-600 shrink-0 mt-0.5 sm:mt-0">
+          <div className="flex items-start sm:items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-[#DFF0FC] border border-[#A5D3F3] flex items-center justify-center text-[#0284C7] shrink-0 mt-0.5 sm:mt-0">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-[#0D1B38] tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span>{t('chart.monthly.title')}</span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 whitespace-nowrap">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#DFF0FC] text-[#0369A1] border border-[#A5D3F3] whitespace-nowrap">
                   {t('chart.monthly.badge')}
                 </span>
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-[#546A8E] mt-0.5">
                 {t('chart.monthly.subtitle')}
               </p>
             </div>
@@ -123,12 +123,12 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
 
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
           {/* Project Selector Dropdown */}
-          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 shadow-2xs w-full sm:w-auto">
-            <FolderGit2 className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
+          <div className="flex items-center gap-1.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl px-2.5 py-1.5 shadow-2xs w-full sm:w-auto">
+            <FolderGit2 className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="text-xs font-semibold text-slate-800 bg-transparent focus:outline-hidden flex-1 sm:max-w-[220px] truncate"
+              className="text-xs font-semibold text-[#0D1B38] bg-transparent focus:outline-hidden flex-1 sm:max-w-[220px] truncate"
             >
               <option value="all">{t('chart.monthly.allProjects')}</option>
               {projects.map((p) => (
@@ -140,23 +140,23 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           </div>
 
           {/* Mode Switcher */}
-          <div className="grid grid-cols-2 sm:flex items-center p-0.5 bg-slate-100 rounded-lg text-xs font-medium w-full sm:w-auto">
+          <div className="grid grid-cols-2 sm:flex items-center p-1 bg-[#DCE6F4] border border-[#C9D9EC] rounded-xl text-xs font-medium w-full sm:w-auto">
             <button
               onClick={() => setChartMode('mixed')}
-              className={`px-2.5 py-1.5 sm:py-1 rounded-md transition-colors text-center ${
+              className={`px-2.5 py-1.5 sm:py-1 rounded-lg transition-all text-center ${
                 chartMode === 'mixed'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
+                  : 'text-[#4B6187] hover:text-[#0D1B38]'
               }`}
             >
               {t('chart.monthly.modeMixed')}
             </button>
             <button
               onClick={() => setChartMode('profit_only')}
-              className={`px-2.5 py-1.5 sm:py-1 rounded-md transition-colors text-center ${
+              className={`px-2.5 py-1.5 sm:py-1 rounded-lg transition-all text-center ${
                 chartMode === 'profit_only'
-                  ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
+                  : 'text-[#4B6187] hover:text-[#0D1B38]'
               }`}
             >
               {t('chart.monthly.modeProfit')}
@@ -167,57 +167,57 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
 
       {/* KPI Cards Strip for Selected Project / Global Scope */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
+        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.collectedRev')}</span>
-            <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+            <DollarSign className="w-3.5 h-3.5 text-emerald-700" />
           </div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-900">
+          <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38]">
             {formatDH(totals.totalRev)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">{t('chart.monthly.collectedRevSub')}</div>
+          <div className="text-[10px] text-[#5F7394] mt-1">{t('chart.monthly.collectedRevSub')}</div>
         </div>
 
-        <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
+        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.prodCosts')}</span>
-            <Briefcase className="w-3.5 h-3.5 text-rose-600" />
+            <Briefcase className="w-3.5 h-3.5 text-rose-700" />
           </div>
-          <div className="text-base sm:text-lg font-bold font-mono text-slate-900">
+          <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38]">
             {formatDH(totals.totalCost)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-[10px] text-[#5F7394] mt-1">
             {t('chart.monthly.laborShort')} {formatDH(totals.totalLabor)} ({totals.totalHours}{t('common.hours')})
           </div>
         </div>
 
-        <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1">
+        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.netProfit')}</span>
-            <TrendingUp className={`w-3.5 h-3.5 ${totals.totalProfit >= 0 ? 'text-cyan-600' : 'text-rose-600'}`} />
+            <TrendingUp className={`w-3.5 h-3.5 ${totals.totalProfit >= 0 ? 'text-[#0284C7]' : 'text-rose-700'}`} />
           </div>
           <div
             className={`text-base sm:text-lg font-bold font-mono ${
-              totals.totalProfit >= 0 ? 'text-cyan-700' : 'text-rose-700'
+              totals.totalProfit >= 0 ? 'text-[#0369A1]' : 'text-rose-700'
             }`}
           >
             {formatDH(totals.totalProfit)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">{t('chart.monthly.netProfitSub')}</div>
+          <div className="text-[10px] text-[#5F7394] mt-1">{t('chart.monthly.netProfitSub')}</div>
         </div>
 
-        <div className="bg-gradient-to-br from-slate-900 to-[#070b18] p-3.5 rounded-xl border border-cyan-500/30 text-white shadow-xs">
-          <div className="flex items-center justify-between text-[11px] text-cyan-300 font-medium mb-1">
+        <div className="bg-gradient-to-br from-[#0F2045] to-[#0B1733] p-3.5 rounded-xl border border-[#1E3B75] text-[#F4F8FD] shadow-sm">
+          <div className="flex items-center justify-between text-[11px] text-[#7DD3FC] font-medium mb-1">
             <span>{t('chart.monthly.avgMargin')}</span>
-            <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-300 font-mono">
+            <span className="text-[10px] bg-[#0284C7]/30 px-1.5 py-0.5 rounded-md text-[#BAE6FD] font-mono">
               2026
             </span>
           </div>
-          <div className="text-xl font-bold font-mono text-cyan-400 flex items-center gap-1">
+          <div className="text-xl font-bold font-mono text-[#38BDF8] flex items-center gap-1">
             <span>{totals.avgMargin}%</span>
-            <ArrowUpRight className="w-4 h-4 text-cyan-300" />
+            <ArrowUpRight className="w-4 h-4 text-[#7DD3FC]" />
           </div>
-          <div className="text-[10px] text-slate-300 mt-1">{t('chart.monthly.opProfitability')}</div>
+          <div className="text-[10px] text-[#B8CBE6] mt-1">{t('chart.monthly.opProfitability')}</div>
         </div>
       </div>
 
@@ -230,34 +230,34 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           >
             <defs>
               <linearGradient id="colorRevenus" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.9} />
-                <stop offset="95%" stopColor="#2563eb" stopOpacity={0.9} />
+                <stop offset="5%" stopColor="#0EA5E9" stopOpacity={0.95} />
+                <stop offset="95%" stopColor="#0284C7" stopOpacity={0.92} />
               </linearGradient>
               <linearGradient id="colorCouts" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.85} />
-                <stop offset="95%" stopColor="#e11d48" stopOpacity={0.85} />
+                <stop offset="5%" stopColor="#F43F5E" stopOpacity={0.85} />
+                <stop offset="95%" stopColor="#E11D48" stopOpacity={0.85} />
               </linearGradient>
               <linearGradient id="colorBenefice" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.9} />
+                <stop offset="5%" stopColor="#10B981" stopOpacity={0.9} />
                 <stop offset="95%" stopColor="#059669" stopOpacity={0.9} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#D5E2F1" />
 
             <XAxis
               dataKey="monthLabel"
-              axisLine={{ stroke: '#e2e8f0' }}
+              axisLine={{ stroke: '#C9D9EC' }}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 10, fontWeight: 500 }}
+              tick={{ fill: '#475E82', fontSize: 10, fontWeight: 500 }}
             />
 
             <YAxis
               yAxisId="left"
               width={40}
-              axisLine={{ stroke: '#e2e8f0' }}
+              axisLine={{ stroke: '#C9D9EC' }}
               tickLine={false}
-              tick={{ fill: '#64748b', fontSize: 10 }}
+              tick={{ fill: '#546A8E', fontSize: 10 }}
               tickFormatter={(val) => `${(val / 1000).toFixed(0)}k`}
             />
 
@@ -268,7 +268,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                 orientation="right"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#0891b2', fontSize: 10, fontWeight: 600 }}
+                tick={{ fill: '#0284C7', fontSize: 10, fontWeight: 600 }}
                 tickFormatter={(val) => `${val}%`}
                 domain={[0, 100]}
               />
@@ -281,25 +281,25 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   return (
                     <div
                       dir={dir}
-                      className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 shadow-2xl text-xs space-y-2 min-w-[185px] sm:min-w-[210px] max-w-[calc(100vw-32px)]"
+                      className="bg-[#0B1733]/95 backdrop-blur-md text-[#F4F8FD] border border-[#38BDF8]/35 rounded-2xl p-3.5 shadow-2xl text-xs space-y-2 min-w-[185px] sm:min-w-[210px] max-w-[calc(100vw-32px)]"
                     >
-                      <div className="font-bold text-slate-100 flex items-center justify-between border-b border-slate-800 pb-1.5">
-                        <span className="text-cyan-300 font-semibold">{data.monthLabel} 2026</span>
-                        <span className="text-[10px] text-slate-400 font-mono">{data.month}</span>
+                      <div className="font-bold text-[#F4F8FD] flex items-center justify-between border-b border-[#1E3669] pb-1.5">
+                        <span className="text-[#7DD3FC] font-semibold">{data.monthLabel} 2026</span>
+                        <span className="text-[10px] text-[#90A8CE] font-mono">{data.month}</span>
                       </div>
 
                       <div className="space-y-1 font-mono text-[11px]">
-                        <div className="flex justify-between items-center text-cyan-300">
-                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipRev')}</span>
+                        <div className="flex justify-between items-center text-[#7DD3FC]">
+                          <span className="text-[#C6D5EC] font-sans">{t('chart.monthly.tooltipRev')}</span>
                           <span className="font-bold">{formatDH(data.revenus)}</span>
                         </div>
 
                         <div className="flex justify-between items-center text-rose-300">
-                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipCost')}</span>
+                          <span className="text-[#C6D5EC] font-sans">{t('chart.monthly.tooltipCost')}</span>
                           <span className="font-bold">{formatDH(data.couts)}</span>
                         </div>
 
-                        <div className="text-[10px] text-slate-400 ps-2 space-y-0.5 border-s border-slate-700">
+                        <div className="text-[10px] text-[#90A8CE] ps-2 space-y-0.5 border-s border-[#26427A]">
                           <div className="flex justify-between">
                             <span>{t('chart.monthly.tooltipLabor')}</span>
                             <span>{formatDH(data.coutsMainOeuvre)} ({data.heuresProd}{t('common.hours')})</span>
@@ -310,14 +310,14 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                           </div>
                         </div>
 
-                        <div className="pt-1.5 border-t border-slate-800 flex justify-between items-center text-emerald-400 font-bold">
-                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipProfit')}</span>
+                        <div className="pt-1.5 border-t border-[#1E3669] flex justify-between items-center text-emerald-400 font-bold">
+                          <span className="text-[#C6D5EC] font-sans">{t('chart.monthly.tooltipProfit')}</span>
                           <span>{formatDH(data.beneficeNet)}</span>
                         </div>
 
-                        <div className="flex justify-between items-center text-sky-300 font-semibold pt-0.5">
-                          <span className="text-slate-300 font-sans">{t('chart.monthly.tooltipMargin')}</span>
-                          <span className="px-1.5 py-0.5 rounded bg-cyan-900/60 border border-cyan-500/40 text-[10px]">
+                        <div className="flex justify-between items-center text-[#BAE6FD] font-semibold pt-0.5">
+                          <span className="text-[#C6D5EC] font-sans">{t('chart.monthly.tooltipMargin')}</span>
+                          <span className="px-1.5 py-0.5 rounded bg-[#0C3559]/80 border border-[#38BDF8]/40 text-[10px]">
                             {data.tauxMarge}%
                           </span>
                         </div>
@@ -333,7 +333,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
               verticalAlign="top"
               align="right"
               iconType="circle"
-              wrapperStyle={{ paddingBottom: '12px', fontSize: '11px', fontWeight: 500 }}
+              wrapperStyle={{ paddingBottom: '12px', fontSize: '11px', fontWeight: 500, color: '#2B4068' }}
             />
 
             {chartMode === 'mixed' ? (
@@ -343,7 +343,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   dataKey="revenus"
                   name={t('chart.monthly.legendRev')}
                   fill="url(#colorRevenus)"
-                  radius={[4, 4, 0, 0]}
+                  radius={[6, 6, 0, 0]}
                   maxBarSize={38}
                 />
                 <Bar
@@ -351,7 +351,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   dataKey="couts"
                   name={t('chart.monthly.legendCost')}
                   fill="url(#colorCouts)"
-                  radius={[4, 4, 0, 0]}
+                  radius={[6, 6, 0, 0]}
                   maxBarSize={38}
                 />
                 <Line
@@ -359,10 +359,10 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   type="monotone"
                   dataKey="tauxMarge"
                   name={t('chart.monthly.legendMargin')}
-                  stroke="#00d2ff"
+                  stroke="#0284C7"
                   strokeWidth={2.5}
-                  dot={{ r: 3.5, fill: '#00d2ff', strokeWidth: 1.5, stroke: '#ffffff' }}
-                  activeDot={{ r: 5, fill: '#00d2ff', stroke: '#070b18', strokeWidth: 2 }}
+                  dot={{ r: 3.5, fill: '#22D3EE', strokeWidth: 1.5, stroke: '#0B1733' }}
+                  activeDot={{ r: 5, fill: '#22D3EE', stroke: '#0B1733', strokeWidth: 2 }}
                 />
               </>
             ) : (
@@ -372,7 +372,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
                   dataKey="beneficeNet"
                   name={t('chart.monthly.legendProfit')}
                   fill="url(#colorBenefice)"
-                  radius={[4, 4, 0, 0]}
+                  radius={[6, 6, 0, 0]}
                   maxBarSize={48}
                 />
                 <Line
@@ -392,14 +392,14 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
       </div>
 
       {/* Footer Insight Strip */}
-      <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
+      <div className="pt-3 border-t border-[#DAE5F2] flex flex-col sm:flex-row sm:items-center justify-between text-xs text-[#546A8E] gap-2">
         <div className="flex items-center gap-1.5">
-          <Info className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
+          <Info className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
           <span>
             {activeProject ? (
               <span>
                 {t('chart.monthly.filteredFor')}{' '}
-                <strong className="text-slate-800 font-semibold">{activeProject.nom_systeme}</strong>
+                <strong className="text-[#0D1B38] font-semibold">{activeProject.nom_systeme}</strong>
               </span>
             ) : (
               <span>{t('chart.monthly.consolidatedFor', { count: projects.length })}</span>
@@ -410,7 +410,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
         {onNavigateToProjects && (
           <button
             onClick={onNavigateToProjects}
-            className="text-cyan-700 hover:text-cyan-800 font-semibold flex items-center gap-1"
+            className="text-[#0284C7] hover:text-[#0369A1] font-semibold flex items-center gap-1"
           >
             <span>{t('chart.monthly.goToProjects')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />

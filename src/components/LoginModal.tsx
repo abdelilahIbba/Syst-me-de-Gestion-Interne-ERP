@@ -78,38 +78,38 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/80 max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 bg-[#0B1733]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
+      <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header with DEVNAPP Branding */}
-        <div className="bg-[#070b18] p-4 sm:p-5 text-white flex items-center justify-between gap-2 border-b border-slate-800 shrink-0">
+        <div className="bg-[#0B1733] p-4 sm:p-5 text-white flex items-center justify-between gap-2 border-b border-[#1E3566] shrink-0">
           <div className="flex items-center gap-3">
             <img
               src="/assets/aistudio/devnappLogo_10b7b539.jpg"
               alt="DEVNAPP SARL"
-              className="w-10 h-10 rounded-xl object-cover border border-cyan-500/40 shadow-sm shadow-cyan-500/30"
+              className="w-10 h-10 rounded-xl object-cover border border-[#38BDF8]/40 shadow-sm shadow-[#0EA5E9]/25"
             />
             <div>
               <div className="text-sm font-bold tracking-wide flex items-center gap-1.5">
-                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#7DD3FC] via-[#BAE6FD] to-[#38BDF8] bg-clip-text text-transparent">
                   {t('login.title')}
                 </span>
-                <span className="text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800/80 px-1.5 py-0.5 rounded font-mono font-bold">
+                <span className="text-[10px] bg-[#10224A] text-[#7DD3FC] border border-[#1E3566] px-1.5 py-0.5 rounded font-mono font-bold">
                   AUTH
                 </span>
               </div>
-              <div className="text-xs text-slate-400 mt-0.5">{t('login.subtitle')}</div>
+              <div className="text-xs text-[#9DB3D8] mt-0.5">{t('login.subtitle')}</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-[#9DB3D8] hover:text-white p-1.5 rounded-xl hover:bg-[#10224A] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Mode Selector Tabs */}
-        <div className="flex border-b border-slate-200 bg-slate-50 text-xs font-semibold shrink-0">
+        <div className="flex border-b border-[#CFDDED] bg-[#E6EEF8] text-xs font-semibold shrink-0">
           <button
             type="button"
             onClick={() => {
@@ -118,8 +118,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             }}
             className={`flex-1 py-2.5 sm:py-3 px-2.5 sm:px-4 text-center border-b-2 transition-all flex items-center justify-center gap-1.5 ${
               mode === 'accounts'
-                ? 'border-cyan-600 text-cyan-700 bg-white font-bold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'border-[#0284C7] text-[#035388] bg-[#F1F5FB] font-bold'
+                : 'border-transparent text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             <UserCheck className="w-4 h-4 shrink-0" />
@@ -133,8 +133,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             }}
             className={`flex-1 py-2.5 sm:py-3 px-2.5 sm:px-4 text-center border-b-2 transition-all flex items-center justify-center gap-1.5 ${
               mode === 'credentials'
-                ? 'border-cyan-600 text-cyan-700 bg-white font-bold'
-                : 'border-transparent text-slate-600 hover:text-slate-900'
+                ? 'border-[#0284C7] text-[#035388] bg-[#F1F5FB] font-bold'
+                : 'border-transparent text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             <KeyRound className="w-4 h-4 shrink-0" />
@@ -145,15 +145,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         {/* Notifications */}
         <div className="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
           {errorMsg && (
-            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <div className="p-3 bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] rounded-xl text-xs flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-[#9F1239] shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="p-3 bg-[#DCF4E8] border border-[#A7DFC3] text-[#0E6245] rounded-xl text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#0E6245] shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
@@ -161,9 +161,9 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {/* Mode 1: Quick Accounts List */}
           {mode === 'accounts' && (
             <div className="space-y-3">
-              <div className="text-xs text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+              <div className="text-xs text-[#546A8E] flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                 <span>{t('login.selectAccountPrompt')}</span>
-                <span className="text-[11px] font-mono text-cyan-700 font-semibold">
+                <span className="text-[11px] font-mono text-[#0284C7] font-semibold">
                   {t('login.currentSession', { name: currentUser.name })}
                 </span>
               </div>
@@ -180,18 +180,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                       onClick={() => !isLocked && handleSelectUser(u.id)}
                       className={`p-3 rounded-xl border transition-all flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 cursor-pointer ${
                         isCurrent
-                          ? 'border-cyan-500 bg-cyan-50/60 ring-2 ring-cyan-400/20 shadow-xs'
+                          ? 'border-[#0284C7] bg-[#DFF0FC] ring-2 ring-[#0284C7]/20 shadow-xs'
                           : isLocked
-                          ? 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed'
-                          : 'border-slate-200 hover:border-cyan-300 hover:bg-slate-50/80'
+                          ? 'border-[#CFDDED] bg-[#E6EEF8] opacity-60 cursor-not-allowed'
+                          : 'border-[#CFDDED] bg-[#F5F8FD] hover:border-[#7AC1EE] hover:bg-[#EBF3FB]'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div
                           className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 ${
                             isCurrent
-                              ? 'bg-gradient-to-br from-cyan-600 to-blue-600 text-white shadow-xs'
-                              : 'bg-slate-100 text-slate-700'
+                              ? 'bg-gradient-to-br from-[#0284C7] to-[#0891B2] text-white shadow-xs'
+                              : 'bg-[#DCE6F4] text-[#1C2E4F] border border-[#C9D9EC]'
                           }`}
                         >
                           {u.name
@@ -202,27 +202,27 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-xs text-slate-900 truncate">{u.name}</span>
+                            <span className="font-semibold text-xs text-[#0D1B38] truncate">{u.name}</span>
                             {isCurrent && (
-                              <span className="text-[10px] font-bold text-cyan-700 bg-cyan-100 px-1.5 py-0.2 rounded-sm">
+                              <span className="text-[10px] font-bold text-[#035388] bg-[#BFE3FA] border border-[#90CDF4] px-1.5 py-0.2 rounded-sm">
                                 {t('login.connected')}
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-slate-500 font-mono truncate">{u.email}</div>
+                          <div className="text-[11px] text-[#546A8E] font-mono truncate">{u.email}</div>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-sm border uppercase ${
-                            roleObj?.badgeColor || 'bg-slate-100 text-slate-800 border-slate-300'
+                            roleObj?.badgeColor || 'bg-[#E2EAF5] text-[#1E355E] border-[#B8CAE2]'
                           }`}
                         >
                           {tRole(roleObj?.key || u.role, roleObj?.name || u.role)}
                         </span>
                         {!isCurrent && !isLocked && (
-                          <ArrowRight className={`w-3.5 h-3.5 text-slate-400 ${isRTL ? 'rotate-180' : ''}`} />
+                          <ArrowRight className={`w-3.5 h-3.5 text-[#546A8E] ${isRTL ? 'rotate-180' : ''}`} />
                         )}
                       </div>
                     </div>
@@ -236,8 +236,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {mode === 'credentials' && (
             <form onSubmit={handleCredentialsLogin} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-700 font-medium mb-1 flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-slate-500" />
+                <label className="block text-[#273B63] font-medium mb-1 flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-[#546A8E]" />
                   <span>{t('login.emailLabel')}</span>
                 </label>
                 <input
@@ -246,13 +246,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('login.emailPlaceholder')}
-                  className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-hidden font-mono"
+                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:border-[#0284C7] outline-hidden font-mono transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-700 font-medium mb-1 flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-slate-500" />
+                <label className="block text-[#273B63] font-medium mb-1 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-[#546A8E]" />
                   <span>{t('login.passwordLabel')}</span>
                 </label>
                 <input
@@ -261,18 +261,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={t('login.passwordPlaceholder')}
-                  className="w-full p-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-hidden font-mono"
+                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:border-[#0284C7] outline-hidden font-mono transition-colors"
                 />
-                <div className="text-[11px] text-slate-400 mt-1">
+                <div className="text-[11px] text-[#546A8E] mt-1">
                   {t('login.defaultPasswordHint')}{' '}
-                  <code className="font-mono text-cyan-600 font-bold">devnapp2026!</code>
+                  <code className="font-mono text-[#0284C7] font-bold">devnapp2026!</code>
                 </div>
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2"
                 >
                   <Lock className="w-4 h-4" />
                   <span>{t('login.submit')}</span>
@@ -283,14 +283,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer info */}
-        <div className="bg-slate-50 px-4 sm:px-5 py-3 border-t border-slate-200/80 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div className="bg-[#E6EEF8] px-4 sm:px-5 py-3 border-t border-[#CFDDED] text-[11px] text-[#546A8E] flex flex-wrap items-center justify-between gap-2 shrink-0">
           <span className="flex items-center gap-1.5">
-            <Shield className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
+            <Shield className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
             <span>{t('login.footerRbac')}</span>
           </span>
           <button
             onClick={onClose}
-            className="text-slate-600 hover:text-slate-900 font-semibold"
+            className="text-[#273B63] hover:text-[#0D1B38] font-semibold"
           >
             {t('common.close')}
           </button>

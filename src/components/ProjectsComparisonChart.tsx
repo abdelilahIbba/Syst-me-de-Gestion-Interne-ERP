@@ -72,32 +72,32 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
   }, [chartData, revenueBasis]);
 
   return (
-    <div className="bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 space-y-4 sm:space-y-5">
+    <div className="bg-[#F1F5FB] p-3.5 sm:p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4 sm:space-y-5">
       {/* Header & Basis Toggle */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-[#DAE5F2]">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 rounded-lg bg-[#070b18] text-cyan-400 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-[#0B1733] text-[#38BDF8] flex items-center justify-center shrink-0 shadow-xs">
             <BarChart3 className="w-4 h-4" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+            <h3 className="text-sm sm:text-base font-bold text-[#0D1B38] tracking-tight">
               {t('chart.proj.title')}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-[#546A8E] mt-0.5">
               {t('chart.proj.subtitle')}
             </p>
           </div>
         </div>
 
         {/* Segmented Control */}
-        <div className="grid grid-cols-2 sm:flex items-center p-1 bg-slate-100 rounded-lg text-xs font-medium shrink-0 w-full sm:w-auto">
+        <div className="grid grid-cols-2 sm:flex items-center p-1 bg-[#DCE6F4] border border-[#C9D9EC] rounded-xl text-xs font-medium shrink-0 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setRevenueBasis('encaisses')}
-            className={`px-2.5 sm:px-3 py-1.5 rounded-md transition-colors text-center whitespace-nowrap truncate ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg transition-all text-center whitespace-nowrap truncate ${
               revenueBasis === 'encaisses'
-                ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
+                : 'text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             {t('chart.proj.basisCollected')}
@@ -105,10 +105,10 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
           <button
             type="button"
             onClick={() => setRevenueBasis('contractuel')}
-            className={`px-2.5 sm:px-3 py-1.5 rounded-md transition-colors text-center whitespace-nowrap truncate ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg transition-all text-center whitespace-nowrap truncate ${
               revenueBasis === 'contractuel'
-                ? 'bg-white text-slate-900 font-semibold shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
+                : 'text-[#4B6187] hover:text-[#0D1B38]'
             }`}
           >
             {t('chart.proj.basisPriceHt')}
@@ -118,33 +118,33 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
 
       {/* Aggregate Metric Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 pb-1">
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-100 min-w-0">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium gap-1">
+        <div className="p-3 rounded-xl bg-[#E6EEF8] border border-[#CFDDED] min-w-0">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium gap-1">
             <span className="truncate">{revenueBasis === 'encaisses' ? t('chart.proj.totalCollected') : t('chart.proj.totalPriceHt')}</span>
-            <DollarSign className="w-3.5 h-3.5 text-cyan-600 shrink-0" />
+            <DollarSign className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
           </div>
-          <div className="text-sm sm:text-base font-bold font-mono tabular-nums text-slate-900 mt-1 truncate">
+          <div className="text-sm sm:text-base font-bold font-mono tabular-nums text-[#0D1B38] mt-1 truncate">
             {formatDH(totals.rev)}
           </div>
         </div>
 
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+        <div className="p-3 rounded-xl bg-[#E6EEF8] border border-[#CFDDED]">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium">
             <span>{t('chart.proj.totalCharges')}</span>
-            <Briefcase className="w-3.5 h-3.5 text-rose-600" />
+            <Briefcase className="w-3.5 h-3.5 text-rose-700" />
           </div>
           <div className="text-base font-bold font-mono tabular-nums text-rose-700 mt-1">
             {formatDH(totals.charges)}
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5 font-mono tabular-nums">
+          <div className="text-[10px] text-[#5F7394] mt-0.5 font-mono tabular-nums">
             {t('chart.proj.breakdown', { labor: formatDH(totals.labor), travel: formatDH(totals.travel) })}
           </div>
         </div>
 
-        <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+        <div className="p-3 rounded-xl bg-[#E6EEF8] border border-[#CFDDED]">
+          <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium">
             <span>{t('chart.proj.netMargin')}</span>
-            <TrendingUp className={`w-3.5 h-3.5 ${totals.profit >= 0 ? 'text-emerald-600' : 'text-rose-600'}`} />
+            <TrendingUp className={`w-3.5 h-3.5 ${totals.profit >= 0 ? 'text-emerald-700' : 'text-rose-700'}`} />
           </div>
           <div
             className={`text-base font-bold font-mono tabular-nums mt-1 ${
@@ -155,12 +155,12 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
           </div>
         </div>
 
-        <div className="p-3 rounded-lg bg-[#070b18] text-white border border-slate-800">
-          <div className="text-[11px] text-cyan-300 font-medium">{t('chart.proj.globalRate')}</div>
-          <div className="text-lg font-bold font-mono tabular-nums text-cyan-400 mt-1">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-[#0F2045] to-[#0B1733] text-[#F4F8FD] border border-[#1E3B75] shadow-sm">
+          <div className="text-[11px] text-[#7DD3FC] font-medium">{t('chart.proj.globalRate')}</div>
+          <div className="text-lg font-bold font-mono tabular-nums text-[#38BDF8] mt-1">
             {totals.margin}%
           </div>
-          <div className="text-[10px] text-slate-400 mt-0.5 tabular-nums">
+          <div className="text-[10px] text-[#B8CBE6] mt-0.5 tabular-nums">
             {t('chart.proj.shownCount', { count: chartData.length })}
           </div>
         </div>
@@ -168,10 +168,10 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
 
       {/* Recharts Bar Chart or Empty State */}
       {chartData.length === 0 ? (
-        <div className="h-64 flex flex-col items-center justify-center text-center border border-dashed border-slate-200 rounded-xl bg-slate-50/50 p-6">
-          <FolderGit2 className="w-8 h-8 text-slate-400 mb-2" />
-          <div className="text-xs font-semibold text-slate-700">{t('chart.proj.emptyTitle')}</div>
-          <div className="text-[11px] text-slate-500 mt-1">
+        <div className="h-64 flex flex-col items-center justify-center text-center border border-dashed border-[#B7CAE2] rounded-2xl bg-[#E6EEF8]/60 p-6">
+          <FolderGit2 className="w-8 h-8 text-[#627799] mb-2" />
+          <div className="text-xs font-semibold text-[#273B63]">{t('chart.proj.emptyTitle')}</div>
+          <div className="text-[11px] text-[#5F7394] mt-1">
             {t('chart.proj.emptyDesc')}
           </div>
         </div>
@@ -185,35 +185,35 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
             >
               <defs>
                 <linearGradient id="projRevGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.95} />
-                  <stop offset="95%" stopColor="#2563eb" stopOpacity={0.95} />
+                  <stop offset="5%" stopColor="#0EA5E9" stopOpacity={0.95} />
+                  <stop offset="95%" stopColor="#0284C7" stopOpacity={0.95} />
                 </linearGradient>
                 <linearGradient id="projChargeGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.9} />
-                  <stop offset="95%" stopColor="#e11d48" stopOpacity={0.9} />
+                  <stop offset="5%" stopColor="#F43F5E" stopOpacity={0.9} />
+                  <stop offset="95%" stopColor="#E11D48" stopOpacity={0.9} />
                 </linearGradient>
               </defs>
 
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#D5E2F1" />
 
               <XAxis
                 dataKey="shortName"
-                axisLine={{ stroke: '#e2e8f0' }}
+                axisLine={{ stroke: '#C9D9EC' }}
                 tickLine={false}
                 interval={0}
-                tick={{ fill: '#475569', fontSize: 10, fontWeight: 500 }}
+                tick={{ fill: '#3B4F73', fontSize: 10, fontWeight: 500 }}
               />
 
               <YAxis
                 width={40}
-                axisLine={{ stroke: '#e2e8f0' }}
+                axisLine={{ stroke: '#C9D9EC' }}
                 tickLine={false}
-                tick={{ fill: '#64748b', fontSize: 10 }}
+                tick={{ fill: '#546A8E', fontSize: 10 }}
                 tickFormatter={(val) => `${Math.round(val / 1000)}k`}
               />
 
               <Tooltip
-                cursor={{ fill: 'rgba(6, 182, 212, 0.06)' }}
+                cursor={{ fill: 'rgba(2, 132, 199, 0.08)' }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const item = payload[0].payload as ProjectComparisonItem;
@@ -225,28 +225,28 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
                     return (
                       <div
                         dir={dir}
-                        className="bg-[#070b18]/95 backdrop-blur-md text-white border border-cyan-500/30 rounded-xl p-3 sm:p-3.5 shadow-xl text-xs space-y-2 min-w-[200px] sm:min-w-[240px] max-w-[calc(100vw-32px)]"
+                        className="bg-[#0B1733]/95 backdrop-blur-md text-[#F4F8FD] border border-[#38BDF8]/35 rounded-2xl p-3 sm:p-3.5 shadow-xl text-xs space-y-2 min-w-[200px] sm:min-w-[240px] max-w-[calc(100vw-32px)]"
                       >
-                        <div className="border-b border-slate-800 pb-2">
-                          <div className="font-bold text-cyan-300 leading-snug">{item.nom}</div>
-                          <div className="text-[11px] text-slate-400 mt-0.5">{item.clientName}</div>
+                        <div className="border-b border-[#1E3669] pb-2">
+                          <div className="font-bold text-[#7DD3FC] leading-snug">{item.nom}</div>
+                          <div className="text-[11px] text-[#90A8CE] mt-0.5">{item.clientName}</div>
                         </div>
 
                         <div className="space-y-1 font-mono tabular-nums text-[11px]">
-                          <div className="flex justify-between items-center text-cyan-300">
-                            <span className="font-sans text-slate-300">{t('chart.proj.tooltipCollected')}</span>
+                          <div className="flex justify-between items-center text-[#7DD3FC]">
+                            <span className="font-sans text-[#C6D5EC]">{t('chart.proj.tooltipCollected')}</span>
                             <span className="font-bold">{formatDH(item.revenusEncaisses)}</span>
                           </div>
-                          <div className="flex justify-between items-center text-sky-300">
-                            <span className="font-sans text-slate-300">{t('chart.proj.tooltipPriceHt')}</span>
+                          <div className="flex justify-between items-center text-[#BAE6FD]">
+                            <span className="font-sans text-[#C6D5EC]">{t('chart.proj.tooltipPriceHt')}</span>
                             <span className="font-semibold">{formatDH(item.prixVenteHT)}</span>
                           </div>
 
                           <div className="flex justify-between items-center text-rose-300 pt-1">
-                            <span className="font-sans text-slate-300">{t('chart.proj.tooltipCharges')}</span>
+                            <span className="font-sans text-[#C6D5EC]">{t('chart.proj.tooltipCharges')}</span>
                             <span className="font-bold">{formatDH(item.chargesDirectes)}</span>
                           </div>
-                          <div className="text-[10px] text-slate-400 ps-2 space-y-0.5 border-s border-slate-700">
+                          <div className="text-[10px] text-[#90A8CE] ps-2 space-y-0.5 border-s border-[#26427A]">
                             <div className="flex justify-between">
                               <span>{t('chart.proj.tooltipLabor', { hours: item.totalHours })}</span>
                               <span>{formatDH(item.coutMainOeuvre)}</span>
@@ -257,8 +257,8 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
                             </div>
                           </div>
 
-                          <div className="pt-1.5 border-t border-slate-800 flex justify-between items-center font-bold">
-                            <span className="font-sans text-slate-300">{t('chart.proj.tooltipNetMargin')}</span>
+                          <div className="pt-1.5 border-t border-[#1E3669] flex justify-between items-center font-bold">
+                            <span className="font-sans text-[#C6D5EC]">{t('chart.proj.tooltipNetMargin')}</span>
                             <span className={activeProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
                               {formatDH(activeProfit)} ({activeMargin}%)
                             </span>
@@ -275,21 +275,21 @@ export const ProjectsComparisonChart: React.FC<ProjectsComparisonChartProps> = (
                 verticalAlign="top"
                 align="right"
                 iconType="circle"
-                wrapperStyle={{ paddingBottom: '12px', fontSize: '11px', fontWeight: 500 }}
+                wrapperStyle={{ paddingBottom: '12px', fontSize: '11px', fontWeight: 500, color: '#2B4068' }}
               />
 
               <Bar
                 dataKey={revenueBasis === 'encaisses' ? 'revenusEncaisses' : 'prixVenteHT'}
                 name={revenueBasis === 'encaisses' ? t('chart.proj.legendCollected') : t('chart.proj.legendPriceHt')}
                 fill="url(#projRevGrad)"
-                radius={[4, 4, 0, 0]}
+                radius={[6, 6, 0, 0]}
                 maxBarSize={44}
               />
               <Bar
                 dataKey="chargesDirectes"
                 name={t('chart.proj.legendCharges')}
                 fill="url(#projChargeGrad)"
-                radius={[4, 4, 0, 0]}
+                radius={[6, 6, 0, 0]}
                 maxBarSize={44}
               />
             </BarChart>
