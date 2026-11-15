@@ -129,13 +129,14 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
   };
 
   return (
-    <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4 z-50">
-      <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-4xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 max-h-[90vh] overflow-y-auto">
+    <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+      <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-4xl w-full p-5 sm:p-6 space-y-4 sm:space-y-5 max-h-[92vh] overflow-y-auto">
+        <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-[#DCE6F3]">
           <div className="flex items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2.5 bg-[#DCF4E8] text-[#0E6245] border border-[#A7DFC3] rounded-xl shrink-0">
+              <div className="p-2.5 bg-[#DCF4E8] text-[#0E6245] border border-[#A7DFC3] rounded-2xl shrink-0">
                 <FileSpreadsheet className="w-5 h-5" />
               </div>
               <div className="min-w-0">
@@ -147,8 +148,8 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
                 </div>
               </div>
             </div>
-            <button onClick={onClose} className="sm:hidden p-1.5 text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E6EEF8] rounded-xl shrink-0 transition-colors">
-              <X className="w-5 h-5" />
+            <button onClick={onClose} className="sm:hidden w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] shrink-0 transition-all active:scale-[0.93]">
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -156,19 +157,19 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
             <button
               onClick={syncWithGoogleSheets}
               disabled={sheetsSyncStatus === 'syncing'}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CBEBD9] border border-[#A7DFC3] rounded-xl transition-colors whitespace-nowrap shrink-0"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CBEBD9] border border-[#A7DFC3] rounded-[13px] transition-all active:scale-[0.96] whitespace-nowrap shrink-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${sheetsSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
               <span>{sheetsSyncStatus === 'syncing' ? t('sheets.syncing') : t('sheets.syncNow')}</span>
             </button>
-            <button onClick={onClose} className="hidden sm:block p-1.5 text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E6EEF8] rounded-xl transition-colors">
-              <X className="w-5 h-5" />
+            <button onClick={onClose} className="hidden sm:flex w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]">
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Security & Anti-Injection Note (Section 7.1 & R12) */}
-        <div className="p-3.5 bg-[#DFF0FC] border border-[#A5D3F3] rounded-2xl text-xs space-y-1.5 text-[#035388]">
+        <div className="p-3.5 bg-[#DFF0FC] border border-[#A5D3F3] rounded-[18px] text-xs space-y-1.5 text-[#035388]">
           <div className="font-semibold flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-[#0284C7] shrink-0" />
             <span>{t('sheets.securityTitle')}</span>
@@ -178,16 +179,16 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
           </p>
         </div>
 
-        {/* Workbook tabs */}
-        <div className="flex items-center gap-1.5 border-b border-[#CFDDED] overflow-x-auto text-xs pb-1.5" dir="ltr">
+        {/* Workbook tabs (iOS Segmented Control) */}
+        <div className="ios-segmented flex items-center gap-1 overflow-x-auto text-xs" dir="ltr">
           {workbooks.map((wb) => (
             <button
               key={wb.id}
               onClick={() => setActiveWorkbook(wb.id as typeof activeWorkbook)}
-              className={`px-3 py-2 rounded-xl font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`px-3 py-2 rounded-[10px] font-semibold transition-all duration-150 active:scale-[0.97] whitespace-nowrap shrink-0 ${
                 activeWorkbook === wb.id
-                  ? 'bg-[#0B1733] text-[#7DD3FC] border border-[#1E3566] shadow-xs'
-                  : 'bg-[#E6EEF8] text-[#3C5073] hover:text-[#0D1B38] hover:bg-[#DCE7F6] border border-[#CFDDED]'
+                  ? 'ios-segmented-active'
+                  : 'text-[#3C5073] hover:text-[#0D1B38] hover:bg-[#F1F5FB]/60'
               }`}
             >
               {wb.name}
@@ -197,7 +198,7 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
 
         {/* Workbook Details */}
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 bg-[#E6EEF8] rounded-2xl border border-[#C9D9EC]">
+          <div className="ios-well flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5">
             <div>
               <h3 className="font-bold text-sm text-[#0D1B38]">{currentWb.title}</h3>
               <div className="text-xs text-[#546A8E]">
@@ -207,7 +208,7 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
 
             <button
               onClick={exportCurrentWorkbook}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-[#F5F8FD] border border-[#C9D9EC] hover:bg-[#E1EAF6] text-[#1C2E4F] text-xs font-semibold rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0"
+              className="ios-btn-secondary !bg-[#F5F8FD] hover:!bg-[#E1EAF6] flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold whitespace-nowrap shrink-0"
             >
               <Download className="w-3.5 h-3.5 text-[#0284C7]" />
               <span>{t('sheets.exportWbBtn', { name: currentWb.name })}</span>
@@ -217,7 +218,7 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
           {/* Sheets List in this workbook */}
           <div className="space-y-2">
             <span className="text-xs font-semibold text-[#273B63]">{t('sheets.sheetsListLabel')}</span>
-            <div className="divide-y divide-[#DCE6F3] border border-[#C9D9EC] rounded-2xl overflow-hidden bg-[#F5F8FD]">
+            <div className="divide-y divide-[#DCE6F3] border border-[#C9D9EC] rounded-[18px] overflow-hidden bg-[#F5F8FD]">
               {currentWb.sheets.map((s, idx) => (
                 <div key={idx} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs hover:bg-[#EBF2FA] transition-colors">
                   <div>
@@ -242,7 +243,7 @@ export const GoogleSheetsModal: React.FC<{ isOpen: boolean; onClose: () => void 
         <div className="pt-3 border-t border-[#DCE6F3] flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-[#0B1733] hover:bg-[#10224A] text-white border border-[#1E3566] text-xs font-semibold rounded-xl whitespace-nowrap shrink-0 transition-colors"
+            className="ios-btn-navy px-5 py-2 min-h-[38px] text-xs whitespace-nowrap shrink-0"
           >
             {t('sheets.closeViewer')}
           </button>

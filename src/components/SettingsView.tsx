@@ -77,7 +77,7 @@ export const SettingsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#CFDDED]">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('settings.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('settings.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('settings.subtitle')}
           </div>
@@ -85,7 +85,7 @@ export const SettingsView: React.FC = () => {
       </div>
 
       {/* Sub-navigation Tabs */}
-      <div className="flex items-center gap-1.5 p-1.5 bg-[#DCE6F4] rounded-2xl border border-[#C9D9EC] overflow-x-auto sm:flex-wrap">
+      <div className="ios-segmented flex items-center gap-1 overflow-x-auto sm:flex-wrap">
         {visibleTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeSubTab === tab.id;
@@ -94,13 +94,13 @@ export const SettingsView: React.FC = () => {
               key={tab.id}
               type="button"
               onClick={() => setActiveSubTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-xs font-semibold transition-all duration-150 active:scale-[0.97] whitespace-nowrap shrink-0 ${
                 isActive
-                  ? 'bg-[#0B1733] text-[#7DD3FC] shadow-xs border border-[#1E3566]'
-                  : 'text-[#3C5073] hover:text-[#0D1B38] hover:bg-[#F1F5FB]'
+                  ? 'ios-segmented-active'
+                  : 'text-[#3C5073] hover:text-[#0D1B38] hover:bg-[#F1F5FB]/60'
               }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#38BDF8]' : 'text-[#546A8E]'}`} />
+              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#0284C7]' : 'text-[#546A8E]'}`} />
               <span>{tab.label}</span>
             </button>
           );
@@ -111,7 +111,7 @@ export const SettingsView: React.FC = () => {
       {activeSubTab === 'general' && canManageSettings && (
         <div className="space-y-6 max-w-4xl">
           {saved && (
-            <div className="p-4 bg-[#DCF4E8] border border-[#A7DFC3] text-[#0E6245] rounded-2xl text-xs flex items-center gap-2 shadow-xs">
+            <div className="p-4 bg-[#DCF4E8] border border-[#A7DFC3] text-[#0E6245] rounded-[18px] text-xs flex items-center gap-2 shadow-xs">
               <CheckCircle2 className="w-4 h-4 text-[#0E6245] shrink-0" />
               <span className="font-medium">{t('settings.savedMsg')}</span>
             </div>
@@ -119,7 +119,7 @@ export const SettingsView: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6 text-xs">
             {/* Identité Société & Mentions Légales */}
-            <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+            <div className="ios-card p-4 sm:p-5 space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">
                 <div className="flex items-center gap-2 font-bold text-[#0D1B38] text-sm">
                   <span className="w-7 h-7 rounded-lg bg-[#DFF0FC] border border-[#A5D3F3] flex items-center justify-center shrink-0">
@@ -145,7 +145,7 @@ export const SettingsView: React.FC = () => {
                     required
                     value={form.company_name}
                     onChange={(e) => setForm({ ...form, company_name: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -155,7 +155,7 @@ export const SettingsView: React.FC = () => {
                     required
                     value={form.ice}
                     onChange={(e) => setForm({ ...form, ice: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export const SettingsView: React.FC = () => {
                     type="text"
                     value={form.if_number}
                     onChange={(e) => setForm({ ...form, if_number: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -176,7 +176,7 @@ export const SettingsView: React.FC = () => {
                     type="text"
                     value={form.rc}
                     onChange={(e) => setForm({ ...form, rc: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -185,7 +185,7 @@ export const SettingsView: React.FC = () => {
                     type="text"
                     value={form.patente}
                     onChange={(e) => setForm({ ...form, patente: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -197,7 +197,7 @@ export const SettingsView: React.FC = () => {
                     type="text"
                     value={form.rib}
                     onChange={(e) => setForm({ ...form, rib: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono font-bold text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono font-bold"
                   />
                 </div>
                 <div>
@@ -206,7 +206,7 @@ export const SettingsView: React.FC = () => {
                     type="text"
                     value={form.adresse}
                     onChange={(e) => setForm({ ...form, adresse: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -217,15 +217,15 @@ export const SettingsView: React.FC = () => {
                   rows={2}
                   value={form.invoice_legal_notes}
                   onChange={(e) => setForm({ ...form, invoice_legal_notes: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
             </div>
 
             {/* Taux Fiscaux & Barème RH */}
-            <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+            <div className="ios-card p-4 sm:p-5 space-y-4">
               <div className="flex items-center gap-2 pb-3 border-b border-[#DCE6F3] font-bold text-[#0D1B38] text-sm">
-                <span className="w-7 h-7 rounded-lg bg-[#DCF4E8] border border-[#A7DFC3] flex items-center justify-center shrink-0">
+                <span className="w-7 h-7 rounded-xl bg-[#DCF4E8] border border-[#A7DFC3] flex items-center justify-center shrink-0">
                   <Percent className="w-4 h-4 text-[#0E6245]" />
                 </span>
                 <span>{t('settings.taxPayrollTitle')}</span>
@@ -238,7 +238,7 @@ export const SettingsView: React.FC = () => {
                     type="number"
                     value={form.default_vat_rate}
                     onChange={(e) => setForm({ ...form, default_vat_rate: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono font-bold text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono font-bold"
                   />
                 </div>
                 <div>
@@ -248,7 +248,7 @@ export const SettingsView: React.FC = () => {
                     step="0.01"
                     value={form.cnss_rate_employee}
                     onChange={(e) => setForm({ ...form, cnss_rate_employee: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -257,7 +257,7 @@ export const SettingsView: React.FC = () => {
                     type="number"
                     value={form.cnss_ceiling}
                     onChange={(e) => setForm({ ...form, cnss_ceiling: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -267,16 +267,16 @@ export const SettingsView: React.FC = () => {
                     step="0.01"
                     value={form.amo_rate_employee}
                     onChange={(e) => setForm({ ...form, amo_rate_employee: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
             </div>
 
             {/* Règles Métier & Heure Limite */}
-            <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+            <div className="ios-card p-4 sm:p-5 space-y-4">
               <div className="flex items-center gap-2 pb-3 border-b border-[#DCE6F3] font-bold text-[#0D1B38] text-sm">
-                <span className="w-7 h-7 rounded-lg bg-[#E6E8FA] border border-[#C5CBEF] flex items-center justify-center shrink-0">
+                <span className="w-7 h-7 rounded-xl bg-[#E6E8FA] border border-[#C5CBEF] flex items-center justify-center shrink-0">
                   <Clock className="w-4 h-4 text-[#3730A3]" />
                 </span>
                 <span>{t('settings.opsTitle')}</span>
@@ -289,7 +289,7 @@ export const SettingsView: React.FC = () => {
                     type="time"
                     value={form.daily_report_cutoff_hour}
                     onChange={(e) => setForm({ ...form, daily_report_cutoff_hour: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono font-bold text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono font-bold"
                   />
                 </div>
                 <div>
@@ -298,7 +298,7 @@ export const SettingsView: React.FC = () => {
                     type="number"
                     value={form.reminder_delay_days}
                     onChange={(e) => setForm({ ...form, reminder_delay_days: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -307,7 +307,7 @@ export const SettingsView: React.FC = () => {
                     type="number"
                     value={form.session_timeout_hours}
                     onChange={(e) => setForm({ ...form, session_timeout_hours: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -318,7 +318,7 @@ export const SettingsView: React.FC = () => {
                   type="url"
                   value={form.sheets_webhook_url || ''}
                   onChange={(e) => setForm({ ...form, sheets_webhook_url: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-xs text-[#0D1B38] focus:outline-hidden focus:border-[#0284C7] transition-colors"
+                  className="ios-input w-full p-2.5 font-mono text-xs"
                   placeholder="https://script.google.com/macros/s/.../exec"
                 />
               </div>
@@ -327,7 +327,7 @@ export const SettingsView: React.FC = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-sm transition-all whitespace-nowrap shrink-0"
+                className="ios-btn-primary w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 min-h-[42px] text-xs whitespace-nowrap shrink-0"
               >
                 <Save className="w-4 h-4" />
                 <span>{t('settings.saveBtn')}</span>

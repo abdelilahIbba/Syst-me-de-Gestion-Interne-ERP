@@ -57,13 +57,13 @@ export const TeamReportsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('team.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('team.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('team.subtitle')}
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-[#F1F5FB] border border-[#D1DFEE] rounded-xl px-3 py-1.5 shadow-xs">
+        <div className="flex items-center gap-2 ios-card !rounded-[14px] px-3 py-1.5">
           <Calendar className="w-3.5 h-3.5 text-[#0284C7]" />
           <input
             type="date"
@@ -76,37 +76,37 @@ export const TeamReportsView: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex items-center justify-between">
+        <div className="ios-card p-4 sm:p-5 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('team.kpi.submitted')}</div>
-            <div className="text-2xl font-bold font-mono text-[#0E6245] mt-1">{submittedReports.length}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-[#0E6245] mt-1">{submittedReports.length}</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#DCF4E8] text-[#0E6245] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-[#DCF4E8] text-[#0E6245] flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex items-center justify-between">
+        <div className="ios-card p-4 sm:p-5 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('team.kpi.missing')}</div>
-            <div className="text-2xl font-bold font-mono text-[#9F1239] mt-1">{missingEmployees.length}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-[#9F1239] mt-1">{missingEmployees.length}</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#FCE8EC] text-[#9F1239] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-[#FCE8EC] text-[#9F1239] flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex items-center justify-between">
+        <div className="ios-card p-4 sm:p-5 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('team.kpi.completion')}</div>
-            <div className="text-2xl font-bold font-mono text-[#0284C7] mt-1">
+            <div className="text-2xl font-bold font-mono tabular-nums text-[#0284C7] mt-1">
               {activeEmployees.length > 0
                 ? Math.round((submittedReports.length / activeEmployees.length) * 100)
                 : 0}
               %
             </div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#DFF0FC] text-[#0284C7] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-[#DFF0FC] text-[#0284C7] flex items-center justify-center">
             <Clock className="w-5 h-5" />
           </div>
         </div>
@@ -114,7 +114,7 @@ export const TeamReportsView: React.FC = () => {
 
       {/* Missing employees alert banner (RJ-6) */}
       {missingEmployees.length > 0 && (
-        <div className="p-4 bg-[#FCE8EC] border border-[#F3BCC8] rounded-2xl text-xs space-y-1">
+        <div className="p-4 bg-[#FCE8EC] border border-[#F3BCC8] rounded-[18px] text-xs space-y-1 shadow-xs">
           <div className="font-semibold text-[#9F1239] flex items-center gap-1.5">
             <AlertTriangle className="w-4 h-4 text-[#9F1239] shrink-0" />
             <span>{t('team.missingAlert', { date: selectedDate })}</span>
@@ -133,10 +133,10 @@ export const TeamReportsView: React.FC = () => {
           const emp = employees.find((e) => e.id === rep.employee_id);
 
           return (
-            <div key={rep.id} className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+            <div key={rep.id} className="ios-card p-4 sm:p-5 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-9 h-9 rounded-xl bg-[#0B1733] text-[#7DD3FC] flex items-center justify-center font-bold text-xs shrink-0">
+                  <div className="w-9 h-9 rounded-[13px] bg-[#0B1733] text-[#7DD3FC] flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                     {emp?.prenom.charAt(0)}
                     {emp?.nom.charAt(0)}
                   </div>
@@ -151,7 +151,7 @@ export const TeamReportsView: React.FC = () => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-                  <div className="font-mono bg-[#E6EEF8] px-2.5 py-1 rounded-lg border border-[#C9D9EC] text-[#0D1B38] font-semibold">
+                  <div className="font-mono tabular-nums bg-[#E6EEF8] px-2.5 py-1 rounded-lg border border-[#C9D9EC] text-[#0D1B38] font-semibold">
                     {t('team.totalHoursBadge', { hours: rep.heures_total })}
                   </div>
                   <span
@@ -169,7 +169,7 @@ export const TeamReportsView: React.FC = () => {
                 <span className="text-[11px] font-semibold text-[#546A8E] uppercase tracking-wider">
                   {t('team.activities')}
                 </span>
-                <div className="divide-y divide-[#DCE6F3] bg-[#E6EEF8] border border-[#D5E2F1] rounded-xl p-3">
+                <div className="ios-well divide-y divide-[#D3E0F1] p-3.5">
                   {(rep.tasks || []).map((taskItem, idx) => {
                     const client = clients.find((c) => c.id === taskItem.client_id);
                     const project = projects.find((p) => p.id === taskItem.project_id);
@@ -197,13 +197,13 @@ export const TeamReportsView: React.FC = () => {
               {(rep.blocages || rep.plan_demain) && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {rep.blocages && (
-                    <div className="p-3 bg-[#FEF3D6]/85 rounded-xl border border-[#F2D388]">
+                    <div className="p-3.5 bg-[#FEF3D6]/85 rounded-[16px] border border-[#F2D388]">
                       <span className="font-semibold text-[#8F5600] block mb-0.5">{t('team.blockers')}</span>
                       <p className="text-[#784700] text-[11px]">{rep.blocages}</p>
                     </div>
                   )}
                   {rep.plan_demain && (
-                    <div className="p-3 bg-[#E6EEF8] rounded-xl border border-[#D5E2F1]">
+                    <div className="ios-well p-3.5">
                       <span className="font-semibold text-[#0D1B38] block mb-0.5">{t('team.planTomorrow')}</span>
                       <p className="text-[#3C5073] text-[11px]">{rep.plan_demain}</p>
                     </div>
@@ -220,14 +220,14 @@ export const TeamReportsView: React.FC = () => {
                     placeholder={t('team.commentPlaceholder')}
                     defaultValue={rep.commentaire_manager || ''}
                     onChange={(e) => setManagerComments({ ...managerComments, [rep.id]: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-xs text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 text-xs placeholder:text-[#647BA0]"
                   />
                 </div>
 
                 {rep.statut !== 'validé' ? (
                   <button
                     onClick={() => handleValidate(rep.id)}
-                    className="w-full sm:w-auto px-4 py-2 sm:py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white font-semibold rounded-xl shadow-xs transition-all shrink-0 whitespace-nowrap"
+                    className="ios-btn-primary w-full sm:w-auto px-4 py-2 sm:py-1.5 min-h-[34px] text-xs shrink-0 whitespace-nowrap"
                   >
                     {t('team.validateBtn')}
                   </button>
@@ -243,7 +243,7 @@ export const TeamReportsView: React.FC = () => {
         })}
 
         {submittedReports.length === 0 && (
-          <div className="p-12 text-center bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] text-[#546A8E] text-xs">
+          <div className="ios-card p-12 text-center text-[#546A8E] text-xs">
             {t('team.noReports', { date: selectedDate })}
           </div>
         )}

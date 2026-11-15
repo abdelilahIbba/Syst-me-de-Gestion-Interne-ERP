@@ -31,7 +31,7 @@ export const SiteVisitsView: React.FC = () => {
     <div className="space-y-6">
       {/* Top Bar */}
       <div>
-        <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('visits.title')}</h2>
+        <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('visits.title')}</h2>
         <div className="text-xs text-[#546A8E] mt-0.5">
           {t('visits.subtitle')}
         </div>
@@ -47,14 +47,14 @@ export const SiteVisitsView: React.FC = () => {
           const allExpensesValidated = (visit.expenses || []).every((e) => e.statut === 'validé');
 
           return (
-            <div key={visit.id} className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 sm:p-5 shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+            <div key={visit.id} className="ios-card p-4 sm:p-5 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-[#035388] bg-[#DFF0FC] border border-[#A5D3F3] px-2 py-0.5 rounded-lg shrink-0">
+                    <span className="text-xs font-mono font-bold text-[#035388] bg-[#DFF0FC] border border-[#A5D3F3] px-2 py-0.5 rounded-[10px] shrink-0">
                       {visit.id}
                     </span>
-                    <h3 className="text-sm font-bold text-[#0D1B38]">{visit.motif}</h3>
+                    <h3 className="text-sm font-bold text-[#0D1B38] tracking-[-0.01em]">{visit.motif}</h3>
                   </div>
                   <div className="text-xs text-[#546A8E] mt-0.5">
                     {t('visits.clientAndStaff', {
@@ -67,7 +67,7 @@ export const SiteVisitsView: React.FC = () => {
 
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span
-                    className={`font-semibold px-2.5 py-1 rounded-lg border ${
+                    className={`font-semibold px-2.5 py-1 rounded-[10px] border ${
                       visit.resultat === 'résolu'
                         ? 'bg-[#DCF4E8] text-[#0E6245] border-[#A7DFC3]'
                         : visit.resultat === 'partiel'
@@ -79,7 +79,7 @@ export const SiteVisitsView: React.FC = () => {
                   </span>
                   <button
                     onClick={() => setSelectedVisitForBon(visit)}
-                    className="px-3 py-1 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] text-[#1C2E4F] rounded-lg font-medium transition-colors whitespace-nowrap"
+                    className="ios-btn-secondary px-3 py-1.5 text-xs min-h-[34px] whitespace-nowrap"
                   >
                     {t('visits.slipBtn')}
                   </button>
@@ -87,7 +87,7 @@ export const SiteVisitsView: React.FC = () => {
               </div>
 
               {/* Timing and Work done */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-[#E6EEF8] p-3.5 rounded-xl border border-[#D5E2F1]">
+              <div className="ios-well grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs p-3.5">
                 <div>
                   <span className="text-[#546A8E] block text-[10px]">{t('visits.schedule')}</span>
                   <span className="font-mono font-semibold text-[#0D1B38]" dir="ltr">
@@ -131,7 +131,7 @@ export const SiteVisitsView: React.FC = () => {
                   {!allExpensesValidated && canValidate && (
                     <button
                       onClick={() => validateSiteVisit(visit.id)}
-                      className="px-3 py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white font-semibold rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0"
+                      className="ios-btn-primary px-3.5 py-1.5 text-xs min-h-[34px] whitespace-nowrap shrink-0"
                     >
                       {t('visits.validateExpenses')}
                     </button>
@@ -140,7 +140,7 @@ export const SiteVisitsView: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {(visit.expenses || []).map((exp) => (
-                    <div key={exp.id} className="p-3 bg-[#E6EEF8] rounded-xl border border-[#D5E2F1] flex items-center justify-between text-xs">
+                    <div key={exp.id} className="ios-well p-3 flex items-center justify-between text-xs">
                       <div>
                         <span className="font-semibold capitalize text-[#1C2E4F]">{exp.type}</span>
                         <div className="text-[10px] text-[#546A8E] font-mono">{t('visits.receiptProvided')}</div>
@@ -168,21 +168,22 @@ export const SiteVisitsView: React.FC = () => {
 
       {/* Modal: Intervention Slip PDF with Signature (DP-6) */}
       {selectedVisitForBon && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-2.5 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-2xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto print-page">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1 no-print" />
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DCE6F3] pb-3 no-print">
               <h3 className="text-sm font-bold text-[#0D1B38]">{t('visits.slipModalTitle')}</h3>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white text-xs rounded-xl font-medium shadow-xs"
+                  className="ios-btn-primary flex items-center gap-1.5 px-3.5 py-1.5 text-xs min-h-[34px]"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>{t('common.print')}</span>
                 </button>
                 <button
                   onClick={() => setSelectedVisitForBon(null)}
-                  className="px-3 py-1.5 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] text-[#1C2E4F] text-xs rounded-xl font-medium"
+                  className="ios-btn-secondary px-3.5 py-1.5 text-xs min-h-[34px]"
                 >
                   {t('common.close')}
                 </button>

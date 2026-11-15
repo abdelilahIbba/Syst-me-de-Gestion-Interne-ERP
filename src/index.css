@@ -9,41 +9,49 @@
     --devnapp-cyan: #0EA5E9;
     --devnapp-canvas: #E3ECF7;
     --devnapp-surface: #F1F5FB;
-    --devnapp-well: #E6EEF8;
+    --devnapp-well: #E5EDF8;
     --devnapp-border: #CFDDED;
   }
 
   html, body {
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     background-color: #E3ECF7;
     color: #0D1B38;
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.011em;
   }
 
   html[dir="rtl"] body {
-    font-family: 'Cairo', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'SF Pro Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: 0;
   }
-  
+
   .font-mono, [data-mono="true"] {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
     font-variant-numeric: tabular-nums;
   }
 
+  button, [role="button"], select, input, textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   ::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #DCE6F3;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #B3C6DD;
+    background: rgba(124, 149, 184, 0.55);
     border-radius: 9999px;
   }
 
@@ -55,14 +63,152 @@
 .devnapp-canvas {
   background-color: #E3ECF7;
   background-image:
-    radial-gradient(circle at 88% 0%, rgba(14, 165, 233, 0.11) 0%, transparent 42%),
-    radial-gradient(circle at 12% 100%, rgba(11, 23, 51, 0.06) 0%, transparent 38%);
+    radial-gradient(circle at 86% 0%, rgba(14, 165, 233, 0.13) 0%, transparent 44%),
+    radial-gradient(circle at 10% 96%, rgba(11, 23, 51, 0.07) 0%, transparent 40%);
 }
 
-.devnapp-card {
-  background-color: #F1F5FB;
-  border-color: #D1DFEE;
-  box-shadow: 0 6px 22px -8px rgba(11, 23, 51, 0.08);
+@layer components {
+  .devnapp-card,
+  .ios-card {
+    background-color: rgba(241, 245, 251, 0.92);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid #CFDDED;
+    border-radius: 22px;
+    box-shadow:
+      inset 0 1px 0 rgba(245, 249, 255, 0.92),
+      0 8px 24px -12px rgba(11, 23, 51, 0.12),
+      0 1px 3px rgba(11, 23, 51, 0.04);
+  }
+
+  .ios-well {
+    background-color: rgba(229, 237, 248, 0.92);
+    border: 1px solid #CDDCEF;
+    border-radius: 16px;
+    box-shadow: inset 0 1px 2px rgba(11, 23, 51, 0.03);
+  }
+
+  .ios-nav-glass {
+    background-color: rgba(229, 237, 249, 0.82);
+    -webkit-backdrop-filter: blur(28px) saturate(175%);
+    backdrop-filter: blur(28px) saturate(175%);
+    border-bottom: 1px solid rgba(200, 216, 236, 0.85);
+    box-shadow: 0 1px 0 rgba(11, 23, 51, 0.04);
+  }
+
+  .ios-btn-primary {
+    background: linear-gradient(180deg, #0EA5E9 0%, #0284C7 100%);
+    color: #F4F8FD;
+    border-radius: 14px;
+    font-weight: 600;
+    box-shadow:
+      0 4px 14px -2px rgba(2, 132, 199, 0.38),
+      inset 0 1px 0 rgba(224, 242, 254, 0.34);
+    transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 150ms ease, box-shadow 150ms ease;
+  }
+  .ios-btn-primary:hover {
+    filter: brightness(1.05);
+  }
+  .ios-btn-primary:active {
+    transform: scale(0.96);
+  }
+
+  .ios-btn-secondary {
+    background-color: #E5EDF8;
+    color: #1C2E4F;
+    border: 1px solid #C9D9EC;
+    border-radius: 13px;
+    font-weight: 500;
+    box-shadow: inset 0 1px 0 rgba(245, 249, 255, 0.7);
+    transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms ease;
+  }
+  .ios-btn-secondary:hover {
+    background-color: #DAE5F4;
+  }
+  .ios-btn-secondary:active {
+    transform: scale(0.96);
+  }
+
+  .ios-btn-tinted {
+    background-color: #DFF0FC;
+    color: #035388;
+    border: 1px solid #B2DAF5;
+    border-radius: 13px;
+    font-weight: 600;
+    transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms ease;
+  }
+  .ios-btn-tinted:hover {
+    background-color: #CEE7FA;
+  }
+  .ios-btn-tinted:active {
+    transform: scale(0.96);
+  }
+
+  .ios-btn-navy {
+    background: linear-gradient(180deg, #132550 0%, #0B1733 100%);
+    color: #F4F8FD;
+    border: 1px solid #1E3566;
+    border-radius: 13px;
+    font-weight: 600;
+    box-shadow:
+      0 4px 12px -4px rgba(11, 23, 51, 0.35),
+      inset 0 1px 0 rgba(125, 211, 252, 0.16);
+    transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 150ms ease;
+  }
+  .ios-btn-navy:hover {
+    filter: brightness(1.08);
+  }
+  .ios-btn-navy:active {
+    transform: scale(0.96);
+  }
+
+  .ios-segmented {
+    background-color: rgba(218, 229, 243, 0.9);
+    border: 1px solid #C6D7EB;
+    border-radius: 14px;
+    padding: 4px;
+    box-shadow: inset 0 1px 2px rgba(11, 23, 51, 0.05);
+  }
+
+  .ios-segmented-active {
+    background-color: #F4F8FD;
+    color: #0D1B38;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow:
+      0 2px 8px -1px rgba(11, 23, 51, 0.12),
+      0 1px 2px rgba(11, 23, 51, 0.06);
+  }
+
+  .ios-input {
+    background-color: #E5EDF8;
+    border: 1px solid #C9D9EC;
+    border-radius: 13px;
+    color: #0D1B38;
+    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .ios-input:focus {
+    outline: none;
+    background-color: #F5F8FD;
+    border-color: #0284C7;
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+  }
+
+  .ios-sheet-backdrop {
+    background-color: rgba(11, 23, 51, 0.45);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .ios-sheet {
+    background-color: rgba(241, 245, 251, 0.96);
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    backdrop-filter: blur(26px) saturate(170%);
+    border: 1px solid #C9D9EC;
+    box-shadow:
+      0 24px 60px -15px rgba(11, 23, 51, 0.35),
+      inset 0 1px 0 rgba(245, 249, 255, 0.92);
+  }
 }
 
 @media print {

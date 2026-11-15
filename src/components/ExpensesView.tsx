@@ -92,7 +92,7 @@ export const ExpensesView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('expenses.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('expenses.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('expenses.subtitle')}
           </div>
@@ -100,7 +100,7 @@ export const ExpensesView: React.FC = () => {
 
         <button
           onClick={() => setIsNewModalOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all whitespace-nowrap shrink-0"
+          className="ios-btn-primary flex items-center justify-center gap-1.5 px-4 py-2 text-xs min-h-[38px] whitespace-nowrap shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>{t('expenses.newBtn')}</span>
@@ -108,7 +108,7 @@ export const ExpensesView: React.FC = () => {
       </div>
 
       {/* Category Breakdown Progress Bar (CH-5) */}
-      <div className="bg-[#F1F5FB] p-4 sm:p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+      <div className="ios-card p-4 sm:p-5 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-[#0284C7] shrink-0" />
@@ -121,7 +121,7 @@ export const ExpensesView: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-1">
           {categoryTotals.slice(0, 4).map((c) => (
-            <div key={c.category.id} className="bg-[#E6EEF8] p-3 rounded-xl border border-[#D5E2F1] text-xs">
+            <div key={c.category.id} className="ios-well p-3 text-xs">
               <div className="text-[#546A8E] truncate text-[11px] font-medium">{c.category.nom}</div>
               <div className="font-mono font-bold text-[#0D1B38] mt-0.5">{formatDH(c.total)}</div>
             </div>
@@ -130,7 +130,7 @@ export const ExpensesView: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-wrap items-center gap-2.5 p-3.5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-8px_rgba(11,23,51,0.08)]">
+      <div className="ios-card flex flex-wrap items-center gap-2.5 p-3.5">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-3.5 h-3.5 text-[#647BA0] absolute start-3 top-1/2 -translate-y-1/2" />
           <input
@@ -138,7 +138,7 @@ export const ExpensesView: React.FC = () => {
             placeholder={t('expenses.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full ps-9 pe-3 py-2 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+            className="ios-input w-full ps-9 pe-3 py-2 text-xs placeholder:text-[#647BA0]"
           />
         </div>
 
@@ -146,7 +146,7 @@ export const ExpensesView: React.FC = () => {
         <select
           value={filterSource}
           onChange={(e) => setFilterSource(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 flex-1 sm:flex-none"
         >
           <option value="all">{t('expenses.allSources')}</option>
           <option value="manuelle">{t('expenses.source.manuelle')}</option>
@@ -157,7 +157,7 @@ export const ExpensesView: React.FC = () => {
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 flex-1 sm:flex-none"
         >
           <option value="all">{t('expenses.allCategories')}</option>
           {expenseCategories.map((c) => (
@@ -169,7 +169,7 @@ export const ExpensesView: React.FC = () => {
       </div>
 
       {/* Expenses Table */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         {/* Mobile Card List (< md) */}
         <div className="md:hidden divide-y divide-[#DCE6F3]">
           {filteredExpenses.map((exp) => {
@@ -192,7 +192,7 @@ export const ExpensesView: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 bg-[#E6EEF8] border border-[#D5E2F1] p-2.5 rounded-xl text-[11px]">
+                <div className="ios-well flex flex-wrap items-center justify-between gap-2 p-2.5 text-[11px]">
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span className="font-medium text-[#1C2E4F]">{cat?.nom || '-'}</span>
                     <span
@@ -219,7 +219,7 @@ export const ExpensesView: React.FC = () => {
                   <div className="flex justify-end">
                     <button
                       onClick={() => validateExpense(exp.id)}
-                      className="px-3 py-1.5 text-[11px] font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-lg transition-colors whitespace-nowrap"
+                      className="ios-btn-primary px-3 py-1.5 text-[11px] min-h-[34px] whitespace-nowrap"
                     >
                       {t('expenses.validateBtn')}
                     </button>
@@ -298,7 +298,7 @@ export const ExpensesView: React.FC = () => {
                       {exp.statut === 'en attente' && canValidateExpense && (
                         <button
                           onClick={() => validateExpense(exp.id)}
-                          className="px-2.5 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-lg transition-colors whitespace-nowrap"
+                          className="ios-btn-primary px-3 py-1.5 text-[11px] min-h-[32px] whitespace-nowrap"
                         >
                           {t('expenses.validateBtn')}
                         </button>
@@ -314,11 +314,15 @@ export const ExpensesView: React.FC = () => {
 
       {/* Modal: New Expense */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">{t('expenses.modalTitle')}</h3>
-              <button onClick={() => setIsNewModalOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-[-0.015em]">{t('expenses.modalTitle')}</h3>
+              <button
+                onClick={() => setIsNewModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -332,7 +336,7 @@ export const ExpensesView: React.FC = () => {
                   placeholder={t('expenses.field.labelPlaceholder')}
                   value={formData.libelle}
                   onChange={(e) => setFormData({ ...formData, libelle: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -342,7 +346,7 @@ export const ExpensesView: React.FC = () => {
                   <select
                     value={formData.categorie_id}
                     onChange={(e) => setFormData({ ...formData, categorie_id: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     {expenseCategories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -358,7 +362,7 @@ export const ExpensesView: React.FC = () => {
                     required
                     value={formData.fournisseur}
                     onChange={(e) => setFormData({ ...formData, fournisseur: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -374,7 +378,7 @@ export const ExpensesView: React.FC = () => {
                       const tva = round2(ht * 0.20);
                       setFormData({ ...formData, montant_ht: ht, tva, montant_ttc: round2(ht + tva) });
                     }}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -386,12 +390,12 @@ export const ExpensesView: React.FC = () => {
                       const tva = Number(e.target.value);
                       setFormData({ ...formData, tva, montant_ttc: round2(formData.montant_ht + tva) });
                     }}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
 
-              <div className="p-3 bg-[#E6EEF8] border border-[#D5E2F1] rounded-xl flex justify-between font-mono font-bold text-[#0D1B38]">
+              <div className="ios-well p-3 flex justify-between font-mono font-bold text-[#0D1B38]">
                 <span>{t('expenses.field.totalTtc')}</span>
                 <span>{formatDH(formData.montant_ttc)}</span>
               </div>
@@ -403,7 +407,7 @@ export const ExpensesView: React.FC = () => {
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -411,7 +415,7 @@ export const ExpensesView: React.FC = () => {
                   <select
                     value={formData.mode_paiement}
                     onChange={(e) => setFormData({ ...formData, mode_paiement: e.target.value as PaymentMethod })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     <option value="virement">{t('invoices.method.virement')}</option>
                     <option value="carte">{t('invoices.method.carte')}</option>
@@ -438,13 +442,13 @@ export const ExpensesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {t('expenses.saveBtn')}
                 </button>

@@ -208,7 +208,7 @@ export const UserManagementSection: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0"
+            className="ios-btn-primary flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] text-xs whitespace-nowrap shrink-0"
           >
             <UserPlus className="w-4 h-4" />
             <span>{t('users.newBtn')}</span>
@@ -219,7 +219,7 @@ export const UserManagementSection: React.FC = () => {
       {/* Feedback Notification */}
       {feedback && (
         <div
-          className={`p-3.5 rounded-2xl border text-xs flex items-center gap-2 ${
+          className={`p-3.5 rounded-[18px] border text-xs flex items-center gap-2 shadow-xs ${
             feedback.type === 'success'
               ? 'bg-[#DCF4E8] border-[#A7DFC3] text-[#0E6245]'
               : 'bg-[#FCE8EC] border-[#F3BCC8] text-[#9F1239]'
@@ -235,7 +235,7 @@ export const UserManagementSection: React.FC = () => {
       )}
 
       {/* Search & Filter */}
-      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 p-3 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.06)]">
+      <div className="ios-card flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 p-3">
         <div className="relative flex-1 min-w-0 sm:min-w-[220px]">
           <Search className="w-3.5 h-3.5 text-[#546A8E] absolute start-3 top-1/2 -translate-y-1/2" />
           <input
@@ -243,14 +243,14 @@ export const UserManagementSection: React.FC = () => {
             placeholder={t('users.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full ps-9 pe-3 py-2 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] transition-colors"
+            className="ios-input w-full ps-9 pe-3 py-2 text-xs placeholder:text-[#647BA0]"
           />
         </div>
 
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="w-full sm:w-auto text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] font-medium focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+          className="ios-input w-full sm:w-auto text-xs py-2 px-3 text-[#1C2E4F] font-medium"
         >
           <option value="all">{t('users.allRoles', { count: roles.length })}</option>
           {roles.map((r) => (
@@ -262,7 +262,7 @@ export const UserManagementSection: React.FC = () => {
       </div>
 
       {/* Users List (Mobile Cards) + Desktop Table */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         {/* Mobile Cards */}
         <div className="lg:hidden divide-y divide-[#DCE6F3]">
           {filteredUsers.map((u) => {
@@ -328,7 +328,7 @@ export const UserManagementSection: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleUnlock(u)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] border border-[#F2D388] hover:bg-[#FDE9B8] rounded-lg transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] border border-[#F2D388] hover:bg-[#FDE9B8] rounded-[11px] transition-all active:scale-[0.96]"
                       >
                         <Unlock className="w-3.5 h-3.5" />
                         <span>{t('users.unlock')}</span>
@@ -338,7 +338,7 @@ export const UserManagementSection: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(u)}
-                      className="p-2 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-lg transition-colors"
+                      className="p-2 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-full transition-all active:scale-[0.92]"
                       title={t('users.action.editTitle')}
                       aria-label={`${t('common.edit')} ${u.name}`}
                     >
@@ -348,7 +348,7 @@ export const UserManagementSection: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleResetPassword(u)}
-                      className="p-2 text-[#3C5073] hover:text-[#8F5600] hover:bg-[#FEF3D6] rounded-lg transition-colors"
+                      className="p-2 text-[#3C5073] hover:text-[#8F5600] hover:bg-[#FEF3D6] rounded-full transition-all active:scale-[0.92]"
                       title={t('users.action.resetPwdTitle')}
                     >
                       <KeyRound className="w-3.5 h-3.5" />
@@ -358,7 +358,7 @@ export const UserManagementSection: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleToggleStatus(u)}
-                        className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-lg border transition-colors ${
+                        className={`px-2.5 py-1.5 text-[11px] font-semibold rounded-[11px] border transition-all active:scale-[0.96] ${
                           u.active
                             ? 'text-[#8F5600] bg-[#FEF3D6] border-[#F2D388] hover:bg-[#FDE9B8]'
                             : 'text-[#0E6245] bg-[#DCF4E8] border-[#A7DFC3] hover:bg-[#CBEBD9]'
@@ -371,7 +371,7 @@ export const UserManagementSection: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setConfirmDeleteUser(u)}
-                      className="p-2 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-lg transition-colors"
+                      className="p-2 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-full transition-all active:scale-[0.92]"
                       title={t('users.action.deleteTitle')}
                       aria-label={`${t('common.delete')} ${u.name}`}
                     >
@@ -468,7 +468,7 @@ export const UserManagementSection: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleUnlock(u)}
-                            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] border border-[#F2D388] hover:bg-[#FDE9B8] rounded-lg transition-colors"
+                            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] border border-[#F2D388] hover:bg-[#FDE9B8] rounded-[11px] transition-all active:scale-[0.96]"
                             title={t('users.action.unlockTitle')}
                           >
                             <Unlock className="w-3.5 h-3.5" />
@@ -481,7 +481,7 @@ export const UserManagementSection: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(u)}
-                              className="p-1.5 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-lg transition-colors"
+                              className="p-1.5 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-full transition-all active:scale-[0.92]"
                               title={t('users.action.editTitle')}
                               aria-label={`${t('common.edit')} ${u.name}`}
                             >
@@ -491,7 +491,7 @@ export const UserManagementSection: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleResetPassword(u)}
-                              className="p-1.5 text-[#3C5073] hover:text-[#8F5600] hover:bg-[#FEF3D6] rounded-lg transition-colors"
+                              className="p-1.5 text-[#3C5073] hover:text-[#8F5600] hover:bg-[#FEF3D6] rounded-full transition-all active:scale-[0.92]"
                               title={t('users.action.resetPwdTitle')}
                             >
                               <KeyRound className="w-3.5 h-3.5" />
@@ -501,7 +501,7 @@ export const UserManagementSection: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => handleToggleStatus(u)}
-                                className={`px-2 py-1 text-[11px] font-semibold rounded-lg border transition-colors ${
+                                className={`px-2 py-1 text-[11px] font-semibold rounded-[11px] border transition-all active:scale-[0.96] ${
                                   u.active
                                     ? 'text-[#8F5600] bg-[#FEF3D6] border-[#F2D388] hover:bg-[#FDE9B8]'
                                     : 'text-[#0E6245] bg-[#DCF4E8] border-[#A7DFC3] hover:bg-[#CBEBD9]'
@@ -514,7 +514,7 @@ export const UserManagementSection: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => setConfirmDeleteUser(u)}
-                              className="p-1.5 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-lg transition-colors"
+                              className="p-1.5 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-full transition-all active:scale-[0.92]"
                               title={t('users.action.deleteTitle')}
                               aria-label={`${t('common.delete')} ${u.name}`}
                             >
@@ -542,8 +542,9 @@ export const UserManagementSection: React.FC = () => {
 
       {/* Create / Edit User Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-md w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <h4 className="text-sm font-bold text-[#0D1B38]">
                 {editingUser ? t('users.modal.editTitle', { name: editingUser.name }) : t('users.modal.createTitle')}
@@ -551,7 +552,7 @@ export const UserManagementSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E6EEF8] p-1.5 rounded-xl transition-colors"
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -566,7 +567,7 @@ export const UserManagementSection: React.FC = () => {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder={t('users.field.fullNamePlaceholder')}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -578,7 +579,7 @@ export const UserManagementSection: React.FC = () => {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder={t('users.field.emailPlaceholder')}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5 font-mono"
                 />
               </div>
 
@@ -591,7 +592,7 @@ export const UserManagementSection: React.FC = () => {
                   required={!editingUser}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5 font-mono"
                 />
               </div>
 
@@ -601,7 +602,7 @@ export const UserManagementSection: React.FC = () => {
                   required
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="w-full p-2.5 border border-[#C9D9EC] rounded-xl font-semibold text-[#0D1B38] bg-[#E6EEF8] focus:bg-[#F5F8FD] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5 font-semibold"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.key}>
@@ -616,7 +617,7 @@ export const UserManagementSection: React.FC = () => {
                 <select
                   value={formData.employee_id}
                   onChange={(e) => setFormData({ ...formData, employee_id: e.target.value })}
-                  className="w-full p-2.5 border border-[#C9D9EC] rounded-xl text-[#0D1B38] bg-[#E6EEF8] focus:bg-[#F5F8FD] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5"
                 >
                   <option value="">{t('users.field.noEmployee')}</option>
                   {employees.map((emp) => (
@@ -641,13 +642,13 @@ export const UserManagementSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] font-medium transition-colors"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs transition-all"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {editingUser ? t('users.btn.saveEdit') : t('users.btn.create')}
                 </button>
@@ -659,8 +660,9 @@ export const UserManagementSection: React.FC = () => {
 
       {/* Delete User Confirmation Modal */}
       {confirmDeleteUser && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-sm w-full p-4 sm:p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-sm w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center gap-2.5 text-[#9F1239]">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <h4 className="text-sm font-bold">{t('users.deleteTitle')}</h4>
@@ -673,14 +675,14 @@ export const UserManagementSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setConfirmDeleteUser(null)}
-                className="px-3.5 py-1.5 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] font-medium transition-colors"
+                className="ios-btn-secondary px-3.5 py-2"
               >
                 {t('common.cancel')}
               </button>
               <button
                 type="button"
                 onClick={handleDeleteConfirm}
-                className="px-3.5 py-1.5 bg-[#BE123C] hover:bg-[#9F1239] text-white font-semibold rounded-xl transition-colors"
+                className="px-4 py-2 bg-[#BE123C] hover:bg-[#9F1239] text-[#F4F8FD] font-semibold rounded-[13px] shadow-xs transition-all active:scale-[0.96]"
               >
                 {t('common.delete')}
               </button>
@@ -806,7 +808,7 @@ export const RoleManagementSection: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-xs transition-all whitespace-nowrap shrink-0"
+            className="ios-btn-primary flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] text-xs whitespace-nowrap shrink-0"
           >
             <Plus className="w-4 h-4" />
             <span>{t('roles.newBtn')}</span>
@@ -816,7 +818,7 @@ export const RoleManagementSection: React.FC = () => {
 
       {feedback && (
         <div
-          className={`p-3.5 rounded-2xl border text-xs flex items-center gap-2 ${
+          className={`p-3.5 rounded-[18px] border text-xs flex items-center gap-2 shadow-xs ${
             feedback.type === 'success'
               ? 'bg-[#DCF4E8] border-[#A7DFC3] text-[#0E6245]'
               : 'bg-[#FCE8EC] border-[#F3BCC8] text-[#9F1239]'
@@ -841,7 +843,7 @@ export const RoleManagementSection: React.FC = () => {
           return (
             <div
               key={r.id}
-              className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] p-4 shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] hover:border-[#A7CBE8] transition-colors flex flex-col justify-between gap-3"
+              className="ios-card p-4 hover:border-[#A7CBE8] transition-colors flex flex-col justify-between gap-3"
             >
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
@@ -864,7 +866,7 @@ export const RoleManagementSection: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleOpenEdit(r)}
-                        className="p-1.5 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-lg transition-colors"
+                        className="p-1.5 text-[#3C5073] hover:text-[#0284C7] hover:bg-[#DFF0FC] rounded-full transition-all active:scale-[0.92]"
                         title={t('roles.action.editTitle')}
                         aria-label={`${t('common.edit')} ${roleDisplay}`}
                       >
@@ -875,7 +877,7 @@ export const RoleManagementSection: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setConfirmDeleteRole(r)}
-                          className="p-1.5 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-lg transition-colors"
+                          className="p-1.5 text-[#546A8E] hover:text-[#9F1239] hover:bg-[#FCE8EC] rounded-full transition-all active:scale-[0.92]"
                           title={t('roles.action.deleteTitle')}
                           aria-label={`${t('common.delete')} ${roleDisplay}`}
                         >
@@ -905,8 +907,9 @@ export const RoleManagementSection: React.FC = () => {
 
       {/* Create / Edit Role Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-md w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <h4 className="text-sm font-bold text-[#0D1B38]">
                 {editingRole ? t('roles.modal.editTitle', { name: tRole(editingRole.key, editingRole.name) }) : t('roles.modal.createTitle')}
@@ -914,7 +917,7 @@ export const RoleManagementSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E6EEF8] p-1.5 rounded-xl transition-colors"
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -936,7 +939,7 @@ export const RoleManagementSection: React.FC = () => {
                     }));
                   }}
                   placeholder={t('roles.field.namePlaceholder')}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -949,7 +952,7 @@ export const RoleManagementSection: React.FC = () => {
                     value={formData.key}
                     onChange={(e) => setFormData({ ...formData, key: normalizeRoleKey(e.target.value) })}
                     placeholder={t('roles.field.keyPlaceholder')}
-                    className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               )}
@@ -961,7 +964,7 @@ export const RoleManagementSection: React.FC = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder={t('roles.field.descPlaceholder')}
-                  className="w-full p-2.5 bg-[#E6EEF8] focus:bg-[#F5F8FD] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -970,7 +973,7 @@ export const RoleManagementSection: React.FC = () => {
                 <select
                   value={formData.badgeColor}
                   onChange={(e) => setFormData({ ...formData, badgeColor: e.target.value })}
-                  className="w-full p-2.5 border border-[#C9D9EC] rounded-xl bg-[#E6EEF8] focus:bg-[#F5F8FD] text-[#0D1B38] focus:border-[#0284C7] outline-hidden transition-colors"
+                  className="ios-input w-full p-2.5"
                 >
                   <option value="bg-cyan-50 text-cyan-800 border-cyan-300">{t('roles.color.cyan')}</option>
                   <option value="bg-emerald-50 text-emerald-800 border-emerald-300">{t('roles.color.emerald')}</option>
@@ -986,13 +989,13 @@ export const RoleManagementSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] font-medium transition-colors"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs transition-all"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {editingRole ? t('roles.btn.update') : t('roles.btn.create')}
                 </button>
@@ -1004,8 +1007,9 @@ export const RoleManagementSection: React.FC = () => {
 
       {/* Delete Role Confirmation Modal */}
       {confirmDeleteRole && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-sm w-full p-4 sm:p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-sm w-full p-5 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center gap-2.5 text-[#9F1239]">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <h4 className="text-sm font-bold">{t('roles.deleteTitle')}</h4>
@@ -1019,14 +1023,14 @@ export const RoleManagementSection: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setConfirmDeleteRole(null)}
-                className="px-3.5 py-1.5 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] font-medium transition-colors"
+                className="ios-btn-secondary px-3.5 py-2"
               >
                 {t('common.cancel')}
               </button>
               <button
                 type="button"
                 onClick={handleDeleteConfirm}
-                className="px-3.5 py-1.5 bg-[#BE123C] hover:bg-[#9F1239] text-white font-semibold rounded-xl transition-colors"
+                className="px-4 py-2 bg-[#BE123C] hover:bg-[#9F1239] text-[#F4F8FD] font-semibold rounded-[13px] shadow-xs transition-all active:scale-[0.96]"
               >
                 {t('common.delete')}
               </button>
@@ -1098,7 +1102,7 @@ export const RolePermissionsMatrixSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-[11px] text-[#035388] bg-[#DFF0FC] border border-[#A5D3F3] px-3 py-1.5 rounded-xl shrink-0 self-start sm:self-auto font-medium">
+        <div className="flex items-center gap-1.5 text-[11px] text-[#035388] bg-[#DFF0FC] border border-[#A5D3F3] px-3 py-1.5 rounded-[14px] shrink-0 self-start sm:self-auto font-medium">
           <Info className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
           <span>{t('matrix.liveBadge')}</span>
         </div>
@@ -1106,7 +1110,7 @@ export const RolePermissionsMatrixSection: React.FC = () => {
 
       {feedback && (
         <div
-          className={`p-3 rounded-2xl border text-xs flex items-center gap-2 ${
+          className={`p-3 rounded-[18px] border text-xs flex items-center gap-2 shadow-xs ${
             feedback.type === 'success'
               ? 'bg-[#DCF4E8] border-[#A7DFC3] text-[#0E6245]'
               : 'bg-[#FCE8EC] border-[#F3BCC8] text-[#9F1239]'
@@ -1122,7 +1126,7 @@ export const RolePermissionsMatrixSection: React.FC = () => {
       )}
 
       {/* Matrix Table: Roles x Permissions */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-start text-xs border-collapse">
             <thead className="bg-[#0B1733] text-[#E6EEF8]">
@@ -1135,7 +1139,7 @@ export const RolePermissionsMatrixSection: React.FC = () => {
                   const roleDisplay = tRole(r.key, r.name);
                   return (
                     <th key={r.id} className="py-2.5 px-2 sm:py-3 sm:px-3 text-center min-w-[96px] sm:min-w-[115px] border-s border-[#1E3566]/80">
-                      <div className="font-bold text-white truncate max-w-[100px] sm:max-w-[130px] mx-auto" title={roleDisplay}>
+                      <div className="font-bold text-[#F4F8FD] truncate max-w-[100px] sm:max-w-[130px] mx-auto" title={roleDisplay}>
                         {roleDisplay}
                       </div>
                       <div className="text-[10px] text-[#38BDF8] font-mono font-normal mt-0.5">{r.key}</div>
@@ -1194,11 +1198,11 @@ export const RolePermissionsMatrixSection: React.FC = () => {
                                   onClick={() => togglePermission(r, perm.key)}
                                   aria-label={t('matrix.permAria', { perm: localizedPerm.label, role: roleDisplay })}
                                   aria-pressed={checked}
-                                  className={`w-7 h-7 sm:w-6 sm:h-6 rounded-lg inline-flex items-center justify-center border transition-all ${
+                                  className={`w-7 h-7 sm:w-6 sm:h-6 rounded-[9px] inline-flex items-center justify-center border transition-all active:scale-[0.9] ${
                                     isSuperAdmin
                                       ? 'bg-[#0B1733] border-[#1E3566] text-[#38BDF8] cursor-not-allowed opacity-85'
                                       : checked
-                                      ? 'bg-gradient-to-br from-[#0284C7] to-[#0891B2] border-[#0284C7] text-white shadow-2xs hover:opacity-90'
+                                      ? 'bg-gradient-to-b from-[#0EA5E9] to-[#0284C7] border-[#0284C7] text-[#F4F8FD] shadow-xs hover:brightness-105'
                                       : 'bg-[#E6EEF8] border-[#C9D9EC] text-transparent hover:border-[#0284C7]'
                                   }`}
                                 >

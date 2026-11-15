@@ -155,18 +155,18 @@ function MainLayout() {
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-5">
             {accessDeniedNotice && (
-              <div className="p-3.5 bg-amber-50/90 border border-amber-300/80 text-amber-900 rounded-2xl text-xs flex items-center gap-2.5 shadow-sm">
-                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+              <div className="p-3.5 bg-[#FEF3D6]/90 backdrop-blur-xl border border-[#F2D388] text-[#8F5600] rounded-[18px] text-xs flex items-center gap-2.5 shadow-[inset_0_1px_0_rgba(254,249,231,0.85),0_6px_18px_-8px_rgba(143,86,0,0.18)]">
+                <AlertTriangle className="w-4 h-4 text-[#B45309] shrink-0" />
                 <span className="font-medium">{accessDeniedNotice}</span>
               </div>
             )}
 
             {!tabAllowed ? (
-              <div className="bg-[#F1F5FB] rounded-2xl border border-rose-200/90 p-8 text-center max-w-lg mx-auto my-12 space-y-3 shadow-[0_8px_24px_-8px_rgba(11,23,51,0.1)]">
-                <div className="w-12 h-12 rounded-2xl bg-rose-100/80 text-rose-700 flex items-center justify-center mx-auto border border-rose-200">
+              <div className="ios-card border-rose-200/90 p-8 text-center max-w-lg mx-auto my-12 space-y-3">
+                <div className="w-12 h-12 rounded-[16px] bg-[#FCE8EC] text-[#9F1239] flex items-center justify-center mx-auto border border-[#F3BCC8] shadow-xs">
                   <ShieldAlert className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-bold text-[#0D1B38]">{t('access.unauthorizedTitle')}</h3>
+                <h3 className="text-base font-bold text-[#0D1B38] tracking-tight">{t('access.unauthorizedTitle')}</h3>
                 <p className="text-xs text-[#475D82]">
                   {t('access.unauthorizedDesc', { role: activeRoleLabel })}
                 </p>

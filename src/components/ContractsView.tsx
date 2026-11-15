@@ -72,7 +72,7 @@ export const ContractsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('contracts.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('contracts.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('contracts.subtitle')}
           </div>
@@ -82,7 +82,7 @@ export const ContractsView: React.FC = () => {
           {/* Recurring Billing Button (CL-6) */}
           <button
             onClick={handleRunBilling}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-xl shadow-xs transition-colors whitespace-nowrap shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-[13px] shadow-xs transition-all duration-150 active:scale-[0.96] min-h-[38px] whitespace-nowrap shrink-0"
             title={t('contracts.runBillingTooltip')}
           >
             <Play className="w-3.5 h-3.5 fill-current" />
@@ -91,7 +91,7 @@ export const ContractsView: React.FC = () => {
 
           <button
             onClick={() => setIsNewModalOpen(true)}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all whitespace-nowrap shrink-0"
+            className="ios-btn-primary flex items-center gap-1.5 px-4 py-2 text-xs min-h-[38px] whitespace-nowrap shrink-0"
           >
             <Plus className="w-4 h-4" />
             <span>{t('contracts.newBtn')}</span>
@@ -100,7 +100,7 @@ export const ContractsView: React.FC = () => {
       </div>
 
       {billingResult !== null && (
-        <div className="p-3.5 bg-[#DCF4E8] border border-[#A7DFC3] text-[#0E6245] rounded-2xl text-xs flex items-center justify-between">
+        <div className="p-3.5 bg-[#DCF4E8]/90 backdrop-blur-md border border-[#A7DFC3] text-[#0E6245] rounded-[18px] text-xs flex items-center justify-between">
           <div className="flex items-center gap-2 font-medium">
             <CheckCircle2 className="w-4 h-4 text-[#0E6245]" />
             <span>{t('contracts.billingDone', { count: billingResult })}</span>
@@ -110,10 +110,10 @@ export const ContractsView: React.FC = () => {
 
       {cancelMessage && (
         <div
-          className={`p-3.5 rounded-2xl border text-xs flex items-center gap-2 font-medium ${
+          className={`p-3.5 rounded-[18px] backdrop-blur-md border text-xs flex items-center gap-2 font-medium ${
             cancelMessage.type === 'success'
-              ? 'bg-[#DCF4E8] border-[#A7DFC3] text-[#0E6245]'
-              : 'bg-[#FCE8EC] border-[#F3BCC8] text-[#9F1239]'
+              ? 'bg-[#DCF4E8]/90 border-[#A7DFC3] text-[#0E6245]'
+              : 'bg-[#FCE8EC]/90 border-[#F3BCC8] text-[#9F1239]'
           }`}
         >
           {cancelMessage.type === 'success' ? (
@@ -126,7 +126,7 @@ export const ContractsView: React.FC = () => {
       )}
 
       {/* Contracts Table */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         {/* Mobile Card List (< md) */}
         <div className="md:hidden divide-y divide-[#DCE6F3]">
           {contracts.map((c) => {
@@ -152,7 +152,7 @@ export const ContractsView: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 bg-[#E6EEF8] p-2.5 rounded-xl border border-[#D5E2F1] text-[11px]">
+                <div className="ios-well grid grid-cols-2 gap-2 p-2.5 text-[11px]">
                   <div>
                     <span className="text-[#546A8E] block">{t('contracts.col.amountHt')}</span>
                     <span className="font-mono font-bold text-[#0D1B38]">{formatDH(c.montant_ht)}</span>
@@ -171,7 +171,7 @@ export const ContractsView: React.FC = () => {
 
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
                   <span
-                    className={`text-[11px] font-medium px-2 py-0.5 rounded-lg ${
+                    className={`text-[11px] font-medium px-2 py-0.5 rounded-[10px] ${
                       alert.alertLevel === 'urgent'
                         ? 'bg-[#FCE8EC] text-[#9F1239] border border-[#F3BCC8]'
                         : alert.alertLevel === 'warning'
@@ -191,7 +191,7 @@ export const ContractsView: React.FC = () => {
                         setCancelPackTarget(c);
                         setCancelMotif(t('contracts.cancelPackDesc', { num: c.numero_contrat }));
                       }}
-                      className="px-2.5 py-1.5 text-[11px] font-semibold text-[#9F1239] bg-[#FCE8EC] hover:bg-[#F9D6DE] border border-[#F3BCC8] rounded-lg transition-colors whitespace-nowrap"
+                      className="px-3 py-1.5 text-[11px] font-semibold text-[#9F1239] bg-[#FCE8EC] hover:bg-[#F9D6DE] border border-[#F3BCC8] rounded-[12px] transition-all duration-150 active:scale-[0.96] whitespace-nowrap"
                     >
                       {t('contracts.cancelPackBtn')}
                     </button>
@@ -287,7 +287,7 @@ export const ContractsView: React.FC = () => {
                               setCancelPackTarget(c);
                               setCancelMotif(t('contracts.cancelPackDesc', { num: c.numero_contrat }));
                             }}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-[#9F1239] bg-[#FCE8EC] hover:bg-[#F9D6DE] border border-[#F3BCC8] rounded-lg transition-colors whitespace-nowrap"
+                            className="px-3 py-1.5 text-[11px] font-semibold text-[#9F1239] bg-[#FCE8EC] hover:bg-[#F9D6DE] border border-[#F3BCC8] rounded-[12px] transition-all duration-150 active:scale-[0.96] whitespace-nowrap"
                           >
                             {t('contracts.cancelPackBtn')}
                           </button>
@@ -304,11 +304,15 @@ export const ContractsView: React.FC = () => {
 
       {/* Modal: Add Contract */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">{t('contracts.modalNewTitle')}</h3>
-              <button onClick={() => setIsNewModalOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-[-0.015em]">{t('contracts.modalNewTitle')}</h3>
+              <button
+                onClick={() => setIsNewModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -319,7 +323,7 @@ export const ContractsView: React.FC = () => {
                 <select
                   value={formData.client_id}
                   onChange={(e) => setFormData({ ...formData, client_id: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 >
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -334,7 +338,7 @@ export const ContractsView: React.FC = () => {
                 <select
                   value={formData.project_id}
                   onChange={(e) => setFormData({ ...formData, project_id: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 >
                   {projects.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -351,7 +355,7 @@ export const ContractsView: React.FC = () => {
                     type="date"
                     value={formData.date_debut}
                     onChange={(e) => setFormData({ ...formData, date_debut: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -360,7 +364,7 @@ export const ContractsView: React.FC = () => {
                     type="date"
                     value={formData.date_fin}
                     onChange={(e) => setFormData({ ...formData, date_fin: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -371,7 +375,7 @@ export const ContractsView: React.FC = () => {
                   <select
                     value={formData.periodicite}
                     onChange={(e) => setFormData({ ...formData, periodicite: e.target.value as MaintenancePeriodicity })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     <option value="mensuelle">{t('contracts.period.mensuelle')}</option>
                     <option value="trimestrielle">{t('contracts.period.trimestrielle')}</option>
@@ -384,7 +388,7 @@ export const ContractsView: React.FC = () => {
                     type="number"
                     value={formData.montant_ht}
                     onChange={(e) => setFormData({ ...formData, montant_ht: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -396,7 +400,7 @@ export const ContractsView: React.FC = () => {
                     type="number"
                     value={formData.heures_incluses}
                     onChange={(e) => setFormData({ ...formData, heures_incluses: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -405,7 +409,7 @@ export const ContractsView: React.FC = () => {
                     type="number"
                     value={formData.preavis_jours}
                     onChange={(e) => setFormData({ ...formData, preavis_jours: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -416,7 +420,7 @@ export const ContractsView: React.FC = () => {
                   rows={2}
                   value={formData.sla_description}
                   onChange={(e) => setFormData({ ...formData, sla_description: e.target.value })}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -424,13 +428,13 @@ export const ContractsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {t('contracts.createBtn')}
                 </button>
@@ -442,8 +446,9 @@ export const ContractsView: React.FC = () => {
 
       {/* Modal: Cancel Pack / Annuler le pack */}
       {cancelPackTarget && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <div className="flex items-center gap-2 text-[#9F1239] font-bold text-sm">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
@@ -452,7 +457,7 @@ export const ContractsView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setCancelPackTarget(null)}
-                className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]"
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -469,7 +474,7 @@ export const ContractsView: React.FC = () => {
                   required
                   value={cancelMotif}
                   onChange={(e) => setCancelMotif(e.target.value)}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
             </div>
@@ -478,7 +483,7 @@ export const ContractsView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setCancelPackTarget(null)}
-                className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                className="ios-btn-secondary px-4 py-2 min-h-[38px]"
               >
                 {t('common.close')}
               </button>
@@ -500,7 +505,7 @@ export const ContractsView: React.FC = () => {
                   setCancelPackTarget(null);
                   setTimeout(() => setCancelMessage(null), 4500);
                 }}
-                className="px-4 py-2 bg-[#C81E4A] hover:bg-[#9F1239] text-white rounded-xl font-semibold"
+                className="px-4 py-2 min-h-[38px] bg-[#C81E4A] hover:bg-[#9F1239] text-[#F4F8FD] rounded-[13px] font-semibold transition-all duration-150 active:scale-[0.96]"
               >
                 {t('contracts.confirmCancelPack')}
               </button>

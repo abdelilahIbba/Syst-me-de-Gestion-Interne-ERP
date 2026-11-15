@@ -121,7 +121,7 @@ export const ClientsView: React.FC = () => {
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('clients.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('clients.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('clients.subtitle')}
           </div>
@@ -132,7 +132,7 @@ export const ClientsView: React.FC = () => {
             setNewError(null);
             setIsNewModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-sm shadow-[#0284C7]/20 transition-all whitespace-nowrap shrink-0"
+          className="ios-btn-primary flex items-center justify-center gap-1.5 px-4 py-2 text-xs min-h-[38px] whitespace-nowrap shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>{t('clients.newBtn')}</span>
@@ -142,9 +142,9 @@ export const ClientsView: React.FC = () => {
       {/* Main split: Client List (Left) / 360° View (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Left Client List (4 cols) */}
-        <div className="lg:col-span-4 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex flex-col max-h-[340px] lg:max-h-none lg:h-[750px] overflow-hidden">
+        <div className="lg:col-span-4 ios-card flex flex-col max-h-[340px] lg:max-h-none lg:h-[750px] overflow-hidden">
           {/* Search bar */}
-          <div className="p-3 border-b border-[#DAE5F2] space-y-2">
+          <div className="p-3 border-b border-[#DAE5F2] space-y-2.5">
             <div className="relative">
               <Search className="w-3.5 h-3.5 text-[#627799] absolute start-3 top-1/2 -translate-y-1/2" />
               <input
@@ -152,19 +152,19 @@ export const ClientsView: React.FC = () => {
                 placeholder={t('clients.searchShort')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full ps-9 pe-3 py-1.5 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#6B80A3] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                className="ios-input w-full ps-9 pe-3 py-2 text-xs placeholder:text-[#6B80A3]"
               />
             </div>
 
-            <div className="flex items-center gap-1 overflow-x-auto pb-0.5">
+            <div className="ios-segmented flex items-center gap-1 overflow-x-auto">
               {(['all', 'actif', 'prospect', 'inactif'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setFilterStatut(st)}
-                  className={`px-2.5 py-1 text-[11px] rounded-lg transition-all whitespace-nowrap ${
+                  className={`flex-1 px-2.5 py-1.5 text-[11px] transition-all whitespace-nowrap active:scale-[0.97] ${
                     filterStatut === st
-                      ? 'bg-gradient-to-r from-[#0284C7] to-[#0891B2] text-[#F4F8FD] font-semibold shadow-xs'
-                      : 'text-[#4B6187] hover:bg-[#E4ECF7]'
+                      ? 'ios-segmented-active'
+                      : 'text-[#4B6187] hover:text-[#0D1B38]'
                   }`}
                 >
                   {st === 'all' ? t('common.all') : translateClientStatus(st)}
@@ -213,15 +213,15 @@ export const ClientsView: React.FC = () => {
         </div>
 
         {/* Right 360° Detail View (8 cols) */}
-        <div className="lg:col-span-8 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex flex-col h-auto lg:h-[750px] lg:overflow-hidden">
+        <div className="lg:col-span-8 ios-card flex flex-col h-auto lg:h-[750px] lg:overflow-hidden">
           {selectedClient ? (
             <div className="flex flex-col h-full lg:overflow-hidden">
               {/* Header 360°: Total Facturé / Total Encaissé / Reste Dû (CL-2 & R10) */}
-              <div className="p-4 sm:p-5 border-b border-[#D1DFEE] bg-[#E6EEF8]/80">
+              <div className="p-4 sm:p-5 border-b border-[#D1DFEE] bg-[#E6EEF8]/65">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-base sm:text-lg font-bold text-[#0D1B38]">{selectedClient.raison_sociale}</h3>
+                      <h3 className="text-base sm:text-lg font-bold text-[#0D1B38] tracking-[-0.015em]">{selectedClient.raison_sociale}</h3>
                       <span className="text-[11px] font-mono text-[#627799]">({selectedClient.code_client})</span>
                     </div>
                     <div className="text-xs text-[#546A8E] mt-0.5">
@@ -232,14 +232,14 @@ export const ClientsView: React.FC = () => {
                   <div className="flex items-center gap-2 shrink-0">
                     <a
                       href={`tel:${selectedClient.telephone}`}
-                      className="p-2 bg-[#F4F8FD] border border-[#C9D9EC] text-[#273B63] hover:text-[#0284C7] rounded-xl transition-colors"
+                      className="ios-btn-secondary p-2.5 text-[#273B63] hover:text-[#0284C7]"
                       title={t('clients.call')}
                     >
                       <Phone className="w-3.5 h-3.5" />
                     </a>
                     <a
                       href={`mailto:${selectedClient.email}`}
-                      className="p-2 bg-[#F4F8FD] border border-[#C9D9EC] text-[#273B63] hover:text-[#0284C7] rounded-xl transition-colors"
+                      className="ios-btn-secondary p-2.5 text-[#273B63] hover:text-[#0284C7]"
                       title={t('clients.sendEmail')}
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -249,21 +249,21 @@ export const ClientsView: React.FC = () => {
 
                 {/* Financial Summary Strip (R10) */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-4 pt-3 border-t border-[#CFDDED]">
-                  <div className="bg-[#F4F8FD] p-3 rounded-xl border border-[#CFDDED]">
+                  <div className="ios-well !bg-[#F4F8FD]/90 p-3">
                     <div className="text-[11px] text-[#546A8E] font-medium">{t('clients.totalBilled')}</div>
                     <div className="text-sm font-bold font-mono text-[#0D1B38] mt-0.5">
                       {formatDH(totalFacture)}
                     </div>
                   </div>
-                  <div className="bg-[#F4F8FD] p-3 rounded-xl border border-[#CFDDED]">
+                  <div className="ios-well !bg-[#F4F8FD]/90 p-3">
                     <div className="text-[11px] text-[#546A8E] font-medium">{t('clients.totalCollected')}</div>
                     <div className="text-sm font-bold font-mono text-emerald-700 mt-0.5">
                       {formatDH(totalEncaisse)}
                     </div>
                   </div>
-                  <div className="p-3 rounded-xl border border-amber-200 bg-amber-50/80">
-                    <div className="text-[11px] text-amber-800 font-medium">{t('clients.balanceDue')}</div>
-                    <div className="text-sm font-bold font-mono text-amber-800 mt-0.5">
+                  <div className="p-3 rounded-[16px] border border-[#F2D388] bg-[#FEF3D6]/85">
+                    <div className="text-[11px] text-[#8F5600] font-medium">{t('clients.balanceDue')}</div>
+                    <div className="text-sm font-bold font-mono text-[#8F5600] mt-0.5">
                       {formatDH(resteDu)}
                     </div>
                   </div>
@@ -271,27 +271,29 @@ export const ClientsView: React.FC = () => {
               </div>
 
               {/* 360° Tabs */}
-              <div className="flex items-center gap-1 px-3 sm:px-5 border-b border-[#D1DFEE] bg-[#EDF2FA] overflow-x-auto text-xs font-medium shrink-0">
-                {[
-                  { key: 'infos', label: t('clients.tab.infos') },
-                  { key: 'projets', label: t('clients.tab.projects', { count: clientProjects.length }) },
-                  { key: 'contrats', label: t('clients.tab.contracts', { count: clientContracts.length }) },
-                  { key: 'factures', label: t('clients.tab.invoices', { count: clientInvoices.length }) },
-                  { key: 'paiements', label: t('clients.tab.payments', { count: clientPayments.length }) },
-                  { key: 'interventions', label: t('clients.tab.visits', { count: clientVisits.length }) },
-                ].map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActiveTab(tab.key as any)}
-                    className={`py-3 px-3 border-b-2 font-medium transition-colors whitespace-nowrap ${
-                      activeTab === tab.key
-                        ? 'border-[#0284C7] text-[#0284C7] font-semibold'
-                        : 'border-transparent text-[#546A8E] hover:text-[#0D1B38]'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+              <div className="px-3 sm:px-5 py-2.5 border-b border-[#D1DFEE] bg-[#EDF2FA]/70 shrink-0">
+                <div className="ios-segmented flex items-center gap-1 overflow-x-auto text-xs font-medium">
+                  {[
+                    { key: 'infos', label: t('clients.tab.infos') },
+                    { key: 'projets', label: t('clients.tab.projects', { count: clientProjects.length }) },
+                    { key: 'contrats', label: t('clients.tab.contracts', { count: clientContracts.length }) },
+                    { key: 'factures', label: t('clients.tab.invoices', { count: clientInvoices.length }) },
+                    { key: 'paiements', label: t('clients.tab.payments', { count: clientPayments.length }) },
+                    { key: 'interventions', label: t('clients.tab.visits', { count: clientVisits.length }) },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key as any)}
+                      className={`py-1.5 px-3 transition-all whitespace-nowrap active:scale-[0.97] ${
+                        activeTab === tab.key
+                          ? 'ios-segmented-active'
+                          : 'text-[#546A8E] hover:text-[#0D1B38]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Tab Contents */}
@@ -299,7 +301,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'infos' && (
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                      <div className="bg-[#E6EEF8] p-3.5 rounded-xl space-y-2 border border-[#CFDDED]">
+                      <div className="ios-well p-3.5 space-y-2">
                         <div className="font-semibold text-[#0D1B38]">{t('clients.taxIds')}</div>
                         <div className="grid grid-cols-2 gap-2 text-[11px]">
                           <div>
@@ -321,7 +323,7 @@ export const ClientsView: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="bg-[#E6EEF8] p-3.5 rounded-xl space-y-2 border border-[#CFDDED]">
+                      <div className="ios-well p-3.5 space-y-2">
                         <div className="font-semibold text-[#0D1B38]">{t('clients.fullDetails')}</div>
                         <div className="text-[11px] space-y-1 text-[#273B63]">
                           <div><span className="text-[#546A8E]">{t('clients.address')}</span> {selectedClient.adresse}</div>
@@ -333,7 +335,7 @@ export const ClientsView: React.FC = () => {
                     </div>
 
                     {selectedClient.notes && (
-                      <div className="p-3 bg-[#E6EEF8] rounded-xl border border-[#CFDDED]">
+                      <div className="ios-well p-3.5">
                         <span className="font-semibold text-[#0D1B38] block mb-1">{t('clients.internalNotes')}</span>
                         <p className="text-[#3B4F73] leading-relaxed text-[11px]">{selectedClient.notes}</p>
                       </div>
@@ -344,7 +346,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'projets' && (
                   <div className="space-y-3">
                     {clientProjects.map((p) => (
-                      <div key={p.id} className="p-3.5 bg-[#E6EEF8]/65 border border-[#CFDDED] rounded-xl hover:border-[#A7CBE8] transition-colors">
+                      <div key={p.id} className="ios-well p-3.5 hover:border-[#A7CBE8] transition-colors">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <h4 className="font-bold text-[#0D1B38] text-xs">{p.nom_systeme}</h4>
                           <span className="font-mono text-emerald-700 font-bold shrink-0">{formatDH(p.prix_vente_ht)} HT</span>
@@ -365,7 +367,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'contrats' && (
                   <div className="space-y-3">
                     {clientContracts.map((c) => (
-                      <div key={c.id} className="p-3.5 bg-[#E6EEF8]/65 border border-[#CFDDED] rounded-xl">
+                      <div key={c.id} className="ios-well p-3.5">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span className="font-bold text-[#0D1B38]">{c.numero_contrat} ({c.type})</span>
                           <span className="font-mono font-bold text-[#1C2E4F] shrink-0">{formatDH(c.montant_ht)} HT / {c.periodicite}</span>
@@ -421,7 +423,7 @@ export const ClientsView: React.FC = () => {
                 {activeTab === 'interventions' && (
                   <div className="space-y-3">
                     {clientVisits.map((v) => (
-                      <div key={v.id} className="p-3 bg-[#E6EEF8]/65 border border-[#CFDDED] rounded-xl">
+                      <div key={v.id} className="ios-well p-3.5">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span className="font-bold text-[#0D1B38]">{v.motif}</span>
                           <span className="text-[11px] font-mono text-[#546A8E] shrink-0">{v.date} ({v.heure_depart} - {v.heure_retour})</span>
@@ -450,17 +452,21 @@ export const ClientsView: React.FC = () => {
 
       {/* Modal: Add Client (CL-1 with duplicate ICE & name check) */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] border border-[#CFDDED] rounded-2xl shadow-2xl max-w-lg w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-lg w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DAE5F2] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">{t('clients.modalTitle')}</h3>
-              <button onClick={() => setIsNewModalOpen(false)} className="text-[#627799] hover:text-[#0D1B38]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-[-0.015em]">{t('clients.modalTitle')}</h3>
+              <button
+                onClick={() => setIsNewModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {newError && (
-              <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-xl flex items-center gap-2">
+              <div className="p-3 bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] text-xs rounded-[14px] flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>{newError}</span>
               </div>
@@ -475,7 +481,7 @@ export const ClientsView: React.FC = () => {
                     required
                     value={formData.raison_sociale}
                     onChange={(e) => setFormData({ ...formData, raison_sociale: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -488,7 +494,7 @@ export const ClientsView: React.FC = () => {
                     placeholder="001928374000032"
                     value={formData.ice}
                     onChange={(e) => setFormData({ ...formData, ice: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -497,7 +503,7 @@ export const ClientsView: React.FC = () => {
                     type="text"
                     value={formData.if}
                     onChange={(e) => setFormData({ ...formData, if: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -509,7 +515,7 @@ export const ClientsView: React.FC = () => {
                     type="text"
                     value={formData.contact_nom}
                     onChange={(e) => setFormData({ ...formData, contact_nom: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -518,7 +524,7 @@ export const ClientsView: React.FC = () => {
                     type="text"
                     value={formData.contact_fonction}
                     onChange={(e) => setFormData({ ...formData, contact_fonction: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -530,7 +536,7 @@ export const ClientsView: React.FC = () => {
                     type="text"
                     value={formData.telephone}
                     onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -539,7 +545,7 @@ export const ClientsView: React.FC = () => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -551,7 +557,7 @@ export const ClientsView: React.FC = () => {
                     type="text"
                     value={formData.ville}
                     onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -559,7 +565,7 @@ export const ClientsView: React.FC = () => {
                   <select
                     value={formData.statut}
                     onChange={(e) => setFormData({ ...formData, statut: e.target.value as ClientStatus })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     <option value="actif">{t('clients.status.actif')}</option>
                     <option value="prospect">{t('clients.status.prospect')}</option>
@@ -574,7 +580,7 @@ export const ClientsView: React.FC = () => {
                   type="text"
                   value={formData.adresse}
                   onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
-                  className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -582,13 +588,13 @@ export const ClientsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="px-4 py-2 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] transition-colors"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-[#F4F8FD] rounded-xl font-semibold shadow-sm"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {t('clients.saveBtn')}
                 </button>

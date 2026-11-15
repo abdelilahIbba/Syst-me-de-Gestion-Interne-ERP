@@ -123,7 +123,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Top Banner with Filter and Welcome */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#CFDDED]">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">
             {role === 'admin' || role === 'super_admin'
               ? t('dash.title.admin')
               : role === 'comptable'
@@ -140,27 +140,27 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         </div>
 
         {/* Period Selector */}
-        <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 bg-[#DCE6F4] border border-[#C9D9EC] rounded-xl text-xs font-medium w-full sm:w-auto">
+        <div className="grid grid-cols-3 sm:flex items-center gap-1 ios-segmented text-xs font-medium w-full sm:w-auto">
           <button
             onClick={() => setPeriod('mois')}
-            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
-              period === 'mois' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
+            className={`px-3.5 py-1.5 transition-all duration-150 active:scale-[0.96] text-center ${
+              period === 'mois' ? 'ios-segmented-active' : 'text-[#4B6187] hover:text-[#0D1B38] rounded-[10px]'
             }`}
           >
             {t('dash.period.month')}
           </button>
           <button
             onClick={() => setPeriod('trimestre')}
-            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
-              period === 'trimestre' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
+            className={`px-3.5 py-1.5 transition-all duration-150 active:scale-[0.96] text-center ${
+              period === 'trimestre' ? 'ios-segmented-active' : 'text-[#4B6187] hover:text-[#0D1B38] rounded-[10px]'
             }`}
           >
             {t('dash.period.quarter')}
           </button>
           <button
             onClick={() => setPeriod('annee')}
-            className={`px-3 py-1.5 rounded-lg transition-all text-center ${
-              period === 'annee' ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs' : 'text-[#4B6187] hover:text-[#0D1B38]'
+            className={`px-3.5 py-1.5 transition-all duration-150 active:scale-[0.96] text-center ${
+              period === 'annee' ? 'ios-segmented-active' : 'text-[#4B6187] hover:text-[#0D1B38] rounded-[10px]'
             }`}
           >
             {t('dash.period.year')}
@@ -172,11 +172,11 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* KPI 1: Revenus encaissés */}
         {['super_admin', 'admin', 'comptable', 'commercial', 'cashier'].includes(role) && (
-          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+          <div className="ios-card p-5 hover:border-[#A7CBE8] transition-all duration-150">
             <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.collectedRevenue')}</span>
-              <span className="w-8 h-8 rounded-xl bg-emerald-100/80 border border-emerald-200/80 flex items-center justify-center shrink-0">
-                <TrendingUp className="w-4 h-4 text-emerald-700" />
+              <span className="w-8 h-8 rounded-[12px] bg-[#DCF4E8] border border-[#A7DFC3] flex items-center justify-center shrink-0">
+                <TrendingUp className="w-4 h-4 text-[#0E6245]" />
               </span>
             </div>
             <div className="text-lg sm:text-xl font-bold font-mono text-[#0D1B38]">
@@ -191,11 +191,11 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
 
         {/* KPI 2: Charges totales */}
         {['super_admin', 'admin', 'comptable'].includes(role) && (
-          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+          <div className="ios-card p-5 hover:border-[#A7CBE8] transition-all duration-150">
             <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.validatedExpenses')}</span>
-              <span className="w-8 h-8 rounded-xl bg-rose-100/80 border border-rose-200/80 flex items-center justify-center shrink-0">
-                <Wallet className="w-4 h-4 text-rose-700" />
+              <span className="w-8 h-8 rounded-[12px] bg-[#FCE8EC] border border-[#F3BCC8] flex items-center justify-center shrink-0">
+                <Wallet className="w-4 h-4 text-[#9F1239]" />
               </span>
             </div>
             <div className="text-lg sm:text-xl font-bold font-mono text-[#0D1B38]">
@@ -209,14 +209,14 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
 
         {/* KPI 3: Bénéfice Net */}
         {['super_admin', 'admin'].includes(role) ? (
-          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+          <div className="ios-card p-5 hover:border-[#A7CBE8] transition-all duration-150">
             <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.netProfit')}</span>
-              <span className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${beneficeNet >= 0 ? 'bg-sky-100/80 border-sky-200/80' : 'bg-rose-100/80 border-rose-200/80'}`}>
-                <DollarSign className={`w-4 h-4 ${beneficeNet >= 0 ? 'text-[#0284C7]' : 'text-rose-700'}`} />
+              <span className={`w-8 h-8 rounded-[12px] border flex items-center justify-center shrink-0 ${beneficeNet >= 0 ? 'bg-[#DFF0FC] border-[#B2DAF5]' : 'bg-[#FCE8EC] border-[#F3BCC8]'}`}>
+                <DollarSign className={`w-4 h-4 ${beneficeNet >= 0 ? 'text-[#0284C7]' : 'text-[#9F1239]'}`} />
               </span>
             </div>
-            <div className={`text-lg sm:text-xl font-bold font-mono ${beneficeNet >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+            <div className={`text-lg sm:text-xl font-bold font-mono ${beneficeNet >= 0 ? 'text-[#0E6245]' : 'text-[#9F1239]'}`}>
               {formatDH(beneficeNet)}
             </div>
             <div className="text-xs text-[#5F7394] mt-2">
@@ -224,10 +224,10 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
             </div>
           </div>
         ) : (
-          <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+          <div className="ios-card p-5 hover:border-[#A7CBE8] transition-all duration-150">
             <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
               <span className="font-medium">{t('dash.kpi.monthlyPayroll')}</span>
-              <span className="w-8 h-8 rounded-xl bg-sky-100/80 border border-sky-200/80 flex items-center justify-center shrink-0">
+              <span className="w-8 h-8 rounded-[12px] bg-[#DFF0FC] border border-[#B2DAF5] flex items-center justify-center shrink-0">
                 <Users className="w-4 h-4 text-[#0284C7]" />
               </span>
             </div>
@@ -241,17 +241,17 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         )}
 
         {/* KPI 4: Impayés & Retards */}
-        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] hover:border-[#A7CBE8] transition-colors">
+        <div className="ios-card p-5 hover:border-[#A7CBE8] transition-all duration-150">
           <div className="flex items-center justify-between text-xs text-[#546A8E] mb-2.5">
             <span className="font-medium">{t('dash.kpi.unpaidInvoices')}</span>
-            <span className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${montantRetard > 0 ? 'bg-amber-100/80 border-amber-200/80' : 'bg-[#E6EEF8] border-[#CFDDED]'}`}>
-              <AlertTriangle className={`w-4 h-4 ${montantRetard > 0 ? 'text-amber-700' : 'text-[#5F7394]'}`} />
+            <span className={`w-8 h-8 rounded-[12px] border flex items-center justify-center shrink-0 ${montantRetard > 0 ? 'bg-[#FEF3D6] border-[#F2D388]' : 'bg-[#E5EDF8] border-[#CFDDED]'}`}>
+              <AlertTriangle className={`w-4 h-4 ${montantRetard > 0 ? 'text-[#8F5600]' : 'text-[#5F7394]'}`} />
             </span>
           </div>
-          <div className="text-lg sm:text-xl font-bold font-mono text-amber-800">
+          <div className="text-lg sm:text-xl font-bold font-mono text-[#8F5600]">
             {formatDH(totalImpayes)}
           </div>
-          <div className="text-xs text-rose-700 mt-2 font-medium">
+          <div className="text-xs text-[#9F1239] mt-2 font-medium">
             {t('dash.kpi.overdueCount', { count: facturesEnRetard.length, amount: formatDH(montantRetard) })}
           </div>
         </div>
@@ -260,7 +260,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Middle Row: Operational Indicators */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Contrats à renouveler */}
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
+        <div className="ios-card p-4 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.contractsExpiring')}</div>
             <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">{contratsARenouveler.length}</div>
@@ -268,14 +268,14 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
           </div>
           <button
             onClick={() => onNavigate('contracts')}
-            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
+            className="w-10 h-10 ios-btn-secondary flex items-center justify-center shrink-0"
           >
             <FileCheck2 className="w-5 h-5 text-[#0284C7]" />
           </button>
         </div>
 
         {/* Activité du jour */}
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
+        <div className="ios-card p-4 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.dailyActivity')}</div>
             <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">
@@ -287,14 +287,14 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
           </div>
           <button
             onClick={() => onNavigate('daily_report')}
-            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
+            className="w-10 h-10 ios-btn-secondary flex items-center justify-center shrink-0"
           >
-            <Clock className="w-5 h-5 text-emerald-700" />
+            <Clock className="w-5 h-5 text-[#0E6245]" />
           </button>
         </div>
 
         {/* Frais en attente */}
-        <div className="bg-[#F1F5FB] p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_20px_-8px_rgba(11,23,51,0.07)] flex items-center justify-between">
+        <div className="ios-card p-4 flex items-center justify-between">
           <div>
             <div className="text-xs text-[#546A8E] font-medium">{t('dash.kpi.pendingTravel')}</div>
             <div className="text-xl font-bold text-[#0D1B38] mt-1 font-mono">{formatDH(fraisEnAttente)}</div>
@@ -302,9 +302,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
           </div>
           <button
             onClick={() => onNavigate('site_visits')}
-            className="p-2.5 bg-[#E6EEF8] hover:bg-[#DCE7F6] border border-[#C9D9EC] rounded-xl text-[#273B63] transition-colors"
+            className="w-10 h-10 ios-btn-secondary flex items-center justify-center shrink-0"
           >
-            <Receipt className="w-5 h-5 text-amber-700" />
+            <Receipt className="w-5 h-5 text-[#8F5600]" />
           </button>
         </div>
       </div>
@@ -323,9 +323,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Two-Column Detail View: Financial Comparison & Top Clients */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Breakdown Chart / Progress */}
-        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+        <div className="ios-card p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-[#0D1B38]">{t('dash.breakdownTitle')}</h3>
+            <h3 className="text-sm font-bold text-[#0D1B38] tracking-tight">{t('dash.breakdownTitle')}</h3>
             <span className="text-xs text-[#5F7394]">{t('dash.currentPeriod')}</span>
           </div>
 
@@ -333,9 +333,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
                 <span className="text-[#3B4F73]">{t('dash.collectedLine')}</span>
-                <span className="font-mono text-emerald-700 font-semibold">{formatDH(totalRevenusEncaisses)}</span>
+                <span className="font-mono text-[#0E6245] font-semibold">{formatDH(totalRevenusEncaisses)}</span>
               </div>
-              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#DCE6F3] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 rounded-full transition-all"
                   style={{ width: `${Math.min(100, totalRevenusEncaisses > 0 ? 100 : 0)}%` }}
@@ -346,9 +346,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
             <div>
               <div className="flex justify-between text-xs font-medium mb-1.5">
                 <span className="text-[#3B4F73]">{t('dash.validatedChargesLine')}</span>
-                <span className="font-mono text-rose-700 font-semibold">{formatDH(chargesTotales)}</span>
+                <span className="font-mono text-[#9F1239] font-semibold">{formatDH(chargesTotales)}</span>
               </div>
-              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#DCE6F3] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-rose-500 rounded-full transition-all"
                   style={{
@@ -363,7 +363,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
                 <span className="text-[#3B4F73]">{t('dash.payrollRatioLine', { pct: ratioMasseSalariale })}</span>
                 <span className="font-mono text-[#0284C7] font-semibold">{formatDH(masseSalariale)}</span>
               </div>
-              <div className="h-3 w-full bg-[#E1EAF6] rounded-full overflow-hidden">
+              <div className="h-3 w-full bg-[#DCE6F3] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-[#0284C7] to-[#0EA5E9] rounded-full transition-all"
                   style={{ width: `${Math.min(100, ratioMasseSalariale)}%` }}
@@ -374,29 +374,29 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
 
           <div className="pt-4 border-t border-[#DAE5F2] flex items-center justify-between text-xs">
             <span className="text-[#546A8E]">{t('dash.netCashAvailable')}</span>
-            <span className={`font-mono font-bold text-sm ${beneficeNet >= 0 ? 'text-emerald-700' : 'text-rose-700'}`}>
+            <span className={`font-mono font-bold text-sm ${beneficeNet >= 0 ? 'text-[#0E6245]' : 'text-[#9F1239]'}`}>
               {formatDH(beneficeNet)}
             </span>
           </div>
         </div>
 
         {/* Top 5 Clients by Revenue */}
-        <div className="bg-[#F1F5FB] p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4">
+        <div className="ios-card p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-[#0D1B38]">{t('dash.topClientsTitle')}</h3>
+            <h3 className="text-sm font-bold text-[#0D1B38] tracking-tight">{t('dash.topClientsTitle')}</h3>
             <button
               onClick={() => onNavigate('clients')}
-              className="text-xs text-[#0284C7] hover:text-[#0369A1] font-semibold"
+              className="px-2.5 py-1 text-xs ios-btn-tinted rounded-full active:scale-[0.96]"
             >
               {t('dash.viewAllClients')} {isRTL ? '←' : '→'}
             </button>
           </div>
 
-          <div className="divide-y divide-[#DCE6F3]">
+          <div className="divide-y divide-[#D7E3F2]">
             {topClients.map((item, idx) => (
               <div key={idx} className="py-2.5 flex items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="w-6 h-6 rounded-lg bg-[#E4ECF7] text-[#3B4F73] flex items-center justify-center font-mono font-semibold text-[11px]">#{idx + 1}</span>
+                  <span className="w-6 h-6 rounded-[8px] bg-[#E5EDF8] border border-[#CDDCEF] text-[#3B4F73] flex items-center justify-center font-mono font-semibold text-[11px]">#{idx + 1}</span>
                   <div className="min-w-0">
                     <div className="font-semibold text-[#0D1B38] truncate">
                       {item.client?.raison_sociale || t('common.unknownClient')}
@@ -417,9 +417,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
       {/* Critical Alerts Banner */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Contrats à échéance */}
-        <div className="bg-amber-50/85 border border-amber-200/90 rounded-2xl p-4 shadow-[0_4px_16px_-6px_rgba(180,83,9,0.08)]">
-          <div className="flex items-center gap-2 text-amber-900 font-semibold text-xs mb-2.5">
-            <AlertTriangle className="w-4 h-4 text-amber-600" />
+        <div className="bg-[#FEF3D6]/85 backdrop-blur-xl border border-[#F2D388] rounded-[22px] p-4 shadow-[inset_0_1px_0_rgba(254,249,231,0.8),0_6px_20px_-10px_rgba(143,86,0,0.14)]">
+          <div className="flex items-center gap-2 text-[#8F5600] font-semibold text-xs mb-2.5">
+            <AlertTriangle className="w-4 h-4 text-[#B45309]" />
             <span>{t('dash.contractAlertsTitle')}</span>
           </div>
           <div className="space-y-1.5">
@@ -427,12 +427,12 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               const client = clients.find((cl) => cl.id === c.client_id);
               const alert = checkContractExpiration(c.date_fin);
               return (
-                <div key={c.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F4F8FD]/90 p-2.5 rounded-xl border border-amber-200/70">
+                <div key={c.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F5F8FD]/90 p-2.5 rounded-[14px] border border-[#F2D388]/80">
                   <div className="min-w-0">
                     <span className="font-semibold text-[#0D1B38]">{c.numero_contrat}</span>
                     <span className="text-[#546A8E] ms-2 break-words">({client?.raison_sociale})</span>
                   </div>
-                  <span className="font-medium text-amber-800 font-mono shrink-0">{alert.message}</span>
+                  <span className="font-medium text-[#8F5600] font-mono shrink-0">{alert.message}</span>
                 </div>
               );
             })}
@@ -440,9 +440,9 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
         </div>
 
         {/* Factures en retard */}
-        <div className="bg-rose-50/85 border border-rose-200/90 rounded-2xl p-4 shadow-[0_4px_16px_-6px_rgba(190,18,60,0.08)]">
-          <div className="flex items-center gap-2 text-rose-900 font-semibold text-xs mb-2.5">
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
+        <div className="bg-[#FCE8EC]/85 backdrop-blur-xl border border-[#F3BCC8] rounded-[22px] p-4 shadow-[inset_0_1px_0_rgba(254,242,245,0.8),0_6px_20px_-10px_rgba(159,18,57,0.14)]">
+          <div className="flex items-center gap-2 text-[#9F1239] font-semibold text-xs mb-2.5">
+            <AlertTriangle className="w-4 h-4 text-[#BE123C]" />
             <span>{t('dash.overdueAlertsTitle')}</span>
           </div>
           <div className="space-y-1.5">
@@ -450,16 +450,16 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
               facturesEnRetard.slice(0, 3).map((inv) => {
                 const client = clients.find((cl) => cl.id === inv.client_id);
                 return (
-                  <div key={inv.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F4F8FD]/90 p-2.5 rounded-xl border border-rose-200/70">
+                  <div key={inv.id} className="text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-[#F5F8FD]/90 p-2.5 rounded-[14px] border border-[#F3BCC8]/80">
                     <div className="min-w-0">
                       <span className="font-semibold text-[#0D1B38]">{inv.numero}</span>
                       <span className="text-[#546A8E] ms-2 break-words">({client?.raison_sociale})</span>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0">
-                      <span className="font-bold text-rose-700 font-mono">{formatDH(inv.reste_a_payer)}</span>
+                      <span className="font-bold text-[#9F1239] font-mono">{formatDH(inv.reste_a_payer)}</span>
                       <button
                         onClick={() => onNavigate('reminders')}
-                        className="text-[11px] text-[#0284C7] hover:underline font-semibold"
+                        className="px-2.5 py-1 text-[11px] ios-btn-tinted rounded-full active:scale-[0.95]"
                       >
                         {t('dash.remind')}
                       </button>
@@ -468,7 +468,7 @@ export const DashboardView: React.FC<{ onNavigate: (tab: any) => void }> = ({ on
                 );
               })
             ) : (
-              <div className="text-xs text-rose-700 py-1">{t('dash.noOverdueInvoices')}</div>
+              <div className="text-xs text-[#9F1239] py-1">{t('dash.noOverdueInvoices')}</div>
             )}
           </div>
         </div>

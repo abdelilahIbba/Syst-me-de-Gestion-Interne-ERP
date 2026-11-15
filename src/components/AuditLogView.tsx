@@ -55,14 +55,14 @@ export const AuditLogView: React.FC = () => {
     <div className="space-y-6">
       {/* Top Bar */}
       <div>
-        <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('audit.title')}</h2>
+        <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('audit.title')}</h2>
         <div className="text-xs text-[#546A8E] mt-0.5">
           {t('audit.subtitle')}
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-wrap items-center gap-2.5 p-3.5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-8px_rgba(11,23,51,0.08)]">
+      <div className="ios-card flex flex-wrap items-center gap-2.5 p-3.5">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-3.5 h-3.5 text-[#647BA0] absolute start-3 top-1/2 -translate-y-1/2" />
           <input
@@ -70,14 +70,14 @@ export const AuditLogView: React.FC = () => {
             placeholder={t('audit.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full ps-9 pe-3 py-2 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+            className="ios-input w-full ps-9 pe-3 py-2 text-xs placeholder:text-[#647BA0]"
           />
         </div>
 
         <select
           value={filterAction}
           onChange={(e) => setFilterAction(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 text-[#1C2E4F]"
         >
           <option value="all">{t('audit.allActions')}</option>
           <option value="créer">{t('audit.action.créer')}</option>
@@ -90,7 +90,7 @@ export const AuditLogView: React.FC = () => {
         <select
           value={filterTable}
           onChange={(e) => setFilterTable(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 text-[#1C2E4F]"
         >
           <option value="all">{t('audit.allTables')}</option>
           {tables.map((tbl) => (
@@ -104,7 +104,7 @@ export const AuditLogView: React.FC = () => {
       {/* Split View: Table on Left / JSON Diff on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* Table of logs (7 cols) */}
-        <div className="lg:col-span-7 min-w-0 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+        <div className="lg:col-span-7 min-w-0 ios-card overflow-hidden">
           <div className="overflow-x-auto max-h-[400px] lg:max-h-[650px] overflow-y-auto">
             <table className="w-full text-start text-xs">
               <thead className="bg-[#E6EEF8] text-[#455B80] font-semibold border-b border-[#CFDDED] sticky top-0 z-10">
@@ -169,7 +169,7 @@ export const AuditLogView: React.FC = () => {
         </div>
 
         {/* JSON Diff Inspector (5 cols) */}
-        <div className="lg:col-span-5 min-w-0 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-4">
+        <div className="lg:col-span-5 min-w-0 ios-card p-4 sm:p-5 space-y-4">
           {selectedLog ? (
             <div className="space-y-4 min-w-0">
               <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#DCE6F3]">

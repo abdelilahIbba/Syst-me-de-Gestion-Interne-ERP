@@ -99,16 +99,16 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
     : null;
 
   return (
-    <div className="bg-[#F1F5FB] p-3.5 sm:p-5 rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] space-y-4 sm:space-y-5">
+    <div className="ios-card p-3.5 sm:p-5 space-y-4 sm:space-y-5">
       {/* Header and Project Filter Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-[#DAE5F2]">
         <div>
           <div className="flex items-start sm:items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#DFF0FC] border border-[#A5D3F3] flex items-center justify-center text-[#0284C7] shrink-0 mt-0.5 sm:mt-0">
+            <div className="w-9 h-9 rounded-[12px] bg-[#DFF0FC] border border-[#A5D3F3] flex items-center justify-center text-[#0284C7] shrink-0 mt-0.5 sm:mt-0">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-sm sm:text-base font-bold text-[#0D1B38] tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-[#0D1B38] tracking-[-0.02em] flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <span>{t('chart.monthly.title')}</span>
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#DFF0FC] text-[#0369A1] border border-[#A5D3F3] whitespace-nowrap">
                   {t('chart.monthly.badge')}
@@ -123,7 +123,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
 
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2">
           {/* Project Selector Dropdown */}
-          <div className="flex items-center gap-1.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl px-2.5 py-1.5 shadow-2xs w-full sm:w-auto">
+          <div className="flex items-center gap-1.5 ios-input px-3 py-1.5 min-h-[38px] shadow-2xs w-full sm:w-auto">
             <FolderGit2 className="w-3.5 h-3.5 text-[#0284C7] shrink-0" />
             <select
               value={selectedProjectId}
@@ -140,23 +140,23 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           </div>
 
           {/* Mode Switcher */}
-          <div className="grid grid-cols-2 sm:flex items-center p-1 bg-[#DCE6F4] border border-[#C9D9EC] rounded-xl text-xs font-medium w-full sm:w-auto">
+          <div className="grid grid-cols-2 sm:flex items-center ios-segmented text-xs font-medium w-full sm:w-auto">
             <button
               onClick={() => setChartMode('mixed')}
-              className={`px-2.5 py-1.5 sm:py-1 rounded-lg transition-all text-center ${
+              className={`px-3 py-1.5 sm:py-1 transition-all duration-150 active:scale-[0.96] text-center ${
                 chartMode === 'mixed'
-                  ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
-                  : 'text-[#4B6187] hover:text-[#0D1B38]'
+                  ? 'ios-segmented-active'
+                  : 'text-[#4B6187] hover:text-[#0D1B38] rounded-[10px]'
               }`}
             >
               {t('chart.monthly.modeMixed')}
             </button>
             <button
               onClick={() => setChartMode('profit_only')}
-              className={`px-2.5 py-1.5 sm:py-1 rounded-lg transition-all text-center ${
+              className={`px-3 py-1.5 sm:py-1 transition-all duration-150 active:scale-[0.96] text-center ${
                 chartMode === 'profit_only'
-                  ? 'bg-[#F4F8FD] text-[#0D1B38] font-semibold shadow-xs'
-                  : 'text-[#4B6187] hover:text-[#0D1B38]'
+                  ? 'ios-segmented-active'
+                  : 'text-[#4B6187] hover:text-[#0D1B38] rounded-[10px]'
               }`}
             >
               {t('chart.monthly.modeProfit')}
@@ -167,10 +167,10 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
 
       {/* KPI Cards Strip for Selected Project / Global Scope */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+        <div className="ios-well p-3.5">
           <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.collectedRev')}</span>
-            <DollarSign className="w-3.5 h-3.5 text-emerald-700" />
+            <DollarSign className="w-3.5 h-3.5 text-[#0E6245]" />
           </div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38]">
             {formatDH(totals.totalRev)}
@@ -178,10 +178,10 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           <div className="text-[10px] text-[#5F7394] mt-1">{t('chart.monthly.collectedRevSub')}</div>
         </div>
 
-        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+        <div className="ios-well p-3.5">
           <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.prodCosts')}</span>
-            <Briefcase className="w-3.5 h-3.5 text-rose-700" />
+            <Briefcase className="w-3.5 h-3.5 text-[#9F1239]" />
           </div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38]">
             {formatDH(totals.totalCost)}
@@ -191,14 +191,14 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           </div>
         </div>
 
-        <div className="bg-[#E6EEF8] p-3.5 rounded-xl border border-[#CFDDED]">
+        <div className="ios-well p-3.5">
           <div className="flex items-center justify-between text-[11px] text-[#546A8E] font-medium mb-1">
             <span>{t('chart.monthly.netProfit')}</span>
-            <TrendingUp className={`w-3.5 h-3.5 ${totals.totalProfit >= 0 ? 'text-[#0284C7]' : 'text-rose-700'}`} />
+            <TrendingUp className={`w-3.5 h-3.5 ${totals.totalProfit >= 0 ? 'text-[#0284C7]' : 'text-[#9F1239]'}`} />
           </div>
           <div
             className={`text-base sm:text-lg font-bold font-mono ${
-              totals.totalProfit >= 0 ? 'text-[#0369A1]' : 'text-rose-700'
+              totals.totalProfit >= 0 ? 'text-[#0369A1]' : 'text-[#9F1239]'
             }`}
           >
             {formatDH(totals.totalProfit)}
@@ -206,10 +206,10 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
           <div className="text-[10px] text-[#5F7394] mt-1">{t('chart.monthly.netProfitSub')}</div>
         </div>
 
-        <div className="bg-gradient-to-br from-[#0F2045] to-[#0B1733] p-3.5 rounded-xl border border-[#1E3B75] text-[#F4F8FD] shadow-sm">
+        <div className="bg-gradient-to-b from-[#132550] to-[#0B1733] p-3.5 rounded-[16px] border border-[#1E3B75] text-[#F4F8FD] shadow-[0_6px_18px_-6px_rgba(11,23,51,0.35),inset_0_1px_0_rgba(125,211,252,0.16)]">
           <div className="flex items-center justify-between text-[11px] text-[#7DD3FC] font-medium mb-1">
             <span>{t('chart.monthly.avgMargin')}</span>
-            <span className="text-[10px] bg-[#0284C7]/30 px-1.5 py-0.5 rounded-md text-[#BAE6FD] font-mono">
+            <span className="text-[10px] bg-[#0284C7]/30 px-1.5 py-0.5 rounded-full text-[#BAE6FD] font-mono">
               2026
             </span>
           </div>
@@ -410,7 +410,7 @@ export const ProjectProfitabilityChart: React.FC<ProjectProfitabilityChartProps>
         {onNavigateToProjects && (
           <button
             onClick={onNavigateToProjects}
-            className="text-[#0284C7] hover:text-[#0369A1] font-semibold flex items-center gap-1"
+            className="px-3 py-1 ios-btn-tinted rounded-full text-xs flex items-center gap-1 active:scale-[0.96]"
           >
             <span>{t('chart.monthly.goToProjects')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />

@@ -40,9 +40,9 @@ export const PayrollView: React.FC = () => {
   // Dynamic RBAC access check
   if (!hasUserPermission('manage_payroll')) {
     return (
-      <div className="p-12 text-center bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-xs">
-        <ShieldAlert className="w-12 h-12 text-rose-600 mx-auto mb-3" />
-        <h3 className="text-base font-bold text-[#0D1B38]">{t('access.restrictedPayrollTitle')}</h3>
+      <div className="p-12 text-center ios-card">
+        <ShieldAlert className="w-12 h-12 text-[#9F1239] mx-auto mb-3" />
+        <h3 className="text-base font-bold text-[#0D1B38] tracking-tight">{t('access.restrictedPayrollTitle')}</h3>
         <p className="text-xs text-[#546A8E] mt-1 max-w-sm mx-auto">
           {t('access.restrictedPayrollDesc', { role: localizedRoleName })}
         </p>
@@ -81,7 +81,7 @@ export const PayrollView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('payroll.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('payroll.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('payroll.subtitle')}
           </div>
@@ -89,7 +89,7 @@ export const PayrollView: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {/* Month selector */}
-          <div className="flex items-center gap-1.5 bg-[#F1F5FB] border border-[#C9D9EC] rounded-xl px-3 py-1.5 shadow-xs">
+          <div className="flex items-center gap-1.5 ios-input px-3 py-1.5 min-h-[38px] shadow-2xs">
             <Calendar className="w-3.5 h-3.5 text-[#0284C7]" />
             <select
               value={selectedMonth}
@@ -106,7 +106,7 @@ export const PayrollView: React.FC = () => {
           {!isComptable && (
             <button
               onClick={handleGenerate}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-sm shadow-[#0284C7]/20 transition-all whitespace-nowrap shrink-0"
+              className="flex items-center gap-1.5 px-4 py-2 min-h-[38px] text-xs ios-btn-primary whitespace-nowrap shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t('payroll.generateBtn', { month: selectedMonth })}</span>
@@ -117,41 +117,41 @@ export const PayrollView: React.FC = () => {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+        <div className="ios-card p-3.5 sm:p-4">
           <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.gross')}</div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#0D1B38] mt-1">{formatDH(totalBrut)}</div>
         </div>
 
-        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+        <div className="ios-card p-3.5 sm:p-4">
           <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.cnss')}</div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalCnss)}</div>
         </div>
 
-        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+        <div className="ios-card p-3.5 sm:p-4">
           <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.amo')}</div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalAmo)}</div>
         </div>
 
-        <div className="bg-[#F1F5FB] p-3.5 sm:p-4 rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-6px_rgba(11,23,51,0.07)]">
+        <div className="ios-card p-3.5 sm:p-4">
           <div className="text-[11px] text-[#546A8E] font-medium">{t('payroll.kpi.ir')}</div>
           <div className="text-base sm:text-lg font-bold font-mono text-[#273B63] mt-1">{formatDH(totalIr)}</div>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 p-3.5 sm:p-4 rounded-2xl border border-emerald-200 bg-emerald-50/75 shadow-[0_4px_16px_-6px_rgba(5,150,105,0.08)]">
-          <div className="text-[11px] text-emerald-800 font-medium">{t('payroll.kpi.net')}</div>
-          <div className="text-base sm:text-lg font-bold font-mono text-emerald-700 mt-1">{formatDH(totalNet)}</div>
+        <div className="col-span-2 sm:col-span-1 p-3.5 sm:p-4 rounded-[22px] border border-[#A7DFC3] bg-[#DCF4E8]/85 shadow-[inset_0_1px_0_rgba(240,253,246,0.85),0_6px_18px_-8px_rgba(14,98,69,0.12)]">
+          <div className="text-[11px] text-[#0E6245] font-medium">{t('payroll.kpi.net')}</div>
+          <div className="text-base sm:text-lg font-bold font-mono text-[#0E6245] mt-1">{formatDH(totalNet)}</div>
         </div>
       </div>
 
       {/* Workflow Action Bar (RH-6 & R6) */}
       {!isComptable && monthPayrolls.length > 0 && !allValidated && (
-        <div className="p-3.5 bg-[#DFF0FC] border border-[#A5D3F3] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-3.5 bg-[#DFF0FC]/90 backdrop-blur-xl border border-[#A5D3F3] rounded-[20px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-[inset_0_1px_0_rgba(240,249,255,0.85)]">
           <div className="text-xs text-[#0C4A6E] font-medium">
             {t('payroll.workflowBanner')}
           </div>
           <button
             onClick={handleValidateAll}
-            className="px-4 py-2 sm:py-1.5 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-xs shrink-0 whitespace-nowrap w-full sm:w-auto text-center"
+            className="px-4 py-2 sm:py-1.5 min-h-[36px] text-xs ios-btn-primary shrink-0 whitespace-nowrap w-full sm:w-auto text-center"
           >
             {t('payroll.validateAll')}
           </button>
@@ -159,7 +159,7 @@ export const PayrollView: React.FC = () => {
       )}
 
       {/* Table of Payrolls */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         {isComptable ? (
           /* Comptable restriction: Total only, not individual wages (Section 2) */
           <div className="p-6 text-center space-y-2">
@@ -224,7 +224,7 @@ export const PayrollView: React.FC = () => {
                       {payroll.statut === 'brouillon' && (
                         <button
                           onClick={() => validatePayroll(payroll.id)}
-                          className="px-3 py-1.5 text-[11px] font-medium text-[#0369A1] bg-[#DFF0FC] hover:bg-[#CDE6F9] rounded-lg transition-colors whitespace-nowrap"
+                          className="px-3 py-1.5 text-[11px] ios-btn-tinted rounded-[10px] whitespace-nowrap"
                         >
                           {t('payroll.validateSlip')}
                         </button>
@@ -232,14 +232,14 @@ export const PayrollView: React.FC = () => {
                       {payroll.statut === 'validée' && (
                         <button
                           onClick={() => markPayrollPaid(payroll.id)}
-                          className="px-3 py-1.5 text-[11px] font-medium text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200/70 rounded-lg transition-colors whitespace-nowrap"
+                          className="px-3 py-1.5 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-[10px] active:scale-[0.96] transition-all whitespace-nowrap"
                         >
                           {t('payroll.markPaid')}
                         </button>
                       )}
                       <button
                         onClick={() => setActivePayrollModal(payroll)}
-                        className="px-3 py-1.5 text-[11px] font-medium text-[#273B63] bg-[#E2EAF5] hover:bg-[#D5E1F0] rounded-lg transition-colors whitespace-nowrap"
+                        className="px-3 py-1.5 text-[11px] ios-btn-secondary rounded-[10px] whitespace-nowrap"
                       >
                         {t('payroll.pdfBtn')}
                       </button>
@@ -328,7 +328,7 @@ export const PayrollView: React.FC = () => {
                           {payroll.statut === 'brouillon' && (
                             <button
                               onClick={() => validatePayroll(payroll.id)}
-                              className="px-2.5 py-1 text-[11px] font-medium text-[#0369A1] bg-[#DFF0FC] hover:bg-[#CDE6F9] rounded-lg transition-colors whitespace-nowrap"
+                              className="px-2.5 py-1 text-[11px] ios-btn-tinted rounded-[10px] whitespace-nowrap"
                             >
                               {t('payroll.validateSlip')}
                             </button>
@@ -337,7 +337,7 @@ export const PayrollView: React.FC = () => {
                           {payroll.statut === 'validée' && (
                             <button
                               onClick={() => markPayrollPaid(payroll.id)}
-                              className="px-2.5 py-1 text-[11px] font-medium text-emerald-700 bg-emerald-100/80 hover:bg-emerald-200/70 rounded-lg transition-colors whitespace-nowrap"
+                              className="px-2.5 py-1 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-[10px] active:scale-[0.96] transition-all whitespace-nowrap"
                             >
                               {t('payroll.markPaid')}
                             </button>
@@ -345,7 +345,7 @@ export const PayrollView: React.FC = () => {
 
                           <button
                             onClick={() => setActivePayrollModal(payroll)}
-                            className="px-2.5 py-1 text-[11px] font-medium text-[#273B63] bg-[#E2EAF5] hover:bg-[#D5E1F0] rounded-lg transition-colors whitespace-nowrap"
+                            className="px-2.5 py-1 text-[11px] ios-btn-secondary rounded-[10px] whitespace-nowrap"
                           >
                             {t('payroll.pdfBtn')}
                           </button>
@@ -371,21 +371,22 @@ export const PayrollView: React.FC = () => {
 
       {/* Printable Bulletin de Paie Modal (RH-7) */}
       {activePayrollModal && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] border border-[#CFDDED] rounded-2xl shadow-2xl max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+        <div className="fixed inset-0 ios-sheet-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-2xl w-full p-4 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto print-page">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1 no-print" />
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DAE5F2] pb-3 no-print">
-              <h3 className="text-sm font-bold text-[#0D1B38]">{t('payroll.modalTitle')}</h3>
+              <h3 className="text-sm font-bold text-[#0D1B38] tracking-tight">{t('payroll.modalTitle')}</h3>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-[#F4F8FD] text-xs rounded-xl font-medium shadow-xs"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 min-h-[34px] ios-btn-primary text-xs"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>{t('payroll.printPdf')}</span>
                 </button>
                 <button
                   onClick={() => setActivePayrollModal(null)}
-                  className="px-3 py-1.5 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] text-[#273B63] text-xs rounded-xl transition-colors"
+                  className="px-3.5 py-1.5 min-h-[34px] ios-btn-secondary text-xs"
                 >
                   {t('common.close')}
                 </button>

@@ -153,7 +153,7 @@ export const EmployeesView: React.FC = () => {
       {/* Top action bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('emp.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('emp.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('emp.subtitle', { count: employees.length })}
           </div>
@@ -162,14 +162,14 @@ export const EmployeesView: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={exportEmployeesCSV}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#273B63] bg-[#F1F5FB] hover:bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl shadow-xs whitespace-nowrap shrink-0 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] text-xs ios-btn-secondary whitespace-nowrap shrink-0"
           >
             <Download className="w-3.5 h-3.5 text-[#0284C7]" />
             <span>{t('common.exportCsv')}</span>
           </button>
           <button
             onClick={() => setIsNewModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#F4F8FD] bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-sm shadow-[#0284C7]/20 transition-all whitespace-nowrap shrink-0"
+            className="flex items-center gap-1.5 px-4 py-2 min-h-[38px] text-xs ios-btn-primary whitespace-nowrap shrink-0"
           >
             <UserPlus className="w-4 h-4" />
             <span>{t('emp.addBtn')}</span>
@@ -179,9 +179,9 @@ export const EmployeesView: React.FC = () => {
 
       {/* Expiration alert box (RH-9) */}
       {employees.some(isExpiringSoon) && (
-        <div className="bg-amber-50/90 border border-amber-200 rounded-2xl p-3.5 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-900">
+        <div className="bg-[#FEF3D6]/90 backdrop-blur-xl border border-[#F2D388] rounded-[20px] p-3.5 flex items-start gap-3 shadow-[inset_0_1px_0_rgba(254,249,231,0.85)]">
+          <AlertCircle className="w-5 h-5 text-[#B45309] shrink-0 mt-0.5" />
+          <div className="text-xs text-[#8F5600]">
             <span className="font-semibold">{t('emp.expiringAlert')} </span>
             {employees
               .filter(isExpiringSoon)
@@ -195,7 +195,7 @@ export const EmployeesView: React.FC = () => {
       {/* Main split: Table on Left / Employee 360° Card on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left List: 7 cols */}
-        <div className="lg:col-span-7 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] flex flex-col overflow-hidden">
+        <div className="lg:col-span-7 ios-card flex flex-col overflow-hidden">
           {/* Filters bar */}
           <div className="p-3.5 border-b border-[#DAE5F2] flex flex-wrap items-center gap-2">
             <div className="relative flex-1 min-w-[180px]">
@@ -205,14 +205,14 @@ export const EmployeesView: React.FC = () => {
                 placeholder={t('emp.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full ps-9 pe-3 py-1.5 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#6B80A3] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                className="w-full ps-9 pe-3 py-2 text-xs ios-input placeholder:text-[#6B80A3]"
               />
             </div>
 
             <select
               value={filterDepartement}
               onChange={(e) => setFilterDepartement(e.target.value)}
-              className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-1.5 px-2.5 text-[#273B63] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+              className="text-xs ios-input py-2 px-3 text-[#273B63] flex-1 sm:flex-none"
             >
               <option value="all">{t('emp.allDepts')}</option>
               {departments.map((d) => (
@@ -225,7 +225,7 @@ export const EmployeesView: React.FC = () => {
             <select
               value={filterStatut}
               onChange={(e) => setFilterStatut(e.target.value)}
-              className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-1.5 px-2.5 text-[#273B63] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+              className="text-xs ios-input py-2 px-3 text-[#273B63] flex-1 sm:flex-none"
             >
               <option value="all">{t('emp.allStatuses')}</option>
               <option value="actif">{t('emp.status.actif')}</option>
@@ -377,18 +377,18 @@ export const EmployeesView: React.FC = () => {
         </div>
 
         {/* Right Detail: Employee 360° Card (RH-2 & RH-3) */}
-        <div className="lg:col-span-5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] p-4 sm:p-5 space-y-5">
+        <div className="lg:col-span-5 ios-card p-4 sm:p-5 space-y-5">
           {selectedEmployee ? (
             <>
               {/* Header card */}
               <div className="flex items-start justify-between pb-4 border-b border-[#DAE5F2]">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#DFF0FC] border border-[#A5D3F3] text-[#0369A1] flex items-center justify-center font-bold text-lg">
+                  <div className="w-12 h-12 rounded-[16px] bg-[#DFF0FC] border border-[#A5D3F3] text-[#0369A1] flex items-center justify-center font-bold text-lg shadow-2xs">
                     {selectedEmployee.prenom.charAt(0)}
                     {selectedEmployee.nom.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-[#0D1B38]">
+                    <h3 className="text-base font-bold text-[#0D1B38] tracking-tight">
                       {selectedEmployee.prenom} {selectedEmployee.nom}
                     </h3>
                     <div className="text-xs text-[#546A8E]">{selectedEmployee.poste}</div>
@@ -401,7 +401,7 @@ export const EmployeesView: React.FC = () => {
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => handleOpenEdit(selectedEmployee)}
-                    className="p-2 text-[#475E82] hover:text-[#0D1B38] hover:bg-[#E4ECF7] rounded-xl transition-colors"
+                    className="w-9 h-9 ios-btn-secondary flex items-center justify-center"
                     title={t('emp.editTooltip')}
                   >
                     <Edit2 className="w-4 h-4" />
@@ -409,7 +409,7 @@ export const EmployeesView: React.FC = () => {
                   {selectedEmployee.statut === 'actif' && (
                     <button
                       onClick={() => deactivateEmployee(selectedEmployee.id)}
-                      className="p-2 text-rose-600 hover:text-rose-800 hover:bg-rose-100/70 rounded-xl transition-colors"
+                      className="w-9 h-9 rounded-[12px] bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] hover:bg-[#F9D8DF] active:scale-[0.94] flex items-center justify-center transition-all"
                       title={t('emp.deactivateTooltip')}
                     >
                       <UserX className="w-4 h-4" />
@@ -435,7 +435,7 @@ export const EmployeesView: React.FC = () => {
               </div>
 
               {/* Contract & Compensation (RH-2) */}
-              <div className="bg-[#E6EEF8] border border-[#CFDDED] rounded-xl p-3.5 space-y-2.5 text-xs">
+              <div className="ios-well p-3.5 space-y-2.5 text-xs">
                 <div className="font-semibold text-[#0D1B38] flex items-center justify-between">
                   <span>{t('emp.contractSection')}</span>
                   <span className="font-mono text-emerald-700">{selectedEmployee.type_contrat}</span>
@@ -518,11 +518,12 @@ export const EmployeesView: React.FC = () => {
 
       {/* Modal: New Employee */}
       {isNewModalOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] border border-[#CFDDED] rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="fixed inset-0 ios-sheet-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-lg w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DAE5F2] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">{t('emp.modalNewTitle')}</h3>
-              <button onClick={() => setIsNewModalOpen(false)} className="text-[#627799] hover:text-[#0D1B38]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-tight">{t('emp.modalNewTitle')}</h3>
+              <button onClick={() => setIsNewModalOpen(false)} className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] text-[#546A8E] hover:text-[#0D1B38] active:scale-[0.93] flex items-center justify-center transition-all">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -536,7 +537,7 @@ export const EmployeesView: React.FC = () => {
                     required
                     value={formData.nom}
                     onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
                 <div>
@@ -546,7 +547,7 @@ export const EmployeesView: React.FC = () => {
                     required
                     value={formData.prenom}
                     onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
               </div>
@@ -559,7 +560,7 @@ export const EmployeesView: React.FC = () => {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
                 <div>
@@ -568,7 +569,7 @@ export const EmployeesView: React.FC = () => {
                     type="text"
                     value={formData.telephone}
                     onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
               </div>
@@ -580,7 +581,7 @@ export const EmployeesView: React.FC = () => {
                     type="text"
                     value={formData.cin}
                     onChange={(e) => setFormData({ ...formData, cin: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
                 <div>
@@ -589,7 +590,7 @@ export const EmployeesView: React.FC = () => {
                     type="text"
                     value={formData.numero_cnss}
                     onChange={(e) => setFormData({ ...formData, numero_cnss: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
               </div>
@@ -601,7 +602,7 @@ export const EmployeesView: React.FC = () => {
                     type="text"
                     value={formData.poste}
                     onChange={(e) => setFormData({ ...formData, poste: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7] focus:ring-2 focus:ring-[#0284C7]/20"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
                 <div>
@@ -609,7 +610,7 @@ export const EmployeesView: React.FC = () => {
                   <select
                     value={formData.departement}
                     onChange={(e) => setFormData({ ...formData, departement: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="w-full p-2.5 ios-input"
                   >
                     {departments.map((d) => (
                       <option key={d} value={d}>
@@ -626,7 +627,7 @@ export const EmployeesView: React.FC = () => {
                   <select
                     value={formData.type_contrat}
                     onChange={(e) => setFormData({ ...formData, type_contrat: e.target.value as ContractType })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="w-full p-2.5 ios-input"
                   >
                     <option value="CDI">CDI</option>
                     <option value="CDD">CDD</option>
@@ -640,7 +641,7 @@ export const EmployeesView: React.FC = () => {
                     type="number"
                     value={formData.salaire_brut_base}
                     onChange={(e) => setFormData({ ...formData, salaire_brut_base: Number(e.target.value) })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="w-full p-2.5 ios-input font-mono"
                   />
                 </div>
               </div>
@@ -652,7 +653,7 @@ export const EmployeesView: React.FC = () => {
                     type="date"
                     value={formData.date_fin_contrat}
                     onChange={(e) => setFormData({ ...formData, date_fin_contrat: e.target.value })}
-                    className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="w-full p-2.5 ios-input"
                   />
                 </div>
               )}
@@ -664,7 +665,7 @@ export const EmployeesView: React.FC = () => {
                   placeholder="011 780 0000 000000000000 00"
                   value={formData.rib}
                   onChange={(e) => setFormData({ ...formData, rib: e.target.value })}
-                  className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="w-full p-2.5 ios-input font-mono"
                 />
               </div>
 
@@ -672,13 +673,13 @@ export const EmployeesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="px-4 py-2 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] transition-colors"
+                  className="px-4 py-2 min-h-[38px] ios-btn-secondary"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-[#F4F8FD] rounded-xl font-semibold shadow-sm"
+                  className="px-4 py-2 min-h-[38px] ios-btn-primary"
                 >
                   {t('emp.saveNewBtn')}
                 </button>
@@ -690,13 +691,14 @@ export const EmployeesView: React.FC = () => {
 
       {/* Modal: Edit Employee (Poste / Salaire / Contrat) */}
       {isEditModalOpen && selectedEmployee && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] border border-[#CFDDED] rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="fixed inset-0 ios-sheet-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DAE5F2] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-tight">
                 {t('emp.modalEditTitle', { name: `${selectedEmployee.prenom} ${selectedEmployee.nom}` })}
               </h3>
-              <button onClick={() => setIsEditModalOpen(false)} className="text-[#627799] hover:text-[#0D1B38]">
+              <button onClick={() => setIsEditModalOpen(false)} className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] text-[#546A8E] hover:text-[#0D1B38] active:scale-[0.93] flex items-center justify-center transition-all">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -708,7 +710,7 @@ export const EmployeesView: React.FC = () => {
                   type="text"
                   value={editData.poste || ''}
                   onChange={(e) => setEditData({ ...editData, poste: e.target.value })}
-                  className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="w-full p-2.5 ios-input"
                 />
               </div>
 
@@ -718,7 +720,7 @@ export const EmployeesView: React.FC = () => {
                   type="number"
                   value={editData.salaire_brut_base || 0}
                   onChange={(e) => setEditData({ ...editData, salaire_brut_base: Number(e.target.value) })}
-                  className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="w-full p-2.5 ios-input font-mono"
                 />
               </div>
 
@@ -732,7 +734,7 @@ export const EmployeesView: React.FC = () => {
                   placeholder={t('emp.field.reasonPlaceholder')}
                   value={editMotif}
                   onChange={(e) => setEditMotif(e.target.value)}
-                  className="w-full p-2 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="w-full p-2.5 ios-input"
                 />
               </div>
 
@@ -740,13 +742,13 @@ export const EmployeesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 border border-[#C9D9EC] bg-[#E6EEF8] hover:bg-[#DCE7F6] rounded-xl text-[#273B63] transition-colors"
+                  className="px-4 py-2 min-h-[38px] ios-btn-secondary"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-[#F4F8FD] rounded-xl font-semibold shadow-sm"
+                  className="px-4 py-2 min-h-[38px] ios-btn-primary"
                 >
                   {t('emp.saveEditBtn')}
                 </button>

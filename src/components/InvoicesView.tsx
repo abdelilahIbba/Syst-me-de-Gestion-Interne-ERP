@@ -292,7 +292,7 @@ export const InvoicesView: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-[#0D1B38] tracking-tight">{t('invoices.title')}</h2>
+          <h2 className="text-xl sm:text-[22px] font-bold text-[#0D1B38] tracking-[-0.02em]">{t('invoices.title')}</h2>
           <div className="text-xs text-[#546A8E] mt-0.5">
             {t('invoices.subtitle')}
           </div>
@@ -300,7 +300,7 @@ export const InvoicesView: React.FC = () => {
 
         <button
           onClick={handleOpenNewInvoice}
-          className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-xl shadow-[0_6px_16px_-4px_rgba(2,132,199,0.4)] transition-all whitespace-nowrap shrink-0"
+          className="ios-btn-primary flex items-center justify-center gap-1.5 px-4 py-2 text-xs min-h-[38px] whitespace-nowrap shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>{t('invoices.newBtn')}</span>
@@ -309,10 +309,10 @@ export const InvoicesView: React.FC = () => {
 
       {extrasNotice && (
         <div
-          className={`p-3.5 rounded-2xl border text-xs flex items-center gap-2 font-medium ${
+          className={`p-3.5 rounded-[18px] backdrop-blur-md border text-xs flex items-center gap-2 font-medium ${
             extrasNotice.type === 'success'
-              ? 'bg-[#DCF4E8] border-[#A7DFC3] text-[#0E6245]'
-              : 'bg-[#FCE8EC] border-[#F3BCC8] text-[#9F1239]'
+              ? 'bg-[#DCF4E8]/90 border-[#A7DFC3] text-[#0E6245]'
+              : 'bg-[#FCE8EC]/90 border-[#F3BCC8] text-[#9F1239]'
           }`}
         >
           {extrasNotice.type === 'success' ? (
@@ -325,7 +325,7 @@ export const InvoicesView: React.FC = () => {
       )}
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-wrap items-center gap-2.5 p-3.5 bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_4px_16px_-8px_rgba(11,23,51,0.08)]">
+      <div className="ios-card flex flex-wrap items-center gap-2.5 p-3.5">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-3.5 h-3.5 text-[#647BA0] absolute start-3 top-1/2 -translate-y-1/2" />
           <input
@@ -333,14 +333,14 @@ export const InvoicesView: React.FC = () => {
             placeholder={t('invoices.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full ps-9 pe-3 py-2 text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] placeholder:text-[#647BA0] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+            className="ios-input w-full ps-9 pe-3 py-2 text-xs placeholder:text-[#647BA0]"
           />
         </div>
 
         <select
           value={filterStatut}
           onChange={(e) => setFilterStatut(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 flex-1 sm:flex-none"
         >
           <option value="all">{t('invoices.allStatuses')}</option>
           <option value="brouillon">{t('invoices.status.brouillon')}</option>
@@ -353,7 +353,7 @@ export const InvoicesView: React.FC = () => {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="text-xs bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl py-2 px-3 text-[#1C2E4F] flex-1 sm:flex-none focus:outline-hidden focus:border-[#0284C7]"
+          className="ios-input text-xs py-2 px-3 flex-1 sm:flex-none"
         >
           <option value="all">{t('invoices.allTypes')}</option>
           <option value="vente">{t('invoices.type.vente')}</option>
@@ -364,7 +364,7 @@ export const InvoicesView: React.FC = () => {
       </div>
 
       {/* Table of Invoices */}
-      <div className="bg-[#F1F5FB] rounded-2xl border border-[#D1DFEE] shadow-[0_6px_22px_-8px_rgba(11,23,51,0.08)] overflow-hidden">
+      <div className="ios-card overflow-hidden">
         {/* Mobile Card List (< md) */}
         <div className="md:hidden divide-y divide-[#DCE6F3]">
           {filteredInvoices.map((inv) => {
@@ -407,7 +407,7 @@ export const InvoicesView: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 bg-[#E6EEF8] border border-[#D5E2F1] p-2.5 rounded-xl text-[11px]">
+                <div className="ios-well grid grid-cols-2 gap-2 p-2.5 text-[11px]">
                   <div>
                     <span className="text-[#546A8E] block">{t('invoices.col.totalTtc')}</span>
                     <span className="font-mono font-bold text-[#0D1B38]">{formatDH(inv.total_ttc)}</span>
@@ -428,7 +428,7 @@ export const InvoicesView: React.FC = () => {
                   {inv.statut === 'brouillon' && canValidate && (
                     <button
                       onClick={() => handleValidate(inv)}
-                      className="px-2.5 py-1.5 text-[11px] font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] rounded-lg shadow-xs whitespace-nowrap"
+                      className="ios-btn-primary px-3 py-1.5 text-[11px] min-h-[34px] whitespace-nowrap"
                     >
                       {t('invoices.validateBtn')}
                     </button>
@@ -437,7 +437,7 @@ export const InvoicesView: React.FC = () => {
                   {isLocked && inv.reste_a_payer > 0 && inv.type !== 'avoir' && (
                     <button
                       onClick={() => handleOpenPayment(inv)}
-                      className="px-2.5 py-1.5 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-lg whitespace-nowrap"
+                      className="px-3 py-1.5 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-[12px] transition-all duration-150 active:scale-[0.96] min-h-[34px] whitespace-nowrap"
                     >
                       {t('invoices.recordPayBtn')}
                     </button>
@@ -446,7 +446,7 @@ export const InvoicesView: React.FC = () => {
                   {isLocked && inv.type !== 'avoir' && (
                     <button
                       onClick={() => handleOpenCreditNote(inv)}
-                      className="px-2.5 py-1.5 text-[11px] text-[#273B63] bg-[#E6EEF8] border border-[#C9D9EC] rounded-lg whitespace-nowrap"
+                      className="ios-btn-secondary px-3 py-1.5 text-[11px] min-h-[34px] whitespace-nowrap"
                     >
                       {t('invoices.creditBtn')}
                     </button>
@@ -460,7 +460,7 @@ export const InvoicesView: React.FC = () => {
                         setSelectedExtraItemId(inv.items?.[0]?.id || '');
                         setExtrasMotif(t('invoices.cancelExtrasTitle'));
                       }}
-                      className="px-2.5 py-1.5 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] border border-[#F2D388] rounded-lg whitespace-nowrap"
+                      className="px-3 py-1.5 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] hover:bg-[#FDE8B4] border border-[#F2D388] rounded-[12px] transition-all duration-150 active:scale-[0.96] min-h-[34px] whitespace-nowrap"
                     >
                       {t('invoices.cancelExtrasBtn')}
                     </button>
@@ -468,7 +468,7 @@ export const InvoicesView: React.FC = () => {
 
                   <button
                     onClick={() => setSelectedInvoice(inv)}
-                    className="px-2.5 py-1.5 text-[11px] font-medium text-[#1C2E4F] bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-lg whitespace-nowrap"
+                    className="ios-btn-secondary px-3 py-1.5 text-[11px] min-h-[34px] whitespace-nowrap"
                   >
                     {t('invoices.pdfBtn')}
                   </button>
@@ -560,7 +560,7 @@ export const InvoicesView: React.FC = () => {
                         {inv.statut === 'brouillon' && canValidate && (
                           <button
                             onClick={() => handleValidate(inv)}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-white bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] rounded-lg transition-colors shadow-xs whitespace-nowrap"
+                            className="ios-btn-primary px-3 py-1.5 text-[11px] min-h-[32px] whitespace-nowrap"
                             title={t('invoices.validateTitle')}
                           >
                             {t('invoices.validateBtn')}
@@ -570,7 +570,7 @@ export const InvoicesView: React.FC = () => {
                         {isLocked && inv.reste_a_payer > 0 && inv.type !== 'avoir' && (
                           <button
                             onClick={() => handleOpenPayment(inv)}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-lg transition-colors whitespace-nowrap"
+                            className="px-3 py-1.5 text-[11px] font-semibold text-[#0E6245] bg-[#DCF4E8] hover:bg-[#CDEEDB] border border-[#A7DFC3] rounded-[11px] transition-all duration-150 active:scale-[0.96] min-h-[32px] whitespace-nowrap"
                           >
                             {t('invoices.recordPayBtn')}
                           </button>
@@ -579,7 +579,7 @@ export const InvoicesView: React.FC = () => {
                         {isLocked && inv.type !== 'avoir' && (
                           <button
                             onClick={() => handleOpenCreditNote(inv)}
-                            className="px-2 py-1 text-[11px] text-[#273B63] hover:text-[#0D1B38] bg-[#E6EEF8] border border-[#C9D9EC] rounded-lg transition-colors whitespace-nowrap"
+                            className="ios-btn-secondary px-2.5 py-1.5 text-[11px] min-h-[32px] whitespace-nowrap"
                             title={t('invoices.creditTitle')}
                           >
                             {t('invoices.creditBtn')}
@@ -594,7 +594,7 @@ export const InvoicesView: React.FC = () => {
                               setSelectedExtraItemId(inv.items?.[0]?.id || '');
                               setExtrasMotif(t('invoices.cancelExtrasTitle'));
                             }}
-                            className="px-2 py-1 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] hover:bg-[#FDE8B4] border border-[#F2D388] rounded-lg transition-colors whitespace-nowrap"
+                            className="px-2.5 py-1.5 text-[11px] font-semibold text-[#8F5600] bg-[#FEF3D6] hover:bg-[#FDE8B4] border border-[#F2D388] rounded-[11px] transition-all duration-150 active:scale-[0.96] min-h-[32px] whitespace-nowrap"
                             title={t('invoices.cancelExtrasTitle')}
                           >
                             {t('invoices.cancelExtrasBtn')}
@@ -603,7 +603,7 @@ export const InvoicesView: React.FC = () => {
 
                         <button
                           onClick={() => setSelectedInvoice(inv)}
-                          className="px-2.5 py-1 text-[11px] font-medium text-[#1C2E4F] bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-lg transition-colors whitespace-nowrap"
+                          className="ios-btn-secondary px-2.5 py-1.5 text-[11px] min-h-[32px] whitespace-nowrap"
                         >
                           {t('invoices.pdfBtn')}
                         </button>
@@ -619,8 +619,9 @@ export const InvoicesView: React.FC = () => {
 
       {/* Printable PDF Modal (FA-4 Moroccan legal mentions) */}
       {selectedInvoice && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-3xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto print-page">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-3xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto print-page">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1 no-print" />
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DCE6F3] pb-3 no-print">
               <div className="flex items-center gap-2">
                 <Receipt className="w-4 h-4 text-[#0284C7] shrink-0" />
@@ -631,14 +632,14 @@ export const InvoicesView: React.FC = () => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white text-xs rounded-xl font-medium shadow-xs"
+                  className="ios-btn-primary flex items-center gap-1.5 px-3.5 py-1.5 text-xs min-h-[34px]"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>{t('invoices.printDownload')}</span>
                 </button>
                 <button
                   onClick={() => setSelectedInvoice(null)}
-                  className="px-3 py-1.5 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] text-[#1C2E4F] text-xs rounded-xl font-medium"
+                  className="ios-btn-secondary px-3.5 py-1.5 text-xs min-h-[34px]"
                 >
                   {t('common.close')}
                 </button>
@@ -780,26 +781,30 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Record Payment (FA-5 & FA-7) */}
       {isPaymentModalOpen && selectedInvoice && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <h3 className="text-sm font-bold text-[#0D1B38]">
                 {t('invoices.payModalTitle', { num: selectedInvoice.numero })}
               </h3>
-              <button onClick={() => setIsPaymentModalOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
+              <button
+                onClick={() => setIsPaymentModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {paymentError && (
-              <div className="p-3 bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] text-xs rounded-xl flex items-center gap-2">
+              <div className="p-3 bg-[#FCE8EC] border border-[#F3BCC8] text-[#9F1239] text-xs rounded-[14px] flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 <span>{paymentError}</span>
               </div>
             )}
 
             <form onSubmit={handleSubmitPayment} className="space-y-3.5 text-xs">
-              <div className="p-3 bg-[#E6EEF8] border border-[#D5E2F1] rounded-xl text-[#3C5073] space-y-1">
+              <div className="ios-well p-3 text-[#3C5073] space-y-1">
                 <div className="flex justify-between">
                   <span>{t('invoices.payTotalTtc')}</span>
                   <span className="font-mono font-bold text-[#0D1B38]">{formatDH(selectedInvoice.total_ttc)}</span>
@@ -818,7 +823,7 @@ export const InvoicesView: React.FC = () => {
                   required
                   value={paymentForm.montant}
                   onChange={(e) => setPaymentForm({ ...paymentForm, montant: Number(e.target.value) })}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-sm font-bold text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5 font-mono text-sm font-bold"
                 />
                 <div className="text-[11px] text-[#546A8E] mt-1">
                   {t('invoices.payRuleNote')}
@@ -831,7 +836,7 @@ export const InvoicesView: React.FC = () => {
                   <select
                     value={paymentForm.mode}
                     onChange={(e) => setPaymentForm({ ...paymentForm, mode: e.target.value as PaymentMethod })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     <option value="virement">{t('invoices.method.virement')}</option>
                     <option value="chèque">{t('invoices.method.chèque')}</option>
@@ -845,7 +850,7 @@ export const InvoicesView: React.FC = () => {
                     type="date"
                     value={paymentForm.date_paiement}
                     onChange={(e) => setPaymentForm({ ...paymentForm, date_paiement: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -859,7 +864,7 @@ export const InvoicesView: React.FC = () => {
                     placeholder="VIR-BMCE-12345"
                     value={paymentForm.reference}
                     onChange={(e) => setPaymentForm({ ...paymentForm, reference: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
                 <div>
@@ -868,7 +873,7 @@ export const InvoicesView: React.FC = () => {
                     type="text"
                     value={paymentForm.banque}
                     onChange={(e) => setPaymentForm({ ...paymentForm, banque: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -877,13 +882,13 @@ export const InvoicesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsPaymentModalOpen(false)}
-                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#0E7A55] hover:bg-[#0B6345] text-white rounded-xl font-semibold shadow-xs"
+                  className="px-4 py-2 min-h-[38px] bg-[#0E7A55] hover:bg-[#0B6345] text-[#F4F8FD] rounded-[13px] font-semibold shadow-xs transition-all duration-150 active:scale-[0.96]"
                 >
                   {t('invoices.paySubmit')}
                 </button>
@@ -895,19 +900,23 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Create Credit Note (FA-10 & R3) */}
       {isCreditNoteModalOpen && selectedInvoice && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <h3 className="text-sm font-bold text-[#0D1B38]">
                 {t('invoices.creditModalTitle', { num: selectedInvoice.numero })}
               </h3>
-              <button onClick={() => setIsCreditNoteModalOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
+              <button
+                onClick={() => setIsCreditNoteModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSubmitCreditNote} className="space-y-3.5 text-xs">
-              <div className="p-3 bg-[#FEF3D6] border border-[#F2D388] rounded-xl text-[#8F5600] font-medium">
+              <div className="p-3 bg-[#FEF3D6] border border-[#F2D388] rounded-[14px] text-[#8F5600] font-medium">
                 {t('invoices.creditRuleNote')}
               </div>
 
@@ -922,7 +931,7 @@ export const InvoicesView: React.FC = () => {
                   max={selectedInvoice.total_ttc}
                   value={creditAmount}
                   onChange={(e) => setCreditAmount(Number(e.target.value))}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5 font-mono"
                 />
               </div>
 
@@ -934,7 +943,7 @@ export const InvoicesView: React.FC = () => {
                   placeholder={t('invoices.creditReasonPlaceholder')}
                   value={creditMotif}
                   onChange={(e) => setCreditMotif(e.target.value)}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
 
@@ -942,13 +951,13 @@ export const InvoicesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsCreditNoteModalOpen(false)}
-                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {t('invoices.creditSubmit')}
                 </button>
@@ -960,11 +969,15 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Invoice Editor (FA-1) */}
       {isEditorOpen && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl border border-[#C9D9EC] shadow-2xl max-w-3xl w-full p-4 sm:p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-3xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
-              <h3 className="text-base font-bold text-[#0D1B38]">{t('invoices.editorTitle')}</h3>
-              <button onClick={() => setIsEditorOpen(false)} className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]">
+              <h3 className="text-base font-bold text-[#0D1B38] tracking-[-0.015em]">{t('invoices.editorTitle')}</h3>
+              <button
+                onClick={() => setIsEditorOpen(false)}
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -976,7 +989,7 @@ export const InvoicesView: React.FC = () => {
                   <select
                     value={editorData.client_id}
                     onChange={(e) => setEditorData({ ...editorData, client_id: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     {clients.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -991,7 +1004,7 @@ export const InvoicesView: React.FC = () => {
                   <select
                     value={editorData.type}
                     onChange={(e) => setEditorData({ ...editorData, type: e.target.value as InvoiceType })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   >
                     <option value="vente">{t('invoices.type.vente')}</option>
                     <option value="maintenance">{t('invoices.type.maintenance')}</option>
@@ -1005,7 +1018,7 @@ export const InvoicesView: React.FC = () => {
                     type="number"
                     value={editorData.taux_tva}
                     onChange={(e) => setEditorData({ ...editorData, taux_tva: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl font-mono text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5 font-mono"
                   />
                 </div>
               </div>
@@ -1017,7 +1030,7 @@ export const InvoicesView: React.FC = () => {
                     type="date"
                     value={editorData.date_emission}
                     onChange={(e) => setEditorData({ ...editorData, date_emission: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
                 <div>
@@ -1026,7 +1039,7 @@ export const InvoicesView: React.FC = () => {
                     type="date"
                     value={editorData.date_echeance}
                     onChange={(e) => setEditorData({ ...editorData, date_echeance: e.target.value })}
-                    className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                    className="ios-input w-full p-2.5"
                   />
                 </div>
               </div>
@@ -1038,7 +1051,7 @@ export const InvoicesView: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleAddItem}
-                    className="text-xs text-[#0284C7] hover:text-[#0369A1] font-semibold"
+                    className="ios-btn-tinted px-2.5 py-1 text-[11px]"
                   >
                     {t('invoices.editorAddLine')}
                   </button>
@@ -1046,7 +1059,7 @@ export const InvoicesView: React.FC = () => {
 
                 <div className="space-y-2 max-h-56 overflow-y-auto pe-1">
                   {editorData.items.map((item, idx) => (
-                    <div key={idx} className="grid grid-cols-12 gap-2 p-2.5 bg-[#E6EEF8] border border-[#D5E2F1] rounded-xl items-center">
+                    <div key={idx} className="ios-well grid grid-cols-12 gap-2 p-2.5 items-center">
                       <div className="col-span-12 sm:col-span-5">
                         <input
                           type="text"
@@ -1054,7 +1067,7 @@ export const InvoicesView: React.FC = () => {
                           placeholder={t('invoices.editorItemPlaceholder')}
                           value={item.designation}
                           onChange={(e) => handleItemChange(idx, 'designation', e.target.value)}
-                          className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs text-[#0D1B38]"
+                          className="ios-input w-full p-2 !bg-[#F5F8FD] text-xs"
                         />
                       </div>
                       <div className="col-span-4 sm:col-span-2">
@@ -1063,7 +1076,7 @@ export const InvoicesView: React.FC = () => {
                           placeholder={t('invoices.col.qty')}
                           value={item.quantite}
                           onChange={(e) => handleItemChange(idx, 'quantite', Number(e.target.value))}
-                          className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs font-mono text-[#0D1B38]"
+                          className="ios-input w-full p-2 !bg-[#F5F8FD] text-xs font-mono"
                         />
                       </div>
                       <div className="col-span-4 sm:col-span-3">
@@ -1072,7 +1085,7 @@ export const InvoicesView: React.FC = () => {
                           placeholder={t('invoices.col.unitPrice')}
                           value={item.prix_unitaire_ht}
                           onChange={(e) => handleItemChange(idx, 'prix_unitaire_ht', Number(e.target.value))}
-                          className="w-full p-2 bg-[#F5F8FD] border border-[#C9D9EC] rounded-lg text-xs font-mono text-[#0D1B38]"
+                          className="ios-input w-full p-2 !bg-[#F5F8FD] text-xs font-mono"
                         />
                       </div>
                       <div className="col-span-4 sm:col-span-2 flex items-center justify-end gap-2">
@@ -1083,7 +1096,7 @@ export const InvoicesView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleRemoveItem(idx)}
-                            className="text-[#C81E4A] hover:text-[#9F1239]"
+                            className="p-1.5 rounded-full text-[#C81E4A] hover:bg-[#FCE8EC] active:scale-[0.92] transition-all"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1095,7 +1108,7 @@ export const InvoicesView: React.FC = () => {
               </div>
 
               {/* Total Calculation Strip */}
-              <div className="bg-[#E6EEF8] border border-[#CFDDED] p-3 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono text-[#1C2E4F]">
+              <div className="ios-well p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono text-[#1C2E4F]">
                 <div>{t('invoices.totalHt')} <strong>{formatDH(totals.totalHt)}</strong></div>
                 <div>{t('invoices.vatLabel', { rate: totals.tauxTva })} <strong>{formatDH(totals.montantTva)}</strong></div>
                 <div className="text-sm font-bold text-[#0D1B38]">{t('invoices.totalTtc')} {formatDH(totals.totalTtc)}</div>
@@ -1105,13 +1118,13 @@ export const InvoicesView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditorOpen(false)}
-                  className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                  className="ios-btn-secondary px-4 py-2 min-h-[38px]"
                 >
                   {t('common.cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-[#0284C7] to-[#0891B2] hover:from-[#0369A1] hover:to-[#0E7490] text-white rounded-xl font-semibold shadow-xs"
+                  className="ios-btn-primary px-4 py-2 min-h-[38px]"
                 >
                   {t('invoices.editorSaveDraft')}
                 </button>
@@ -1123,8 +1136,9 @@ export const InvoicesView: React.FC = () => {
 
       {/* Modal: Extras cancellation */}
       {extrasTargetInvoice && (
-        <div className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-[#F1F5FB] rounded-2xl shadow-2xl border border-[#C9D9EC] max-w-md w-full max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div className="ios-sheet-backdrop fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="ios-sheet rounded-t-[28px] sm:rounded-[26px] max-w-md w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#B8CAE2] mx-auto -mt-1" />
             <div className="flex items-center justify-between border-b border-[#DCE6F3] pb-3">
               <div className="flex items-center gap-2 text-[#8F5600] font-bold text-sm">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
@@ -1133,7 +1147,7 @@ export const InvoicesView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setExtrasTargetInvoice(null)}
-                className="p-1.5 rounded-lg text-[#546A8E] hover:text-[#0D1B38] hover:bg-[#E2EAF5]"
+                className="w-8 h-8 rounded-full bg-[#E5EDF8] hover:bg-[#DAE5F4] flex items-center justify-center text-[#546A8E] hover:text-[#0D1B38] transition-all active:scale-[0.93]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1145,7 +1159,7 @@ export const InvoicesView: React.FC = () => {
                 <select
                   value={selectedExtraItemId}
                   onChange={(e) => setSelectedExtraItemId(e.target.value)}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 >
                   {(extrasTargetInvoice.items || []).map((item) => (
                     <option key={item.id} value={item.id}>
@@ -1160,7 +1174,7 @@ export const InvoicesView: React.FC = () => {
                   rows={2}
                   value={extrasMotif}
                   onChange={(e) => setExtrasMotif(e.target.value)}
-                  className="w-full p-2.5 bg-[#E6EEF8] border border-[#C9D9EC] rounded-xl text-[#0D1B38] focus:outline-hidden focus:bg-[#F5F8FD] focus:border-[#0284C7]"
+                  className="ios-input w-full p-2.5"
                 />
               </div>
             </div>
@@ -1169,7 +1183,7 @@ export const InvoicesView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setExtrasTargetInvoice(null)}
-                className="px-4 py-2 bg-[#E6EEF8] hover:bg-[#DAE5F4] border border-[#C9D9EC] rounded-xl text-[#1C2E4F] font-medium"
+                className="ios-btn-secondary px-4 py-2 min-h-[38px]"
               >
                 {t('common.close')}
               </button>
@@ -1191,7 +1205,7 @@ export const InvoicesView: React.FC = () => {
                   setExtrasTargetInvoice(null);
                   setTimeout(() => setExtrasNotice(null), 4500);
                 }}
-                className="px-4 py-2 bg-[#B45309] hover:bg-[#92400E] text-white rounded-xl font-semibold"
+                className="px-4 py-2 min-h-[38px] bg-[#B45309] hover:bg-[#92400E] text-[#F4F8FD] rounded-[13px] font-semibold transition-all duration-150 active:scale-[0.96]"
               >
                 {t('invoices.extrasConfirmBtn')}
               </button>

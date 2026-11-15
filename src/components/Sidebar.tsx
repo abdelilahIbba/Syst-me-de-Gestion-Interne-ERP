@@ -137,15 +137,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const renderSidebarBody = (isMobileDrawer: boolean) => (
     <>
       {/* Brand Header with DEVNAPP Logo */}
-      <div className="h-16 lg:h-18 px-4 flex items-center justify-between gap-2 border-b border-[#1E3566]/80 bg-[#09132B]/70 shrink-0">
+      <div className="h-16 lg:h-18 px-4 flex items-center justify-between gap-2 border-b border-[#1E3566]/80 bg-[#09132B]/75 backdrop-blur-xl shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <img
             src="/assets/aistudio/devnappLogo_10b7b539.jpg"
             alt="DEVNAPP SARL"
-            className="w-9 h-9 lg:w-10 lg:h-10 rounded-xl object-cover border border-[#38BDF8]/40 shadow-sm shadow-[#0284C7]/25 shrink-0"
+            className="w-9 h-9 lg:w-10 lg:h-10 rounded-[12px] object-cover border border-[#38BDF8]/40 shadow-[0_4px_12px_rgba(2,132,199,0.28)] shrink-0"
           />
           <div className="min-w-0">
-            <div className="text-sm font-extrabold text-[#F4F8FD] tracking-wider truncate flex items-center gap-1.5">
+            <div className="text-sm font-extrabold text-[#F4F8FD] tracking-tight truncate flex items-center gap-1.5">
               <span className="bg-gradient-to-r from-[#38BDF8] via-[#7DD3FC] to-[#E0F2FE] bg-clip-text text-transparent">DEVNAPP</span>
               <span className="text-[10px] text-[#90A8CE] font-bold font-mono">SARL</span>
             </div>
@@ -157,9 +157,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={onCloseMobile}
             aria-label={t('common.close')}
-            className="w-10 h-10 rounded-xl text-[#9DB3D6] hover:text-[#F4F8FD] hover:bg-[#172D5C] flex items-center justify-center shrink-0 transition-colors"
+            className="w-9 h-9 rounded-full bg-[#172D5C]/80 text-[#C6D5EC] hover:text-[#F4F8FD] hover:bg-[#1E3A73] active:scale-[0.92] flex items-center justify-center shrink-0 transition-all"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -172,7 +172,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           return (
             <div key={section.title} className="space-y-1">
-              <div className="px-3 text-[11px] font-semibold text-[#7E96BE] uppercase tracking-wider">
+              <div className="px-3 text-[11px] font-semibold text-[#7E96BE] uppercase tracking-[0.05em]">
                 {section.title}
               </div>
               <div className="space-y-1 mt-1.5">
@@ -186,9 +186,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         onSelectTab(item.key as NavItemKey);
                         if (isMobileDrawer && onCloseMobile) onCloseMobile();
                       }}
-                      className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 lg:py-2 min-h-[42px] lg:min-h-0 text-xs font-medium rounded-xl transition-all text-start ${
+                      className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 lg:py-2 min-h-[42px] lg:min-h-[38px] text-[13px] lg:text-xs font-medium rounded-[13px] transition-all duration-150 active:scale-[0.97] text-start ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#0284C7] to-[#0891B2] text-[#F4F8FD] font-semibold shadow-md shadow-[#0284C7]/25'
+                          ? 'bg-gradient-to-b from-[#0EA5E9] to-[#0284C7] text-[#F4F8FD] font-semibold shadow-[0_4px_14px_-2px_rgba(2,132,199,0.45),inset_0_1px_0_rgba(224,242,254,0.32)]'
                           : 'text-[#C6D5EC] hover:bg-[#172D5C]/80 hover:text-[#F4F8FD]'
                       }`}
                     >
@@ -204,11 +204,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Mobile Quick Tools (exposed inside mobile drawer so nothing is lost on phones) */}
         {isMobileDrawer && (
-          <div className="pt-3 border-t border-[#1E3566]/80 space-y-1.5">
+          <div className="pt-3 border-t border-[#1E3566]/80 space-y-2">
             <button
               type="button"
               onClick={() => syncWithGoogleSheets()}
-              className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-xs font-medium rounded-xl bg-[#11244D] text-[#E4ECF6] border border-[#223F78] hover:bg-[#183166] transition-colors"
+              className="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 min-h-[42px] text-xs font-medium rounded-[13px] bg-[#11244D] text-[#E4ECF6] border border-[#223F78] hover:bg-[#183166] active:scale-[0.97] transition-all"
             >
               <span className="flex items-center gap-2 truncate">
                 <RefreshCw className={`w-3.5 h-3.5 text-[#38BDF8] shrink-0 ${sheetsSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
@@ -226,7 +226,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onCloseMobile?.();
                   onOpenSheets();
                 }}
-                className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl bg-[#0C3559]/75 text-[#BAE6FD] border border-[#0284C7]/50 hover:bg-[#0E4470]/80 text-start transition-colors"
+                className="w-full flex items-center gap-2 px-3.5 py-2.5 min-h-[42px] text-xs font-semibold rounded-[13px] bg-[#0C3559]/80 text-[#BAE6FD] border border-[#0284C7]/50 hover:bg-[#0E4470]/80 active:scale-[0.97] text-start transition-all"
               >
                 <FileSpreadsheet className="w-4 h-4 text-[#38BDF8] shrink-0" />
                 <span className="truncate">{t('header.sheetsWorkbooks')}</span>
@@ -240,9 +240,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onCloseMobile?.();
                   onToggleMobileSim();
                 }}
-                className={`w-full flex items-center gap-2 px-3 py-2.5 text-xs font-semibold rounded-xl border text-start transition-colors ${
+                className={`w-full flex items-center gap-2 px-3.5 py-2.5 min-h-[42px] text-xs font-semibold rounded-[13px] border text-start active:scale-[0.97] transition-all ${
                   isMobileSimOpen
-                    ? 'bg-gradient-to-r from-[#0284C7] to-[#0891B2] text-[#F4F8FD] border-transparent'
+                    ? 'bg-gradient-to-b from-[#0EA5E9] to-[#0284C7] text-[#F4F8FD] border-transparent shadow-[inset_0_1px_0_rgba(224,242,254,0.3)]'
                     : 'bg-[#11244D] text-[#E4ECF6] border-[#223F78] hover:bg-[#183166]'
                 }`}
               >
@@ -255,9 +255,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* User Info Footer */}
-      <div className="p-3 border-t border-[#1E3566]/80 bg-[#09132B]/70 shrink-0">
-        <div className="flex items-center gap-3 px-2.5 py-2 rounded-xl bg-[#12254E]/90 border border-[#223E76]">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0284C7]/35 to-[#22D3EE]/25 text-[#7DD3FC] border border-[#38BDF8]/40 flex items-center justify-center font-bold text-xs shrink-0 font-mono">
+      <div className="p-3 border-t border-[#1E3566]/80 bg-[#09132B]/75 backdrop-blur-xl shrink-0">
+        <div className="flex items-center gap-3 px-3 py-2.5 rounded-[16px] bg-[#12254E]/90 border border-[#223E76] shadow-[inset_0_1px_0_rgba(125,211,252,0.12)]">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0284C7]/40 to-[#22D3EE]/30 text-[#7DD3FC] border border-[#38BDF8]/40 flex items-center justify-center font-bold text-xs shrink-0 font-mono">
             {currentUser.name.charAt(0)}
           </div>
           <div className="min-w-0 flex-1">
@@ -274,7 +274,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {/* Desktop Fixed Sidebar */}
-      <aside className="hidden lg:flex w-64 bg-gradient-to-b from-[#0B1733] via-[#0F2045] to-[#09132B] text-[#C6D5EC] flex-col shrink-0 h-screen border-e border-[#1E3566]/80">
+      <aside className="hidden lg:flex w-64 bg-gradient-to-b from-[#0B1733] via-[#0F2045] to-[#09132B] text-[#C6D5EC] flex-col shrink-0 h-screen border-e border-[#1E3566]/80 shadow-[4px_0_24px_-12px_rgba(11,23,51,0.35)]">
         {renderSidebarBody(false)}
       </aside>
 
@@ -282,11 +282,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-[#0B1733]/65 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-[#0B1733]/55 backdrop-blur-md transition-opacity"
             onClick={onCloseMobile}
             aria-hidden="true"
           />
-          <aside className="relative z-10 w-72 max-w-[85vw] h-full bg-gradient-to-b from-[#0B1733] via-[#0F2045] to-[#09132B] text-[#C6D5EC] flex flex-col border-e border-[#1E3566]/80 shadow-2xl">
+          <aside className="relative z-10 w-72 max-w-[85vw] h-full rounded-e-[28px] overflow-hidden bg-gradient-to-b from-[#0B1733] via-[#0F2045] to-[#09132B] text-[#C6D5EC] flex flex-col border-e border-[#1E3566]/80 shadow-2xl">
             {renderSidebarBody(true)}
           </aside>
         </div>
